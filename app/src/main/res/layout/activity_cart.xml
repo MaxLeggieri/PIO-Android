@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.livelife.pioalert.CartActivity"
+    android:background="#f6f6f6">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+
+                android:id="@+id/backButton"
+                android:padding="12dp"
+                android:layout_width="50dp"
+                android:layout_height="44dp"
+                android:layout_alignParentLeft="true"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_back"/>
+
+            <TextView
+
+                android:id="@+id/comNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:text="Carrello"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textColor="#ffffff"
+                android:textSize="18sp"/>
+
+        </RelativeLayout>
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/loadingOverlay"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#33000000">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appBar"
+        >
+
+
+        <RelativeLayout
+            android:id="@+id/cartContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_margin="18dp"
+                android:id="@+id/cartRecyclerView"
+                tools:context=".CartActivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+            <TextView
+                android:id="@+id/shipLabel"
+                android:textColor="#6f6f6f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Spedito a:"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textSize="16sp"
+                android:layout_marginTop="22dp"
+                android:layout_below="@+id/cartRecyclerView"
+                android:layout_alignStart="@+id/cartRecyclerView"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#6f6f6f"
+                android:textSize="16sp"
+                android:maxLines="3"
+                android:layout_below="@id/shipLabel"
+                android:layout_marginTop="12dp"
+                android:text="Nessun indirizzo specificato"
+                android:id="@+id/shippingAddress"
+                android:layout_alignStart="@+id/shipLabel"
+                android:layout_alignEnd="@+id/cartRecyclerView"/>
+
+            <Button
+                android:id="@+id/changeAddressButton"
+                android:layout_width="140dp"
+                android:background="#9b9a9b"
+                android:textColor="#ffffff"
+                android:layout_height="30dp"
+                android:textAllCaps="false"
+                android:text="Cambia indirizzo"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/shippingAddress"
+                android:layout_alignStart="@+id/shippingAddress"/>
+
+            <View
+                android:id="@+id/separator"
+                android:layout_marginTop="16dp"
+                android:layout_below="@id/changeAddressButton"
+                android:background="#c5c5c5"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignStart="@+id/changeAddressButton"
+                android:layout_alignEnd="@+id/shippingAddress"/>
+
+
+            <TextView
+                android:id="@+id/subtotalLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subtotale"
+                android:textColor="#6f6f6f"
+                android:textSize="16sp"
+                android:layout_alignBaseline="@+id/subTotal"
+                android:layout_alignBottom="@+id/subTotal"
+                android:layout_alignStart="@+id/separator"/>
+
+            <TextView
+                android:id="@+id/shipAmountLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Spedizione"
+                android:textColor="#6f6f6f"
+                android:textSize="16sp"
+                android:layout_above="@+id/total"
+                android:layout_alignStart="@+id/subtotalLabel"/>
+
+            <TextView
+                android:id="@+id/totalLabel"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TOTALE"
+                android:textColor="#6f6f6f"
+                android:textSize="16sp"
+                android:layout_alignBaseline="@+id/total"
+                android:layout_alignBottom="@+id/total"
+                android:layout_alignStart="@+id/shipAmountLabel"/>
+
+            <TextView
+                android:textAlignment="viewEnd"
+                android:id="@+id/subTotal"
+                android:layout_marginTop="23dp"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="€ 0.00"
+                android:textColor="#6f6f6f"
+                android:textSize="16sp"
+                android:layout_below="@+id/separator"
+                android:layout_alignEnd="@+id/separator"/>
+
+            <TextView
+                android:textAlignment="viewEnd"
+                android:id="@+id/shipAmount"
+                android:layout_marginTop="22dp"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="€ 0.00"
+                android:textColor="#6f6f6f"
+                android:textSize="16sp"
+                android:layout_below="@+id/subTotal"
+                android:layout_alignStart="@+id/subTotal"/>
+
+            <TextView
+                android:textAlignment="viewEnd"
+                android:id="@+id/total"
+                android:layout_marginTop="22dp"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="€ 0.00"
+                android:textColor="#6f6f6f"
+                android:textSize="24sp"
+                android:layout_below="@+id/shipAmount"
+                android:layout_alignEnd="@+id/shipAmount"/>
+
+            <EditText
+                android:layout_marginTop="16dp"
+                android:maxLines="10"
+                android:textSize="14sp"
+                android:hint="Opzionale: Inserisci un messaggio per il negozio"
+                android:id="@+id/userMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/total"
+                android:layout_alignStart="@+id/totalLabel"
+                android:layout_alignEnd="@+id/total"/>
+
+            <Button
+                android:id="@+id/bookingButton"
+                android:text="PRENOTA ORA"
+                android:textSize="18sp"
+                android:textColor="#ffffff"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                android:background="@color/colorPrimary"
+                android:layout_below="@+id/userMessage"
+                android:layout_marginTop="30dp"/>
+
+            <Button
+                android:id="@+id/buyButton"
+                android:text="VAI AL PAGAMENTO"
+                android:textSize="18sp"
+                android:textColor="#ffffff"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                android:background="#cc9c4a"
+                android:layout_below="@+id/bookingButton"
+                />
+
+
+        </RelativeLayout>
+
+
+
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</RelativeLayout>

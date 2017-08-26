@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+    android:padding="14dp">
+
+
+    <TextView
+        android:id="@id/prodName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:text="Nome Prodotto"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:layout_marginTop="26dp"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantità"
+        android:layout_below="@id/prodName"
+        android:id="@+id/quantityLabel"/>
+
+    <TextView
+        android:id="@+id/quantity"
+        android:textSize="22sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_alignBottom="@+id/subButton"
+        android:layout_toStartOf="@+id/subButton"
+        android:layout_marginEnd="22dp"/>
+
+    <Button
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="#a6a6a6"
+        android:textColor="#ffffff"
+        android:text="+"
+        android:layout_alignBaseline="@+id/quantityLabel"
+        android:layout_alignBottom="@+id/quantityLabel"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/addButton"/>
+
+    <Button
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="#a6a6a6"
+        android:textColor="#ffffff"
+        android:text="-"
+        android:layout_marginEnd="7dp"
+        android:layout_alignBottom="@+id/addButton"
+        android:layout_toStartOf="@+id/addButton"
+        android:id="@+id/subButton"/>
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/doneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:textColor="#ffffff"
+        android:layout_below="@id/addButton"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="26dp"
+        android:text="Fatto"/>
+
+</RelativeLayout>

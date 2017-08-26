@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context="com.livelife.pioalert.PromoActivity">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_margin="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+
+                android:id="@+id/backButton"
+                android:padding="12dp"
+                android:layout_width="50dp"
+                android:layout_height="44dp"
+                android:layout_alignParentLeft="true"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_back"/>
+
+            <TextView
+                android:id="@+id/promoTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:text="Promo title"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textColor="#ffffff"
+                android:textSize="18sp"/>
+
+
+
+
+        </RelativeLayout>
+
+
+
+    </android.support.design.widget.AppBarLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_below="@id/appBar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/placeholder_logo_16_9"
+                android:id="@+id/imageView"/>
+
+            <ImageView
+                android:cropToPadding="false"
+                android:background="#f8f8f8"
+                android:layout_marginTop="-20dp"
+                android:elevation="3dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_below="@+id/imageView"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/signin_logo_pio"
+                android:scaleType="fitCenter"
+                android:layout_marginStart="22dp"
+                android:clickable="true"
+                android:id="@+id/comImageView"/>
+
+            <TextView
+                android:layout_marginLeft="18dp"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#a3a3a3"
+                android:text="Promo disponibile da"
+                android:layout_below="@+id/imageView"
+                android:layout_toEndOf="@+id/comImageView"
+                android:layout_marginTop="14dp"
+                android:id="@+id/textView2"/>
+
+            <TextView
+                android:ellipsize="end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#6f6f6f"
+                android:textSize="18sp"
+                android:text="Nome Negozio"
+                android:maxLines="1"
+                android:layout_below="@+id/textView2"
+                android:layout_alignStart="@+id/textView2"
+                android:layout_marginTop="6dp"
+                android:id="@+id/shopNameTextView"
+                android:layout_alignEnd="@+id/likeButton"/>
+
+            <TextView
+                android:id="@+id/shopDistanceTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/comImageView"
+                android:layout_alignStart="@+id/shopNameTextView"
+                android:text="A 1,7 Km da te"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textColor="#5da5e5"/>
+
+            <ImageButton
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_like"
+                android:scaleType="fitXY"
+                android:background="#00000000"
+                android:layout_marginEnd="18dp"
+                android:layout_below="@+id/imageView"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="12dp"
+                android:id="@+id/likeButton"/>
+
+            <ImageButton
+                android:id="@+id/shareButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_share"
+                android:scaleType="fitXY"
+                android:background="#00000000"
+                android:layout_alignTop="@+id/likeButton"
+                android:layout_toStartOf="@+id/likeButton"
+                android:layout_marginEnd="10dp"/>
+
+            <TextView
+                android:id="@+id/promoTitle"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:text="Promo Title"
+                android:textColor="#6f6f6f"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:layout_marginTop="35dp"
+                android:layout_below="@+id/comImageView"
+                android:layout_alignStart="@+id/comImageView"
+                android:layout_alignEnd="@+id/shopNameTextView"/>
+
+            <TextView
+                android:textSize="12sp"
+                android:id="@+id/expireTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expire text"
+                android:layout_below="@+id/promoTitle"
+                android:layout_alignStart="@+id/promoTitle"
+                android:layout_marginTop="11dp"
+                android:textColor="#a3a3a3"/>
+
+            <TextView
+                android:id="@+id/promoDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Promo desc"
+                android:maxLines="200"
+                android:textSize="16sp"
+                android:layout_below="@+id/expireTextView"
+                android:layout_alignStart="@+id/expireTextView"
+                android:layout_marginTop="30dp"
+                android:textColor="#6f6f6f"
+                android:layout_alignEnd="@+id/promoTitle"/>
+
+
+            <View
+                android:layout_below="@+id/promoDesc"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#6f6f6f"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="12dp"
+                android:layout_alignStart="@+id/promoDesc"
+                android:layout_alignEnd="@+id/promoDesc"
+                android:id="@+id/view"/>
+
+            <TextView
+                android:id="@+id/numberViews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="Visto xxx volte"
+                android:textColor="#6f6f6f"
+                android:layout_below="@+id/view"
+                android:layout_alignStart="@+id/view"/>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="12dp"
+                android:id="@+id/galleryRecycler"
+                android:layout_below="@id/numberViews"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:clickable="true"
+                tools:context=".PromoActivity"
+                tools:listitem="@layout/horizontal_item_square"/>
+
+
+            <LinearLayout
+                android:id="@+id/buttonsContainer"
+                android:layout_marginTop="18dp"
+                android:layout_below="@+id/galleryRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignStart="@+id/numberViews"
+                android:layout_alignEnd="@+id/view"
+                >
+
+                <Button
+                    android:id="@+id/linkButton"
+                    android:layout_width="110dp"
+                    android:layout_height="36dp"
+                    android:text="Link"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textColor="#ffffff"
+                    android:layout_marginRight="14dp"
+                    android:background="@drawable/button_round_corners"/>
+
+                <Button
+                    android:id="@+id/attachmentButton"
+                    android:layout_width="110dp"
+                    android:layout_height="36dp"
+                    android:text="Allegato"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textColor="#ffffff"
+                    android:layout_marginRight="14dp"
+                    android:background="@drawable/button_round_corners"/>
+
+                <Button
+                    android:id="@+id/couponButton"
+                    android:layout_width="110dp"
+                    android:layout_height="36dp"
+                    android:text="Coupon"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textColor="#ffffff"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="@drawable/button_round_corners"/>
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/videoPreviewButton"
+                android:layout_below="@id/buttonsContainer"
+                android:background="#00000000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_margin="24dp"
+                />
+
+            <ImageButton
+                android:id="@+id/playButton"
+                android:layout_below="@id/buttonsContainer"
+                android:background="#00000000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:src="@drawable/youtube_overlay_button"
+                android:layout_margin="24dp"/>
+
+            <com.livelife.pioalert.ScrollMapView
+                android:layout_marginTop="14dp"
+                android:id="@+id/mapView"
+                android:layout_below="@+id/playButton"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"/>
+
+        </RelativeLayout>
+        
+
+
+
+    </ScrollView>
+
+
+</RelativeLayout>

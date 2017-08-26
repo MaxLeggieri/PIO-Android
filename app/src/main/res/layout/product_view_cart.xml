@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#f6f6f6">
+
+
+    <RelativeLayout
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="#ffffff">
+
+
+        <ImageView
+            android:layout_marginLeft="13dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/placeholder_logo_square"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:id="@+id/imageView"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"/>
+
+
+        <TextView
+            android:id="@+id/title"
+            android:ellipsize="end"
+            android:layout_marginTop="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:maxLines="1"
+            android:textSize="16sp"
+            android:textColor="#6f6f6f"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_toEndOf="@+id/imageView"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
+
+
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/title"
+            android:layout_alignStart="@+id/title"
+            android:layout_below="@+id/title"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:text="Quantità: 0"
+            android:textColor="#6f6f6f"
+            android:textSize="12sp"
+            />
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:background="#9b9a9b"
+            android:textColor="#ffffff"
+            android:text="Modifica"
+            android:textAllCaps="false"
+            android:layout_below="@+id/quantity"
+            android:layout_alignStart="@+id/quantity"
+            android:id="@+id/editButton"/>
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="€ 99.00"
+            android:textSize="18sp"
+            android:layout_marginRight="18dp"
+            android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+            android:textColor="#5c5b5c"
+            android:layout_alignBaseline="@+id/editButton"
+            android:layout_alignBottom="@+id/editButton"
+            android:layout_alignParentEnd="true"/>
+
+
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

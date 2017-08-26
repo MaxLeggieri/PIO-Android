@@ -1,0 +1,293 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:focusable="true"
+             android:focusableInTouchMode="true"
+             android:id="@+id/homeContainer"
+             tools:context="com.livelife.pioalert.HomeFragment">
+
+
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:clipToPadding="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="98dp">
+
+            <ImageButton
+                android:id="@+id/menuButton"
+                android:layout_width="55dp"
+                android:layout_height="45dp"
+                android:padding="10dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_menu"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_explore"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                android:layout_alignBottom="@+id/menuButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"/>
+
+            <ImageButton
+                android:id="@+id/refreshButton"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentEnd="true"
+                android:padding="13dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/refresh"/>
+
+
+            <EditText
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="12dp"
+                android:id="@+id/searchEditText"
+                android:layout_width="280dp"
+                android:layout_height="35dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:lines="1"
+                android:maxLines="1"
+                android:imeOptions="actionDone"
+                android:background="@drawable/round_corners"
+                android:hint="@string/search_hint"
+                android:textColor="#6f6f6f"
+                android:textColorHint="#6f6f6f"
+                android:inputType="text"
+                android:textSize="15sp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/menuButton"
+                android:layout_marginBottom="12dp"
+                android:layout_alignEnd="@+id/refreshButton"/>
+
+            <ImageButton
+                android:visibility="invisible"
+                android:id="@+id/cancelSearchButton"
+                android:layout_width="23dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_height="23dp"
+                android:layout_alignBottom="@+id/searchEditText"
+                android:layout_alignEnd="@+id/searchEditText"
+                android:background="#00000000"
+                android:scaleType="fitXY"
+                android:src="@drawable/button_cancel"/>
+
+        </RelativeLayout>
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="98dp"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f8f8f8">
+
+
+
+            <com.livelife.pioalert.ScrollMapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                />
+
+            <ImageButton
+                android:id="@+id/zoomToUserButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="16dp"
+                android:background="#00000000"
+                android:elevation="4dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/map_user_button"/>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_below="@id/mapView"
+                android:background="#ffffff"
+                android:clickable="true"
+                tools:context=".MainActivity"
+                tools:listitem="@layout/horizontal_item_rect"
+                />
+
+            <View
+                android:id="@+id/separator1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/recyclerView"
+                android:background="#e3e3e3"/>
+
+            <RelativeLayout
+                android:id="@+id/com1Container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/separator1"
+                android:layout_marginTop="24dp">
+
+                <ImageView
+                    android:id="@+id/com1ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholder_logo_16_9"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="#88000000"/>
+
+                <TextView
+                    android:textColor="#ffffff"
+                    android:id="@+id/com1TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="44dp"
+                    android:text="NOME NEGOZIO"
+                    android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                    android:textSize="22sp"/>
+
+                <Button
+                    android:textColor="#ffffff"
+                    android:id="@+id/comButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/com1TextView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="55dp"
+                    android:background="@drawable/round_corners_white_border"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:text="@string/go_to_store"/>
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignBottom="@+id/com1ImageView"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="17dp"
+                    android:src="@drawable/pointer"/>
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/com1RecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_below="@id/com1Container"
+                android:background="#ffffff"
+                android:clickable="true"
+                tools:context=".MainActivity"
+                tools:listitem="@layout/horizontal_item_square"
+                />
+
+            <View
+                android:id="@+id/separator2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/com1RecyclerView"
+                android:background="#e3e3e3"/>
+
+            <RelativeLayout
+                android:id="@+id/com2Container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/separator2"
+                android:layout_marginTop="24dp"
+                android:background="#ffffff">
+
+                <ImageView
+                    android:id="@+id/com2ImageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="#ffffff"
+                    android:clickable="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="18dp"
+                    android:elevation="3dp"
+                    android:cropToPadding="false"
+                    android:src="@drawable/signin_logo_pio"/>
+
+                <TextView
+                    android:id="@+id/com2TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/dummy_content_row"
+                    android:layout_alignBottom="@+id/com2ImageView"
+                    android:layout_toEndOf="@+id/com2ImageView"
+                    android:layout_marginBottom="14dp"/>
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/com2RecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_below="@id/com2Container"
+                android:background="#ffffff"
+                android:clickable="true"
+                tools:context=".MainActivity"
+
+                tools:listitem="@layout/horizontal_item_square"
+                />
+
+            <View
+                android:id="@+id/separator3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/com2RecyclerView"
+                android:layout_marginBottom="24dp"
+                android:background="#e3e3e3"/>
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+    <ListView
+        android:background="#ddffffff"
+        android:elevation="3dp"
+        android:translationZ="3dp"
+        android:id="@+id/searchResultsListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_marginTop="98dp">
+
+    </ListView>
+</FrameLayout>

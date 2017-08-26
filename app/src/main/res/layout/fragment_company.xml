@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             xmlns:tools="http://schemas.android.com/tools">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:clipToPadding="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+
+            <ImageButton
+                android:id="@+id/menuButton"
+                android:layout_width="55dp"
+                android:layout_height="45dp"
+                android:padding="9dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_menu"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_shops"
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:layout_alignBottom="@+id/menuButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"/>
+
+
+
+        </RelativeLayout>
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="45dp"
+        android:elevation="4dp"
+        android:id="@+id/catRecycler"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:clipToPadding="false"
+        tools:listitem="@layout/horizontal_cat_rect"
+        android:orientation="horizontal"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeRefresh"
+        android:layout_marginTop="98dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/companiesRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MainActivity"
+            tools:listitem="@layout/company_view"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+
+</FrameLayout>

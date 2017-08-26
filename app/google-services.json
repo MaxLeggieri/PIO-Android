@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "920202055350",
+    "firebase_url": "https://pioalert-41da6.firebaseio.com",
+    "project_id": "pioalert-41da6",
+    "storage_bucket": "pioalert-41da6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920202055350:android:1b99e77005aed7f9",
+        "android_client_info": {
+          "package_name": "com.livelife.pioalert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "920202055350-3t25lumk83h4pq7ql7pqknmnldp5nc13.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAb4FqiFclWk-CGQgTTvtSVfjQnYJIcJ40"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "920202055350-3t25lumk83h4pq7ql7pqknmnldp5nc13.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

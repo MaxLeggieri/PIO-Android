@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.livelife.pioalert.ProfileActivity">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:padding="7dp"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/title_categories"
+                android:textColor="#ffffff"
+                android:textSize="20sp"
+                android:id="@+id/textView"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_categories_desc"
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="14dp"/>
+
+
+
+        </RelativeLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ListView
+        android:listSelector="@android:color/transparent"
+        android:background="#ffffff"
+        android:layout_marginTop="98dp"
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/doneButton"
+        android:divider="@null"
+        android:dividerHeight="0dp">
+
+    </ListView>
+
+    <Button
+        android:textColor="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:text="@string/choose_how_much"
+        android:textSize="20sp"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/doneButton"/>
+</RelativeLayout>

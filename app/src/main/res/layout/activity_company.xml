@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context="com.livelife.pioalert.CompanyActivity">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+
+                android:id="@+id/backButton"
+                android:padding="12dp"
+                android:layout_width="50dp"
+                android:layout_height="44dp"
+                android:layout_alignParentLeft="true"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_back"/>
+
+            <TextView
+
+                android:id="@+id/comNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:text="Company Name"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textColor="#ffffff"
+                android:textSize="18sp"/>
+
+        </RelativeLayout>
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_below="@id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.gms.maps.MapView
+                android:focusableInTouchMode="true"
+                android:layout_alignParentTop="true"
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"/>
+            
+            <ImageView
+                android:layout_width="100dp"
+                android:background="#ffffff"
+                android:elevation="7dp"
+                android:layout_height="100dp"
+                android:layout_below="@id/mapView"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="-24dp"
+                android:id="@+id/comImage"/>
+
+            <ImageButton
+                android:visibility="invisible"
+                android:layout_below="@id/mapView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_like"
+                android:scaleType="fitXY"
+                android:background="#00000000"
+                android:layout_marginEnd="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="12dp"
+                android:id="@+id/likeButton"/>
+
+            <ImageButton
+                android:visibility="invisible"
+                android:id="@+id/shareButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_share"
+                android:scaleType="fitXY"
+                android:background="#00000000"
+                android:layout_alignTop="@+id/likeButton"
+                android:layout_toStartOf="@+id/likeButton"
+                android:layout_marginEnd="10dp"/>
+
+            <TextView
+                android:ellipsize="end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#6f6f6f"
+                android:textSize="18sp"
+                android:text="Nome Negozio"
+                android:maxLines="1"
+                android:id="@+id/shopNameTextView"
+                android:layout_marginStart="11dp"
+                android:layout_marginEnd="21dp"
+                android:layout_above="@+id/shopDistanceTextView"
+                android:layout_toEndOf="@+id/comImage"/>
+
+            <TextView
+                android:id="@+id/shopDistanceTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A 1,7 Km da te"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textColor="#5da5e5"
+                android:layout_alignBottom="@+id/comImage"
+                android:layout_alignStart="@+id/shopNameTextView"/>
+
+
+            <TextView
+                android:id="@+id/comDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Company desc"
+                android:maxLines="200"
+                android:textSize="16sp"
+                android:layout_marginTop="44dp"
+                android:textColor="#6f6f6f"
+                android:layout_below="@+id/comImage"
+                android:layout_alignStart="@+id/comImage"
+                android:layout_alignEnd="@+id/likeButton"/>
+
+
+            <LinearLayout
+                android:clickable="true"
+                android:background="#ffffff"
+                android:id="@+id/phoneButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@+id/comDesc"
+                android:layout_alignStart="@+id/comDesc"
+                android:layout_marginTop="17dp"
+                android:layout_alignEnd="@+id/comDesc"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:clickable="false"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_phone_small"/>
+
+                <TextView
+                    android:clickable="false"
+                    android:inputType="phone"
+                    android:id="@+id/phoneNumber"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="085 12 34 567"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/locationButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="11dp"
+                android:gravity="center_vertical"
+                android:layout_below="@+id/phoneButton"
+                android:layout_alignStart="@+id/phoneButton"
+                android:layout_alignEnd="@+id/phoneButton">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_location_small"/>
+
+                <TextView
+                    android:id="@+id/locationAddress"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Via delle Strade 123, 12345 Citta"/>
+
+
+
+            </LinearLayout>
+
+            <Button
+                android:textColor="#ffffff"
+                android:id="@+id/infoButton"
+                android:layout_width="180dp"
+                android:layout_height="36dp"
+                android:text="@string/ask_info"
+                android:background="@drawable/button_round_corners"
+                android:layout_marginTop="23dp"
+                android:layout_below="@+id/locationButton"
+                android:layout_centerHorizontal="true"/>
+
+            <View
+                android:id="@+id/separator"
+                android:layout_marginTop="22dp"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:background="#f6f6f6"
+                android:layout_below="@id/infoButton"
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:background="#f6f6f6"
+                android:id="@+id/companyPromos"
+                android:layout_below="@id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context=".CompanyActivity"
+                tools:listitem="@layout/promo_view"/>
+
+
+            <LinearLayout
+                android:id="@+id/productsHeader"
+                android:layout_below="@id/companyPromos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_margin="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="#5c5c5c"
+                    android:text="@string/products"
+                    android:textAppearance="@style/AppTheme.TextAppearance.Bold"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:background="#ffffff"
+                android:id="@+id/companyProducts"
+                android:layout_below="@id/productsHeader"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                tools:context=".CompanyActivity"
+                tools:listitem="@layout/horizontal_item_square"/>
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

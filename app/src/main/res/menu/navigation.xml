@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_explore"
+        android:icon="@drawable/menu_esplora"
+        android:title="@string/title_explore"/>
+
+    <item
+        android:id="@+id/navigation_promo"
+        android:icon="@drawable/menu_promo"
+        android:title="@string/title_promo"/>
+
+    <item
+        android:id="@+id/navigation_showcase"
+        android:icon="@drawable/menu_vetrina"
+        android:title="@string/title_showcase"/>
+
+    <item
+        android:id="@+id/navigation_shops"
+        android:icon="@drawable/menu_negozi"
+        android:title="@string/title_shops"/>
+
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/menu_notifiche"
+        android:title="@string/title_notifications"/>
+
+</menu>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#f6f6f6">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="#ffffff"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:elevation="3dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+
+
+        <ImageView
+            android:layout_marginLeft="13dp"
+            android:layout_width="114dp"
+            android:layout_height="114dp"
+            android:src="@drawable/placeholder_logo_square"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:id="@+id/imageView"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"/>
+
+
+        <TextView
+            android:id="@+id/title"
+            android:ellipsize="end"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:maxLines="2"
+            android:textSize="16sp"
+            android:textColor="#6f6f6f"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_toEndOf="@+id/imageView"/>
+
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
+            android:textSize="12sp"
+            android:maxLines="3"
+            android:textColor="#6f6f6f"
+            android:layout_below="@+id/title"
+            android:layout_alignStart="@+id/title"
+            android:layout_marginTop="6dp"
+            android:layout_alignEnd="@+id/title"
+            android:layout_above="@+id/price"/>
+
+        <TextView
+            android:id="@+id/total"
+            android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="location"
+            android:textSize="16sp"
+            android:textColor="#5da5e5"
+            android:layout_alignBottom="@+id/imageView"
+            android:layout_alignStart="@+id/description"/>
+
+
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

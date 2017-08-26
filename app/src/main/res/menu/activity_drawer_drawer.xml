@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/group1" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_interest"
+            android:title="I miei interessi"/>
+        <item
+            android:id="@+id/nav_carts"
+            android:title="Carrelli"/>
+        <item
+            android:id="@+id/nav_orders"
+            android:title="Ordini"/>
+        <item
+            android:id="@+id/nav_ranking"
+            android:title="Classifica"/>
+        <item
+            android:id="@+id/nav_felix"
+            android:title="Aziende Felix"/>
+    </group>
+
+    <group android:id="@+id/group2" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_logout"
+            android:title="Esci"/>
+        <item
+            android:id="@+id/nav_info"
+            android:title="Info"/>
+    </group>
+
+
+
+</menu>
