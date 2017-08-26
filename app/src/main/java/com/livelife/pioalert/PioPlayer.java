@@ -18,6 +18,10 @@ public class PioPlayer {
     PioPlayer(JSONObject object) {
 
         try {
+
+
+
+            
             name = object.getString("uname");
             imageFullPath = object.getString("upic");
             score = object.getInt("score");
