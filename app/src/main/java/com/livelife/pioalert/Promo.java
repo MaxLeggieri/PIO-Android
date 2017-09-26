@@ -1,15 +1,9 @@
 package com.livelife.pioalert;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
 
 /**
  * Created by Max on 22/07/16.
@@ -19,6 +13,7 @@ public class Promo {
     int pid;
     int brandId;
     String desc;
+    String relatedProductsIds = "";
     String imagePath;
     String prodName;
     String prodSpecs;
@@ -54,6 +49,9 @@ public class Promo {
             brandId = jsonObject.getInt("idcom");
             desc = jsonObject.getString("description");
             imagePath = jsonObject.getString("image");
+            if (jsonObject.has("relatedProductsIds")){
+                relatedProductsIds = jsonObject.getString("relatedProductsIds");
+            }
             prodName = jsonObject.getString("products");
             title = jsonObject.getString("title");
             distanceHuman = jsonObject.getString("distanceHuman");
