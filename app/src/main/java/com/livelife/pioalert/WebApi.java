@@ -6,12 +6,10 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
-import org.altbeacon.beacon.Beacon;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -630,6 +628,48 @@ public class WebApi {
         }
 
 
+    }
+
+    public ArrayList<Product> getAllProductsByIds(String ids){
+        ArrayList<Product> products = new ArrayList<>();
+
+        String query = apiAddress+"?method=product";
+        try {
+            query += "&idproduct="+ids;
+            query += "&lat=" + PioUser.getInstance().location.getLatitude();
+            query += "&lng=" + PioUser.getInstance().location.getLongitude();
+
+            Log.e(tag,"Calling: "+query);
+
+            JSONObject response = getJsonObjectFromUrl(query);
+            JSONObject dataObj = response.getJSONObject("data");
+
+            if(!dataObj.has("products")) {
+                return products;
+            }
+
+            JSONArray d = dataObj.getJSONArray("products");
+
+
+
+            for(int i=0; i < d.length(); i++) {
+                JSONObject jsonObject = d.getJSONObject(i);
+
+                Product p = new Product(jsonObject);
+                products.add(p);
+
+            }
+
+
+            return products;
+
+
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return products;
     }
 
     public Product getProductById(int idp) {
