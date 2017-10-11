@@ -12,6 +12,10 @@ import java.io.Serializable;
 public class Product implements Serializable {
 
     public int pid;
+    public String calendarType = "";
+    public String fromtime = "";
+    public String totime = "";
+    public String workingDays = "";
     public String name;
     public String descShort;
     public String descLong;
@@ -35,6 +39,19 @@ public class Product implements Serializable {
     Product(JSONObject jsonObject) {
 
         try {
+
+            if (jsonObject.has("calendarType")){
+                this.calendarType = jsonObject.getString("calendarType");
+            }
+            if (jsonObject.has("totime")){
+                this.totime = jsonObject.getString("totime");
+            }
+            if (jsonObject.has("fromtime")){
+                this.fromtime = jsonObject.getString("fromtime");
+            }
+            if (jsonObject.has("workingDays")){
+                this.workingDays = jsonObject.getString("workingDays");
+            }
             this.pid = jsonObject.getInt("idp");
             if(jsonObject.has("sellingMethod")) {
                 this.sellingMethod = jsonObject.getInt("sellingMethod");

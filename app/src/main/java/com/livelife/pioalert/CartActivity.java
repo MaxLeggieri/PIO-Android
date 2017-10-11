@@ -206,14 +206,14 @@ public class CartActivity extends AppCompatActivity {
         dialogBuilder.setPositiveButton("Fatto", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                WebApi.getInstance().basketMove(p.pid,p.quantity);
+                WebApi.getInstance().basketMove(p.pid,p.quantity,0,0);
                 updateCart();
             }
         });
         dialogBuilder.setNegativeButton("Rimuovi", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                WebApi.getInstance().basketMove(p.pid,0);
+                WebApi.getInstance().basketMove(p.pid,0,0,0);
                 updateCart();
             }
         });
@@ -319,7 +319,12 @@ public class CartActivity extends AppCompatActivity {
             }
         });
         dialog.setNegativeButton("Ignora", null);
-        dialog.show();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog.show();
+            }
+        });
     }
 
     public void showErrorDialog() {
