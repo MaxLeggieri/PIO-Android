@@ -74,7 +74,10 @@ public class Product implements Serializable {
                 this.initialPrice = "0";
             }
 
-            this.priceUnit = jsonObject.getString("priceUnit");
+            if (jsonObject.has("priceUnit")){
+                this.priceUnit = jsonObject.getString("priceUnit");
+            }
+
             if (jsonObject.has("scontoPercent")) {
                 this.discountPercent = jsonObject.getString("scontoPercent");
             }

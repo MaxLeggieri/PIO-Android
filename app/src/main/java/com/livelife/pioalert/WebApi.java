@@ -987,11 +987,16 @@ public class WebApi {
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
         query += "&idp=" + idProduct;
-        if (quantity <= 0) {
+        if (calendarType==1){
+            if (quantity <= 0) {
+                query += "&quantity=" + 1;
+            } else {
+                query += "&quantity=" + quantity;
+            }
+        }else{
             query += "&quantity=" + 1;
-        } else {
-            query += "&quantity=" + quantity;
         }
+
 
 
         if (calendarTime > 0) {

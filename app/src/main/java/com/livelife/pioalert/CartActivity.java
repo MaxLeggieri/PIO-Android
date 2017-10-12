@@ -35,14 +35,14 @@ public class CartActivity extends AppCompatActivity {
     ImageButton backButton;
     Cart cart;
     int idCom;
-
-    Button bookingButton,buyButton,changeAddressButton;
+    String calendarType = "";
+    Button bookingButton, buyButton, changeAddressButton;
     EditText userMessage;
 
     RecyclerView cartRecyclerView;
     CartRecyclerView cartAdapter;
 
-    TextView subTotal,shipAmount,total,shippingAddress;
+    TextView subTotal, shipAmount, total, shippingAddress;
 
     RelativeLayout loadingOverlay;
 
@@ -56,9 +56,13 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        idCom = getIntent().getIntExtra("idCom",0);
+        idCom = getIntent().getIntExtra("idCom", 0);
+        if (getIntent().hasExtra("calendarType")) {
+            calendarType = getIntent().getStringExtra("calendarType");
+        }
 
-        if (idCom==0) finish();
+
+        if (idCom == 0) finish();
 
         backButton = (ImageButton) findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -85,13 +89,13 @@ public class CartActivity extends AppCompatActivity {
 
                 loadingOverlay.setVisibility(View.VISIBLE);
 
-                boolean sent = WebApi.getInstance().emailPrenotation(cart.companyId,userMessage.getText().toString());
+                boolean sent = WebApi.getInstance().emailPrenotation(cart.companyId, userMessage.getText().toString());
 
                 AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
 
                 if (sent) {
 
-                    dialog.setMessage("Verrai contattato via e-mail da "+cart.companyName+" per i dettagli.");
+                    dialog.setMessage("Verrai contattato via e-mail da " + cart.companyName + " per i dettagli.");
                     dialog.setTitle("La prenotazione è andata a buon fine!");
                     dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -130,13 +134,12 @@ public class CartActivity extends AppCompatActivity {
         changeAddressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(CartActivity.this,ShippingAddressActivity.class);
+                Intent i = new Intent(CartActivity.this, ShippingAddressActivity.class);
                 startActivity(i);
             }
         });
 
         shippingAddress = (TextView) findViewById(R.id.shippingAddress);
-
 
 
         subTotal = (TextView) findViewById(R.id.subTotal);
@@ -153,7 +156,7 @@ public class CartActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Log.e(tag,"onResume...");
+        Log.e(tag, "onResume...");
 
         updateCart();
 
@@ -163,8 +166,7 @@ public class CartActivity extends AppCompatActivity {
 
         if (cart.sellingMethod == 2) {
             buyButton.setVisibility(View.GONE);
-        }
-        else if(cart.sellingMethod == 1) {
+        } else if (cart.sellingMethod == 1) {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -172,7 +174,6 @@ public class CartActivity extends AppCompatActivity {
                 }
             });
         }
-
 
 
     }
@@ -186,7 +187,7 @@ public class CartActivity extends AppCompatActivity {
         }
 
         if (cartAdapter == null) {
-            cartAdapter = new CartRecyclerView(cart.products,this);
+            cartAdapter = new CartRecyclerView(cart.products, this);
             cartRecyclerView.setAdapter(cartAdapter);
         } else {
             cartAdapter.setItems(cart.products);
@@ -206,14 +207,14 @@ public class CartActivity extends AppCompatActivity {
         dialogBuilder.setPositiveButton("Fatto", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                WebApi.getInstance().basketMove(p.pid,p.quantity,0,0);
+                WebApi.getInstance().basketMove(p.pid, p.quantity, 0, 0);
                 updateCart();
             }
         });
         dialogBuilder.setNegativeButton("Rimuovi", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                WebApi.getInstance().basketMove(p.pid,0,0,0);
+                WebApi.getInstance().basketMove(p.pid, 0, 0, 0);
                 updateCart();
             }
         });
@@ -226,7 +227,7 @@ public class CartActivity extends AppCompatActivity {
         Button sub = (Button) dialogView.findViewById(R.id.subButton);
 
         final TextView quantity = (TextView) dialogView.findViewById(R.id.quantity);
-        quantity.setText(""+p.quantity+"");
+        quantity.setText("" + p.quantity + "");
 
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +238,7 @@ public class CartActivity extends AppCompatActivity {
                     p.quantity++;
                 }
 
-                quantity.setText(""+p.quantity+"");
+                quantity.setText("" + p.quantity + "");
 
             }
         });
@@ -250,7 +251,7 @@ public class CartActivity extends AppCompatActivity {
                     p.quantity--;
                 }
 
-                quantity.setText(""+p.quantity+"");
+                quantity.setText("" + p.quantity + "");
 
             }
         });
@@ -260,16 +261,15 @@ public class CartActivity extends AppCompatActivity {
 
     }
 
-    String currentDhlRateId,currentPaypalClientToken,currentDhlTotal;
+    String currentDhlRateId, currentPaypalClientToken, currentDhlTotal;
 
     void getDhlRate() {
 
 
-
-        if(PioUser.getInstance().shipAddress != null) {
+        if (PioUser.getInstance().shipAddress != null) {
             JSONObject rateRequest = WebApi.getInstance().getDhlRate(CartActivity.this, idCom);
             try {
-                Log.v(tag, "RATE REQUEST: "+rateRequest.toString(2));
+                Log.v(tag, "RATE REQUEST: " + rateRequest.toString(2));
 
                 if (!rateRequest.has("id_rate")) {
                     showErrorDialog();
@@ -285,7 +285,7 @@ public class CartActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        Log.v(tag,"runOnUiThread...");
+                        Log.v(tag, "runOnUiThread...");
                         shipAmount.setText(Utility.getInstance().getFormattedPrice(currentDhlTotal));
                         double t = cart.subTotal + Double.parseDouble(currentDhlTotal);
                         total.setText(Utility.getInstance().getFormattedPrice(t));
@@ -303,28 +303,31 @@ public class CartActivity extends AppCompatActivity {
         }
 
 
-
     }
 
 
     public void showNoShippingDialog() {
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
-        dialog.setTitle("Attenzione");
-        dialog.setMessage("Non hai specificato nessun indirizzo di spedizione, vuoi specificarne uno?");
-        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                Intent i = new Intent(CartActivity.this,ShippingAddressActivity.class);
-                startActivity(i);
-            }
-        });
-        dialog.setNegativeButton("Ignora", null);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                dialog.show();
-            }
-        });
+        System.out.println("calendarType : " + calendarType);
+        if (calendarType.equalsIgnoreCase("0")) {
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
+            dialog.setTitle("Attenzione");
+            dialog.setMessage("Non hai specificato nessun indirizzo di spedizione, vuoi specificarne uno?");
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    Intent i = new Intent(CartActivity.this, ShippingAddressActivity.class);
+                    startActivity(i);
+                }
+            });
+            dialog.setNegativeButton("Ignora", null);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.show();
+                }
+            });
+        }
+
     }
 
     public void showErrorDialog() {
@@ -345,8 +348,8 @@ public class CartActivity extends AppCompatActivity {
         DropInRequest dropInRequest = new DropInRequest()
                 .clientToken(currentPaypalClientToken);
 
-        double t = cart.subTotal+cart.shippingTotal;
-        dropInRequest.amount(""+t+"");
+        double t = cart.subTotal + cart.shippingTotal;
+        dropInRequest.amount("" + t + "");
         dropInRequest.requestThreeDSecureVerification(true);
 
         startActivityForResult(dropInRequest.getIntent(this), 1234);
@@ -356,8 +359,8 @@ public class CartActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case (9999) : {
+        switch (requestCode) {
+            case (9999): {
                 if (resultCode == Activity.RESULT_OK) {
 
                     updateCart();
@@ -366,29 +369,29 @@ public class CartActivity extends AppCompatActivity {
 
             }
 
-            case (1234) : {
+            case (1234): {
 
                 if (resultCode == Activity.RESULT_OK) {
                     DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
                     // use the result to update your UI and send the payment method nonce to your server
 
-                    Log.v(tag,"PayPal DropInResult nonce: "+result.getPaymentMethodNonce().getNonce());
+                    Log.v(tag, "PayPal DropInResult nonce: " + result.getPaymentMethodNonce().getNonce());
 
                     final String nonce = result.getPaymentMethodNonce().getNonce();
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
-                            double t = cart.subTotal+cart.shippingTotal;
-                            JSONObject resp = WebApi.getInstance().paypalTrans(nonce,""+t+"",currentDhlRateId,idCom);
+                            double t = cart.subTotal + cart.shippingTotal;
+                            JSONObject resp = WebApi.getInstance().paypalTrans(nonce, "" + t + "", currentDhlRateId, idCom);
 
                             try {
                                 final boolean responseOk = resp.getBoolean("response");
-                                Log.v(tag,"paypalTrans: "+resp.toString(2));
+                                Log.v(tag, "paypalTrans: " + resp.toString(2));
 
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if(responseOk) {
+                                        if (responseOk) {
 
                                             AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
                                             dialog.setMessage("L'ordine è andato a buon fine. Controlla la sezione Ordini per controllare la spedizione del tuo acquisto.");
@@ -430,13 +433,13 @@ public class CartActivity extends AppCompatActivity {
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     // the user canceled
 
-                    Log.v(tag,"PayPal DropInResult: User canceled");
+                    Log.v(tag, "PayPal DropInResult: User canceled");
 
                 } else {
                     // handle errors here, an exception may be available in
                     Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
 
-                    Log.v(tag,"PayPal DropInResult: Error "+error.toString());
+                    Log.v(tag, "PayPal DropInResult: Error " + error.toString());
                 }
 
                 break;

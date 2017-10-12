@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -231,12 +232,17 @@ public class ProductActivity extends AppCompatActivity {
                 }
 
 
-                boolean added = WebApi.getInstance().basketMove(p.pid, (mCheckOutTime - mCalTime), mCalType, mCalTime);
+
+
+                long mQuantity = TimeUnit.DAYS.convert(mCheckOutTime - mCalTime, TimeUnit.MILLISECONDS);
+                System.out.println ("Days: " +mQuantity );
+                boolean added = WebApi.getInstance().basketMove(p.pid,mQuantity  , mCalType, mCalTime);
 
                 if (added) {
                     addProgressBar.setVisibility(View.GONE);
                     Intent intent = new Intent(ProductActivity.this, CartActivity.class);
                     intent.putExtra("idCom", p.idCom);
+                    intent.putExtra("calendarType", p.calendarType);
                     startActivity(intent);
                 } else {
                     addToCartButton.setEnabled(true);
