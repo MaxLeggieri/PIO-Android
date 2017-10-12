@@ -36,7 +36,7 @@ public class CartActivity extends AppCompatActivity {
     Cart cart;
     int idCom;
 
-    Button bookingButton,buyButton,changeAddressButton;
+    Button bookingButton,buyButton,buyAndCollectButton,changeAddressButton;
     EditText userMessage;
 
     RecyclerView cartRecyclerView;
@@ -125,6 +125,19 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
+        buyAndCollectButton = (Button) findViewById(R.id.buyAndCollectButton);
+        buyAndCollectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkoutAndCollectLater();
+            }
+        });
+
+        buyButton.setEnabled(false);
+        buyAndCollectButton.setEnabled(false);
+        buyButton.setAlpha(0.4f);
+        buyAndCollectButton.setAlpha(0.4f);
+
 
         changeAddressButton = (Button) findViewById(R.id.changeAddressButton);
         changeAddressButton.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +176,7 @@ public class CartActivity extends AppCompatActivity {
 
         if (cart.sellingMethod == 2) {
             buyButton.setVisibility(View.GONE);
+            buyAndCollectButton.setVisibility(View.GONE);
         }
         else if(cart.sellingMethod == 1) {
             AsyncTask.execute(new Runnable() {
@@ -195,6 +209,7 @@ public class CartActivity extends AppCompatActivity {
         subTotal.setText(Utility.getInstance().getFormattedPrice(cart.subTotal));
         //shipAmount.setText(Utility.getInstance().getFormattedPrice(cart.subTotal));
         total.setText(Utility.getInstance().getFormattedPrice(cart.subTotal));
+
     }
 
     public void modifyQuantityForItem(final Product p) {
@@ -290,7 +305,13 @@ public class CartActivity extends AppCompatActivity {
                         double t = cart.subTotal + Double.parseDouble(currentDhlTotal);
                         total.setText(Utility.getInstance().getFormattedPrice(t));
                         buyButton.setEnabled(true);
+                        buyAndCollectButton.setEnabled(true);
                         buyButton.setAlpha(1);
+                        buyAndCollectButton.setAlpha(1);
+
+
+                        buyButton.setText("PAGA E RICEVI A CASA "+Utility.getInstance().getFormattedPrice(t));
+                        buyAndCollectButton.setText("PAGA E RITIRA IN NEGOZIO "+Utility.getInstance().getFormattedPrice(cart.subTotal));
 
                     }
                 });
@@ -348,6 +369,17 @@ public class CartActivity extends AppCompatActivity {
 
     }
 
+    void checkoutAndCollectLater() {
+        DropInRequest dropInRequest = new DropInRequest()
+                .clientToken(currentPaypalClientToken);
+
+        double t = cart.subTotal;
+        dropInRequest.amount(""+t+"");
+        dropInRequest.requestThreeDSecureVerification(true);
+
+        startActivityForResult(dropInRequest.getIntent(this), 3456);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -386,7 +418,81 @@ public class CartActivity extends AppCompatActivity {
                                         if(responseOk) {
 
                                             AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
-                                            dialog.setMessage("L'ordine è andato a buon fine. Controlla la sezione Ordini per controllare la spedizione del tuo acquisto.");
+                                            dialog.setMessage("L'ordine è andato a buon fine, ti abbiamo mandato una mail di conferma. Controlla la sezione Ordini per controllare la spedizione del tuo acquisto.");
+                                            dialog.setTitle("Grazie!");
+                                            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                                                    finish();
+                                                }
+                                            });
+                                            dialog.show();
+
+                                        } else {
+
+                                            AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
+                                            dialog.setMessage("Si è verificato un error. Riprova o contatta il gestore della tua carta o servizio.");
+                                            dialog.setTitle("Ops!");
+                                            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                                                    finish();
+                                                }
+                                            });
+                                            dialog.show();
+
+                                        }
+                                    }
+                                });
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                    });
+
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    // the user canceled
+
+                    Log.v(tag,"PayPal DropInResult: User canceled");
+
+                } else {
+                    // handle errors here, an exception may be available in
+                    Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
+
+                    Log.v(tag,"PayPal DropInResult: Error "+error.toString());
+                }
+
+                break;
+            }
+            case (3456): {
+                if (resultCode == Activity.RESULT_OK) {
+                    DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+                    // use the result to update your UI and send the payment method nonce to your server
+
+                    Log.v(tag,"PayPal DropInResult nonce: "+result.getPaymentMethodNonce().getNonce());
+
+                    final String nonce = result.getPaymentMethodNonce().getNonce();
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            double t = cart.subTotal;
+                            JSONObject resp = WebApi.getInstance().paypalTransNoShip(nonce,""+t+"",idCom);
+
+                            try {
+                                final boolean responseOk = resp.getBoolean("response");
+                                Log.v(tag,"paypalTrans: "+resp.toString(2));
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(responseOk) {
+
+                                            AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
+                                            dialog.setMessage("L'ordine è andato a buon fine, ti abbiamo mandato una mail di conferma. Vai al negozio con un tuo documento d'identità e ritira il tuo acquisto.");
                                             dialog.setTitle("Grazie!");
                                             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                                 @Override

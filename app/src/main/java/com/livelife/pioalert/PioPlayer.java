@@ -13,6 +13,7 @@ public class PioPlayer {
     int score;
     int rank;
     int uid;
+    String coderef;
     public boolean currentUser = false;
 
     PioPlayer(JSONObject object) {

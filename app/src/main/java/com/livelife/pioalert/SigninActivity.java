@@ -7,13 +7,17 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -58,6 +62,8 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
     LinearLayout fbButton,gButton;
     ProgressBar loginProgress;
 
+    EditText coderef;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -94,6 +100,13 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
 
             }
         };
+
+        coderef = (EditText) findViewById(R.id.coderef);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -252,7 +265,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 } else {
 
 
-                    JSONObject object = WebApi.getInstance().sendGoogleData(acct);
+                    JSONObject object = WebApi.getInstance().sendGoogleData(acct,coderef.getText().toString());
 
 
                     try {
@@ -304,7 +317,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                                         return;
                                     }
 
-                                    WebApi.getInstance().sendFacebookData(object.toString(), SigninActivity.this);
+                                    WebApi.getInstance().sendFacebookData(object.toString(), SigninActivity.this,coderef.getText().toString());
 
                                     try {
                                         Log.v(tag,"graphrequest: "+object.toString(2));

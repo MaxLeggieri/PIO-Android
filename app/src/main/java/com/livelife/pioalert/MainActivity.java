@@ -2,16 +2,19 @@ package com.livelife.pioalert;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -25,6 +28,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
     private final int REQUEST_PERMISSION_ACCESS_FINE_LOCATION=1;
 
     BroadcastReceiver receiver;
+    LocationService locationService;
 
     LocationService mService;
     boolean mBound = false;
@@ -56,11 +61,13 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
     ImageView userImageView;
     TextView userWelcomeTextView,userPointsTextView;
-
+    Button promoCode;
     AHBottomNavigation bottomNavigation;
 
 
 
+    PioPlayer you;
+    boolean locationServiceBound = false;
     public void startHome() {
 
         if(homeFragment == null) {
@@ -79,15 +86,38 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
                 }
             } else {
                 // Already Granted
-                Log.e(tag,"Already Granted permissions for LocationService...");
-                Intent serviceIntent = new Intent(this, LocationService.class);
-                serviceIntent.putExtra("uid",PioUser.getInstance().uid);
-                serviceIntent.putExtra("deviceToken",WebApi.getInstance().deviceToken);
-                startService(serviceIntent);
 
-                PioPlayer you = WebApi.getInstance().userRanking();
+
+
+                if (!locationServiceBound) {
+
+                    Log.v(tag,"Starting LocationService...");
+
+                    Intent serviceIntent = new Intent(MainActivity.this, LocationService.class);
+                    serviceIntent.putExtra("uid",PioUser.getInstance().uid);
+                    serviceIntent.putExtra("deviceToken",WebApi.getInstance().deviceToken);
+                    bindService(serviceIntent, new ServiceConnection() {
+                        @Override
+                        public void onServiceConnected(ComponentName name, IBinder service) {
+                            LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
+                            locationService = binder.getService();
+                            locationServiceBound = true;
+                            Log.v(tag, "LocationService connected...");
+                        }
+
+                        @Override
+                        public void onServiceDisconnected(ComponentName name) {
+                            Log.v(tag, "LocationService disconnected...");
+                        }
+                    }, Context.BIND_AUTO_CREATE);
+                    startService(serviceIntent);
+                }
+
+                you = WebApi.getInstance().userRanking();
                 Log.v(tag,"PioPlayer: "+you.name);
                 userPointsTextView.setText(""+you.score+" pts");
+                promoCode.setPaintFlags(promoCode.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                promoCode.setText("PROMO CODE "+you.coderef);
 
                 homeFragment = new HomeFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, homeFragment, "HomeFragment").commit();
@@ -98,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
 
 
+        } else {
+            locationService.startLocationUpdates();
         }
 
 
@@ -122,8 +154,10 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
     @Override
     protected void onStop() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
         super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+
+        Log.v(tag,"onStop...");
     }
 
 
@@ -131,9 +165,22 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
     @Override
     protected void onPause() {
         super.onPause();
-        // TODO check if needed...
-        //if (beaconManager.isBound(this)) beaconManager.setBackgroundMode(true);
+        if (locationService != null) {
+            Log.v(tag,"Stopping location updates...");
+            locationService.stopLocationUpdates();
+        }
+        Log.v(tag,"onPause...");
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+
+
+        Log.v(tag,"onRestart...");
+    }
+
 
 
     @Override
@@ -254,7 +301,32 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         userImageView = (ImageView) navHeaderView.findViewById(R.id.userImageView);
         userWelcomeTextView = (TextView) navHeaderView.findViewById(R.id.userWelcomeTextView);
         userPointsTextView = (TextView) navHeaderView.findViewById(R.id.userPointsTextView);
+        promoCode = (Button) navHeaderView.findViewById(R.id.promoCode);
+        promoCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final android.app.AlertDialog ad = Utility.getInstance().getAlertDialog("Dai questo codice ad un amico/a e fai scaricare l'app",you.coderef,MainActivity.this);
+                ad.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "Condividi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Scarica l'app PIO qui: \n\n https://play.google.com/store/apps/details?id=com.livelife.pioalert \n\n Inserisci questo codice prima di accedere: "+you.coderef);
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Scarica l'app PIO! Unisciti a noi");
+                        sendIntent.setType("text/plain");
+                        startActivity(Intent.createChooser(sendIntent, "Condividi con:"));
+                    }
+                });
+                ad.setButton(android.app.AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ad.dismiss();
+                    }
+                });
+                ad.show();
 
+            }
+        });
 
 
 
@@ -593,6 +665,5 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
     public void setNotificationBadge(int howmany) {
         bottomNavigation.setNotification(""+howmany+"",4);
     }
-
 
 }

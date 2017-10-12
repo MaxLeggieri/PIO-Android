@@ -226,10 +226,10 @@ public class WebApi {
     }
 
     //Context fbContext;
-    private void postJsonObjectFromUrl(final String path, String json, Context c) throws ExecutionException, InterruptedException {
+    private void postJsonObjectFromUrl(final String path, String json, Context c, String coderef) throws ExecutionException, InterruptedException {
 
         //fbContext = c;
-        new PostAsyncTask().execute(path,json);
+        new PostAsyncTask().execute(path,json,coderef);
 
     }
 
@@ -246,11 +246,13 @@ public class WebApi {
             BufferedReader reader;
             String path = strings[0];
             String json = strings[1];
+            String coderef = strings[2];
             try {
 
 
                 jsonParam.put("method", "sendFbUserData");
                 jsonParam.put("device_token", deviceToken);
+                jsonParam.put("coderef",coderef);
                 jsonParam.put("fbUserData", new JSONObject(json));
 
 
@@ -307,7 +309,7 @@ public class WebApi {
      */
 
 
-    public JSONObject sendGoogleData(GoogleSignInAccount account) {
+    public JSONObject sendGoogleData(GoogleSignInAccount account,String coderef) {
 
 
         String query = apiAddress+"?method=sendGoogleUserData";
@@ -321,6 +323,7 @@ public class WebApi {
             query += "&idToken="+account.getIdToken();
             query += "&image="+account.getPhotoUrl().getPath();
             query += "&serverAuthCode="+account.getServerAuthCode();
+            query += "&coderef="+coderef;
 
             Log.v(tag,"Calling: "+query);
 
@@ -337,11 +340,11 @@ public class WebApi {
     }
 
 
-    public void sendFacebookData(String json, Context c) {
+    public void sendFacebookData(String json, Context c, String coderef) {
 
 
         try {
-            postJsonObjectFromUrl(apiAddress,json,c);
+            postJsonObjectFromUrl(apiAddress,json,c,coderef);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -1322,7 +1325,10 @@ public class WebApi {
             you.rank = youObj.getInt("pos");
             you.currentUser = true;
 
-            if (you.rank > 10 || you.rank == 0) {
+            JSONObject youTotalObj = data.getJSONObject("youTotal");
+            you.coderef = youTotalObj.getString("code");
+
+            if (you.rank > rec || you.rank == 0) {
                 players.add(you);
             }
 
@@ -1356,6 +1362,7 @@ public class WebApi {
         try {
             JSONObject response = getJsonObjectFromUrl(query);
             JSONObject youObj = response.getJSONObject("data").getJSONObject("you");
+            JSONObject youTotalObj = response.getJSONObject("data").getJSONObject("youTotal");
             PioPlayer you = new PioPlayer();
             you.name = PioUser.getInstance().userName;
             you.imageFullPath = PioUser.getInstance().userImagePath;
@@ -1363,7 +1370,7 @@ public class WebApi {
             you.score = youObj.getInt("score");
             you.rank = youObj.getInt("pos");
             you.currentUser = true;
-
+            you.coderef = youTotalObj.getString("code");
             currentPlayer = you;
 
             return you;
@@ -1464,14 +1471,23 @@ public class WebApi {
         return new JSONObject();
     }
 
-    boolean sandbox = false;
+    boolean sandbox = true;
 
+    public JSONObject paypalTransNoShip(String paymentMethodNonce, String amount, int idCom) {
+        return paypalTrans(paymentMethodNonce,amount,null,idCom);
+    }
     public JSONObject paypalTrans(String paymentMethodNonce, String amount, String rateId, int idCom) {
 
         HttpURLConnection c = null;
         try {
 
-            String data  = URLEncoder.encode("method", "UTF-8") + "=" + URLEncoder.encode("payPalTrans", "UTF-8");
+            String data = "";
+            if (rateId!=null) {
+                data += URLEncoder.encode("method", "UTF-8") + "=" + URLEncoder.encode("payPalTrans", "UTF-8");
+                data += "&" + URLEncoder.encode("id_rate", "UTF-8") + "=" + URLEncoder.encode(rateId, "UTF-8");
+            } else {
+                data += URLEncoder.encode("method", "UTF-8") + "=" + URLEncoder.encode("paypalTransNoShip", "UTF-8");
+            }
 
             data += "&" + URLEncoder.encode("uid", "UTF-8") + "=" + URLEncoder.encode(""+PioUser.getInstance().uid+"", "UTF-8");
             data += "&" + URLEncoder.encode("idcom", "UTF-8") + "=" + URLEncoder.encode(""+idCom+"", "UTF-8");
@@ -1479,7 +1495,7 @@ public class WebApi {
 
             data += "&" + URLEncoder.encode("payment_method_nonce", "UTF-8") + "=" + URLEncoder.encode(paymentMethodNonce, "UTF-8");
             data += "&" + URLEncoder.encode("amount", "UTF-8") + "=" + URLEncoder.encode(amount, "UTF-8");
-            data += "&" + URLEncoder.encode("id_rate", "UTF-8") + "=" + URLEncoder.encode(rateId, "UTF-8");
+
 
             if(sandbox) {
                 data += "&" + URLEncoder.encode("sandbox", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8");

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="230dp"
     android:background="#fafafa"
     android:padding="16dp">
 
@@ -45,5 +45,20 @@
         android:textAlignment="center"
         android:textColor="#9b9b9b"
         android:textSize="14sp"/>
+
+
+
+    <Button
+        android:id="@+id/promoCode"
+        android:layout_marginTop="3dp"
+        android:textSize="15sp"
+        android:textColor="#6f6f6f"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/userPointsTextView"
+        android:layout_centerHorizontal="true"
+        android:text="Promo code XXXXXXX"
+        android:background="#00000000"
+        />
 
 </RelativeLayout>
