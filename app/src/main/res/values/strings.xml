@@ -66,4 +66,10 @@
     <string name="products">PRODOTTI</string>
     <string name="ask_info">chiedi informazioni</string>
     <string name="promo">Promo</string>
+    <string name="prenatoSubitoText">PRENATO SUBITO</string>
+    <string name="checkIntext">Check-in</string>
+    <string name="checkoutText">Check-out</string>
+    <string name="giornaText">Giorna</string>
+    <string name="oraText">Ora</string>
+    <string name="chooseOraText">Choose Ora</string>
 </resources>

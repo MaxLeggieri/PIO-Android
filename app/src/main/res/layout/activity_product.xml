@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.livelife.pioalert.ProductActivity"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    tools:context="com.livelife.pioalert.ProductActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,14 +22,14 @@
             <ImageButton
 
                 android:id="@+id/backButton"
-                android:padding="12dp"
                 android:layout_width="50dp"
                 android:layout_height="44dp"
                 android:layout_alignParentLeft="true"
-                android:background="#00000000"
-                android:scaleType="fitCenter"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_back"/>
+                android:background="#00000000"
+                android:padding="12dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_back" />
 
             <TextView
                 android:id="@+id/productTitleTextView"
@@ -41,219 +40,370 @@
                 android:text="Product title"
                 android:textAppearance="@style/AppTheme.TextAppearance.Bold"
                 android:textColor="#ffffff"
-                android:textSize="18sp"/>
-
-
+                android:textSize="18sp" />
 
 
         </RelativeLayout>
 
 
-
     </android.support.design.widget.AppBarLayout>
+
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_below="@id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true"
+        android:layout_above="@+id/addToCartButton"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/addToCartButton">
+        android:layout_below="@id/appBar"
+        android:fillViewport="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
 
-        <TextView
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:id="@+id/prodName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="4"
-            android:layout_margin="28dp"
-            android:text="Product name"
-            android:ellipsize="end"
-            android:textColor="#6f6f6f"
-            android:textAppearance="@style/AppTheme.TextAppearance.Bold"
-            android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/prodName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="28dp"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:text="Product name"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textColor="#6f6f6f"
+                android:textSize="18sp" />
 
 
             <ImageButton
                 android:id="@+id/prodImageButton"
-                android:background="#dddddd"
-                android:elevation="3dp"
-                android:layout_marginLeft="28dp"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
-                android:scaleType="fitXY"
+                android:layout_below="@id/prodName"
+                android:layout_marginLeft="28dp"
                 android:adjustViewBounds="true"
-                android:layout_below="@id/prodName"/>
+                android:background="#dddddd"
+                android:elevation="3dp"
+                android:scaleType="fitXY" />
 
             <TextView
+                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#a3a3a3"
-                android:textSize="12sp"
-                android:text="@string/price"
                 android:layout_below="@+id/prodName"
-                android:layout_toEndOf="@+id/prodImageButton"
                 android:layout_marginStart="13dp"
                 android:layout_marginTop="12dp"
-                android:id="@+id/textView3"/>
+                android:layout_toEndOf="@+id/prodImageButton"
+                android:text="@string/price"
+                android:textColor="#a3a3a3"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="€ 9.99"
-                android:textSize="22sp"
-                android:textColor="#5da5e5"
-                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
-                android:layout_below="@+id/textView3"
                 android:layout_alignStart="@+id/textView3"
-                android:layout_marginTop="4dp"/>
+                android:layout_below="@+id/textView3"
+                android:layout_marginTop="4dp"
+                android:text="€ 9.99"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textColor="#5da5e5"
+                android:textSize="22sp" />
 
             <TextView
                 android:id="@+id/priceOff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="€ 9.99"
-                android:textSize="22sp"
-                android:textColor="#a3a3a3"
-                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
-                android:layout_below="@+id/price"
                 android:layout_alignStart="@+id/textView3"
-                android:layout_marginTop="3dp"/>
-
-            <TextView
+                android:layout_below="@+id/price"
+                android:layout_marginTop="3dp"
+                android:text="€ 9.99"
                 android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textColor="#a3a3a3"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/saveAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#a3a3a3"
-                android:textSize="12sp"
-                android:text="Nessuno sconto"
-                android:layout_marginTop="4dp"
-                android:id="@+id/saveAmount"
+                android:layout_alignStart="@+id/priceOff"
                 android:layout_below="@+id/priceOff"
-                android:layout_alignStart="@+id/priceOff"/>
+                android:layout_marginTop="4dp"
+                android:text="Nessuno sconto"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textColor="#a3a3a3"
+                android:textSize="12sp" />
 
 
             <TextView
+                android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#a3a3a3"
-                android:textSize="12sp"
-                android:text="@string/available"
                 android:layout_above="@+id/availableUnits"
-                android:layout_toEndOf="@+id/prodImageButton"
+                android:layout_marginBottom="4dp"
                 android:layout_marginStart="13dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="4dp"
-                android:id="@+id/textView6"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#6f6f6f"
-                android:textSize="16sp"
-                android:text="99 unità"
-                android:id="@+id/availableUnits"
-                android:layout_marginBottom="7dp"
-                android:layout_alignBottom="@+id/prodImageButton"
-                android:layout_alignStart="@+id/saveAmount"/>
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/prodImageButton"
+                android:text="@string/available"
                 android:textColor="#a3a3a3"
-                android:textSize="12sp"
-                android:text="@string/promo_location"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/availableUnits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/prodImageButton"
+                android:layout_alignStart="@+id/saveAmount"
+                android:layout_marginBottom="7dp"
+                android:text="99 unità"
+                android:textColor="#6f6f6f"
+                android:textSize="16sp" />
+
+
+            <TextView
                 android:id="@+id/promoLocation"
-                android:layout_below="@+id/prodImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/prodName"
                 android:layout_alignStart="@+id/prodImageButton"
+                android:layout_below="@+id/prodImageButton"
                 android:layout_marginTop="26dp"
-                android:layout_alignEnd="@+id/prodName"/>
+                android:text="@string/promo_location"
+                android:textColor="#a3a3a3"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/brandName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/promoLocation"
+                android:layout_alignStart="@+id/promoLocation"
+                android:layout_below="@+id/promoLocation"
+                android:layout_marginTop="14dp"
+                android:ellipsize="end"
                 android:maxLines="2"
                 android:text="Brand name"
-                android:ellipsize="end"
                 android:textColor="#6f6f6f"
-                android:textSize="18sp"
-                android:layout_marginTop="14dp"
-                android:layout_below="@+id/promoLocation"
-                android:layout_alignStart="@+id/promoLocation"
-                android:layout_alignEnd="@+id/promoLocation"/>
+                android:textSize="18sp" />
 
 
             <TextView
                 android:id="@+id/brandLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Location"
-                android:maxLines="2"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp"
-                android:textColor="#5da5e5"
-                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
-                android:layout_below="@+id/brandName"
+                android:layout_alignEnd="@+id/brandName"
                 android:layout_alignStart="@+id/brandName"
-                android:layout_alignEnd="@+id/brandName"/>
+                android:layout_below="@+id/brandName"
+                android:layout_marginTop="4dp"
+                android:maxLines="2"
+                android:text="Location"
+                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                android:textColor="#5da5e5"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:id="@+id/check_in_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_alignEnd="@+id/brandLocation"
+                android:layout_alignStart="@+id/brandLocation"
+                android:layout_below="@+id/brandLocation"
+                android:layout_marginTop="21dp">
+
+                <TextView
+                    android:id="@+id/prenato_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prenatoSubitoText"
+                    android:textColor="@android:color/black" />
+
+                <LinearLayout
+                    android:id="@+id/check_in_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/prenato_tv"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/checkIntext"
+
+                            android:textColor="#6f6f6f" />
+
+                        <EditText
+                            android:id="@+id/check_in_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="5dp"
+                            android:background="#ededed"
+                            android:drawableLeft="@drawable/ic_date_range_black_24dp"
+                            android:drawablePadding="5dp"
+                            android:focusable="false"
+                            android:padding="3dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/checkoutText"
+
+                            android:textColor="#6f6f6f" />
+
+                        <EditText
+                            android:id="@+id/check_out_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
+
+
+                            android:layout_marginTop="5dp"
+                            android:background="#ededed"
+                            android:drawableLeft="@drawable/ic_date_range_black_24dp"
+
+
+                            android:drawablePadding="5dp"
+                            android:focusable="false"
+                            android:padding="3dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/giorna_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/check_in_ll"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/giornaText"
+
+                            android:textColor="#6f6f6f" />
+
+                        <EditText
+                            android:id="@+id/giorna_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="5dp"
+                            android:background="#ededed"
+                            android:drawableLeft="@drawable/ic_date_range_black_24dp"
+                            android:drawablePadding="5dp"
+                            android:focusable="false"
+                            android:padding="3dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/oraText"
+
+                            android:textColor="#6f6f6f" />
+
+                        <EditText
+                            android:id="@+id/ora_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
+
+
+                            android:layout_marginTop="5dp"
+                            android:background="#ededed"
+                            android:drawableLeft="@drawable/ic_date_range_black_24dp"
+
+
+                            android:drawablePadding="5dp"
+                            android:focusable="false"
+                            android:padding="3dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/prodDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Promo desc"
-                android:maxLines="200"
-                android:textSize="16sp"
+                android:layout_alignEnd="@+id/check_in_rl"
+                android:layout_alignStart="@+id/check_in_rl"
+                android:layout_below="@+id/check_in_rl"
                 android:layout_marginTop="21dp"
+                android:maxLines="200"
+                android:text="Promo desc"
                 android:textColor="#6f6f6f"
-                android:layout_below="@+id/brandLocation"
-                android:layout_alignStart="@+id/brandLocation"
-                android:layout_alignEnd="@+id/brandLocation"/>
+                android:textSize="16sp" />
 
 
             <View
-                android:layout_below="@+id/prodDesc"
+                android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#6f6f6f"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="12dp"
-                android:layout_alignStart="@+id/prodDesc"
                 android:layout_alignEnd="@+id/prodDesc"
-                android:id="@+id/view"/>
+                android:layout_alignStart="@+id/prodDesc"
+                android:layout_below="@+id/prodDesc"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="24dp"
+                android:background="#6f6f6f" />
 
             <TextView
-                android:visibility="invisible"
                 android:id="@+id/numberViews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16dp"
+                android:layout_alignStart="@+id/view"
+                android:layout_below="@+id/view"
+                android:layout_marginBottom="22dp"
                 android:text="Visto xxx volte"
                 android:textColor="#6f6f6f"
-                android:layout_below="@+id/view"
-                android:layout_alignStart="@+id/view"
-                android:layout_marginBottom="22dp"/>
+                android:textSize="16dp"
+                android:visibility="invisible" />
 
             <Button
-                android:textColor="#ffffff"
                 android:id="@+id/infoButton"
                 android:layout_width="180dp"
                 android:layout_height="36dp"
-                android:layout_marginBottom="24dp"
-                android:text="@string/ask_info"
-                android:background="@drawable/button_round_corners"
-                android:layout_marginTop="35dp"
                 android:layout_below="@+id/numberViews"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="35dp"
+                android:background="@drawable/button_round_corners"
+                android:text="@string/ask_info"
+                android:textColor="#ffffff" />
 
 
         </RelativeLayout>
@@ -262,40 +412,40 @@
     </ScrollView>
 
     <LinearLayout
-        android:clickable="true"
         android:id="@+id/addToCartButton"
         android:layout_width="match_parent"
         android:layout_height="66dp"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary"
-        android:gravity="center_horizontal|center_vertical"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:background="@color/colorPrimary"
+        android:clickable="true"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="horizontal">
 
         <ProgressBar
             android:id="@+id/addProgressBar"
-            android:indeterminateTint="#ffffff"
-            android:layout_marginRight="12dp"
             android:layout_width="20dp"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp"
+            android:layout_marginRight="12dp"
+            android:indeterminateTint="#ffffff" />
 
         <TextView
-            android:textColor="#ffffff"
-            android:textAppearance="@style/AppTheme.TextAppearance.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_to_cart"
             android:layout_gravity="center_vertical"
-            android:textSize="18sp"/>
+            android:text="@string/add_to_cart"
+            android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
 
         <ImageView
 
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="12dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/icon_add"/>
+            android:src="@drawable/icon_add" />
 
     </LinearLayout>
 </RelativeLayout>

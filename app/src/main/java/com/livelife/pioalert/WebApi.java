@@ -309,7 +309,7 @@ public class WebApi {
      */
 
 
-    public JSONObject sendGoogleData(GoogleSignInAccount account,String coderef) {
+    public JSONObject sendGoogleData(GoogleSignInAccount account) {
 
 
         String query = apiAddress+"?method=sendGoogleUserData";
@@ -395,19 +395,19 @@ public class WebApi {
 
     public boolean setUserCategories(String cats) {
 
-        String query = apiAddress+"?method=ucategory_on";
+        String query = apiAddress + "?method=ucategory_on";
 
 
         try {
-            query += "&device_token="+deviceToken;
-            query += "&idcat="+cats;
-            query += "&uid="+PioUser.getInstance().uid;
+            query += "&device_token=" + deviceToken;
+            query += "&idcat=" + cats;
+            query += "&uid=" + PioUser.getInstance().uid;
 
 
-            Log.v(tag,"Calling: "+query);
+            Log.v(tag, "Calling: " + query);
 
             JSONObject object = getJsonObjectFromUrl(query);
-            Log.v(tag,object.toString(2));
+            Log.v(tag, object.toString(2));
 
             if (object.getBoolean("response")) {
                 return true;
@@ -424,13 +424,13 @@ public class WebApi {
     public JSONObject signupMissing() {
 
 
-        String query = apiAddress+"?method=signupMissing";
+        String query = apiAddress + "?method=signupMissing";
 
         try {
-            query += "&device_token="+deviceToken;
-            query += "&uid="+PioUser.getInstance().uid;
+            query += "&device_token=" + deviceToken;
+            query += "&uid=" + PioUser.getInstance().uid;
 
-            Log.e(tag,"Calling: "+query);
+            Log.e(tag, "Calling: " + query);
 
             return getJsonObjectFromUrl(query);
 
@@ -448,22 +448,22 @@ public class WebApi {
 
     public JSONObject home(int page, String searchTerm, int idcat) {
 
-        String query = apiAddress+"?method=home";
+        String query = apiAddress + "?method=home";
 
         try {
-            query += "&device_token="+deviceToken;
-            query += "&uid="+PioUser.getInstance().uid;
-            query += "&page="+page;
-            query += "&lat="+PioUser.getInstance().location.getLatitude();
-            query += "&lng="+PioUser.getInstance().location.getLongitude();
+            query += "&device_token=" + deviceToken;
+            query += "&uid=" + PioUser.getInstance().uid;
+            query += "&page=" + page;
+            query += "&lat=" + PioUser.getInstance().location.getLatitude();
+            query += "&lng=" + PioUser.getInstance().location.getLongitude();
             if (searchTerm != null) {
-                query += "&idcat="+idcat;
-                query += "&search="+URLEncoder.encode(searchTerm, "UTF-8");
+                query += "&idcat=" + idcat;
+                query += "&search=" + URLEncoder.encode(searchTerm, "UTF-8");
             } else {
                 query += "&idcat=favorite";
             }
 
-            Log.e(tag,"Calling: "+query);
+            Log.e(tag, "Calling: " + query);
             return getJsonObjectFromUrl(query);
 
         } catch (UnsupportedEncodingException | InterruptedException | ExecutionException e) {
@@ -476,14 +476,14 @@ public class WebApi {
 
     public JSONArray autosuggest(String text) {
 
-        String query = apiAddress+"?method=autosuggest";
+        String query = apiAddress + "?method=autosuggest";
 
         try {
-            query += "&device_token="+deviceToken;
-            query += "&uid="+PioUser.getInstance().uid;
-            query += "&terms="+URLEncoder.encode(text,"UTF-8");
+            query += "&device_token=" + deviceToken;
+            query += "&uid=" + PioUser.getInstance().uid;
+            query += "&terms=" + URLEncoder.encode(text, "UTF-8");
 
-            Log.e(tag,"Calling: "+query);
+            Log.e(tag, "Calling: " + query);
 
             JSONObject response = getJsonObjectFromUrl(query);
 
@@ -998,19 +998,35 @@ public class WebApi {
     }
 
 
-    public boolean basketMove(int idProduct, int quantity) {
+    public boolean basketMove(int idProduct, long quantity, int calendarType, long calendarTime) {
 
-        String query  = apiAddress+"?method=basketMove";
+        String query = apiAddress + "?method=basketMove";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
         query += "&idp=" + idProduct;
-        query += "&quantity=" + quantity;
+        if (calendarType==1){
+            if (quantity <= 0) {
+                query += "&quantity=" + 1;
+            } else {
+                query += "&quantity=" + quantity;
+            }
+        }else{
+            query += "&quantity=" + 1;
+        }
 
-        Log.e(tag,"Calling: "+query);
+
+
+        if (calendarTime > 0) {
+            query += "&calendarTime=" + calendarTime;
+        }
+        query += "&calendarType=" + calendarType;
+
+
+        Log.e(tag, "Calling basketMove : " + query);
 
         try {
             JSONObject response = getJsonObjectFromUrl(query);
-            return  response.getBoolean("response");
+            return response.getBoolean("response");
         } catch (ExecutionException | InterruptedException | JSONException e) {
             e.printStackTrace();
         }
@@ -1495,7 +1511,7 @@ public class WebApi {
 
             data += "&" + URLEncoder.encode("payment_method_nonce", "UTF-8") + "=" + URLEncoder.encode(paymentMethodNonce, "UTF-8");
             data += "&" + URLEncoder.encode("amount", "UTF-8") + "=" + URLEncoder.encode(amount, "UTF-8");
-
+            data += "&" + URLEncoder.encode("id_rate", "UTF-8") + "=" + URLEncoder.encode(rateId, "UTF-8");
 
             if(sandbox) {
                 data += "&" + URLEncoder.encode("sandbox", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8");

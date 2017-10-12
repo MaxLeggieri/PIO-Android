@@ -37,6 +37,7 @@ public class CartActivity extends AppCompatActivity {
     int idCom;
 
     Button bookingButton,buyButton,buyAndCollectButton,changeAddressButton;
+    String calendarType = "";
     EditText userMessage;
 
     RecyclerView cartRecyclerView;
@@ -56,7 +57,11 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        idCom = getIntent().getIntExtra("idCom",0);
+        idCom = getIntent().getIntExtra("idCom", 0);
+        if (getIntent().hasExtra("calendarType")) {
+            calendarType = getIntent().getStringExtra("calendarType");
+        }
+
 
         if (idCom==0) finish();
 
@@ -143,13 +148,12 @@ public class CartActivity extends AppCompatActivity {
         changeAddressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(CartActivity.this,ShippingAddressActivity.class);
+                Intent i = new Intent(CartActivity.this, ShippingAddressActivity.class);
                 startActivity(i);
             }
         });
 
         shippingAddress = (TextView) findViewById(R.id.shippingAddress);
-
 
 
         subTotal = (TextView) findViewById(R.id.subTotal);
@@ -166,7 +170,7 @@ public class CartActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Log.e(tag,"onResume...");
+        Log.e(tag, "onResume...");
 
         updateCart();
 
@@ -188,7 +192,6 @@ public class CartActivity extends AppCompatActivity {
         }
 
 
-
     }
 
     public void updateCart() {
@@ -200,7 +203,7 @@ public class CartActivity extends AppCompatActivity {
         }
 
         if (cartAdapter == null) {
-            cartAdapter = new CartRecyclerView(cart.products,this);
+            cartAdapter = new CartRecyclerView(cart.products, this);
             cartRecyclerView.setAdapter(cartAdapter);
         } else {
             cartAdapter.setItems(cart.products);
@@ -209,7 +212,6 @@ public class CartActivity extends AppCompatActivity {
         subTotal.setText(Utility.getInstance().getFormattedPrice(cart.subTotal));
         //shipAmount.setText(Utility.getInstance().getFormattedPrice(cart.subTotal));
         total.setText(Utility.getInstance().getFormattedPrice(cart.subTotal));
-
     }
 
     public void modifyQuantityForItem(final Product p) {
@@ -221,14 +223,14 @@ public class CartActivity extends AppCompatActivity {
         dialogBuilder.setPositiveButton("Fatto", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                WebApi.getInstance().basketMove(p.pid,p.quantity);
+                WebApi.getInstance().basketMove(p.pid, p.quantity, 0, 0);
                 updateCart();
             }
         });
         dialogBuilder.setNegativeButton("Rimuovi", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                WebApi.getInstance().basketMove(p.pid,0);
+                WebApi.getInstance().basketMove(p.pid, 0, 0, 0);
                 updateCart();
             }
         });
@@ -329,18 +331,27 @@ public class CartActivity extends AppCompatActivity {
 
 
     public void showNoShippingDialog() {
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
-        dialog.setTitle("Attenzione");
-        dialog.setMessage("Non hai specificato nessun indirizzo di spedizione, vuoi specificarne uno?");
-        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                Intent i = new Intent(CartActivity.this,ShippingAddressActivity.class);
-                startActivity(i);
-            }
-        });
-        dialog.setNegativeButton("Ignora", null);
-        dialog.show();
+        System.out.println("calendarType : " + calendarType);
+        if (calendarType.equalsIgnoreCase("0")) {
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
+            dialog.setTitle("Attenzione");
+            dialog.setMessage("Non hai specificato nessun indirizzo di spedizione, vuoi specificarne uno?");
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    Intent i = new Intent(CartActivity.this, ShippingAddressActivity.class);
+                    startActivity(i);
+                }
+            });
+            dialog.setNegativeButton("Ignora", null);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.show();
+                }
+            });
+        }
+
     }
 
     public void showErrorDialog() {
@@ -418,81 +429,7 @@ public class CartActivity extends AppCompatActivity {
                                         if(responseOk) {
 
                                             AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
-                                            dialog.setMessage("L'ordine è andato a buon fine, ti abbiamo mandato una mail di conferma. Controlla la sezione Ordini per controllare la spedizione del tuo acquisto.");
-                                            dialog.setTitle("Grazie!");
-                                            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                                                    finish();
-                                                }
-                                            });
-                                            dialog.show();
-
-                                        } else {
-
-                                            AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
-                                            dialog.setMessage("Si è verificato un error. Riprova o contatta il gestore della tua carta o servizio.");
-                                            dialog.setTitle("Ops!");
-                                            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                                                    finish();
-                                                }
-                                            });
-                                            dialog.show();
-
-                                        }
-                                    }
-                                });
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-
-                        }
-                    });
-
-                } else if (resultCode == Activity.RESULT_CANCELED) {
-                    // the user canceled
-
-                    Log.v(tag,"PayPal DropInResult: User canceled");
-
-                } else {
-                    // handle errors here, an exception may be available in
-                    Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
-
-                    Log.v(tag,"PayPal DropInResult: Error "+error.toString());
-                }
-
-                break;
-            }
-            case (3456): {
-                if (resultCode == Activity.RESULT_OK) {
-                    DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
-                    // use the result to update your UI and send the payment method nonce to your server
-
-                    Log.v(tag,"PayPal DropInResult nonce: "+result.getPaymentMethodNonce().getNonce());
-
-                    final String nonce = result.getPaymentMethodNonce().getNonce();
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            double t = cart.subTotal;
-                            JSONObject resp = WebApi.getInstance().paypalTransNoShip(nonce,""+t+"",idCom);
-
-                            try {
-                                final boolean responseOk = resp.getBoolean("response");
-                                Log.v(tag,"paypalTrans: "+resp.toString(2));
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if(responseOk) {
-
-                                            AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
-                                            dialog.setMessage("L'ordine è andato a buon fine, ti abbiamo mandato una mail di conferma. Vai al negozio con un tuo documento d'identità e ritira il tuo acquisto.");
+                                            dialog.setMessage("L'ordine è andato a buon fine. Controlla la sezione Ordini per controllare la spedizione del tuo acquisto.");
                                             dialog.setTitle("Grazie!");
                                             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                                 @Override
