@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
                     public void onClick(DialogInterface dialog, int which) {
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Scarica l'app PIO qui: \n\n https://play.google.com/store/apps/details?id=com.livelife.pioalert \n\n Inserisci questo codice prima di accedere: "+you.coderef);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Scarica l'app PIO qui: \n\n https://pioalert.com/download.php \n\n Inserisci questo codice prima di accedere: "+you.coderef);
                         sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Scarica l'app PIO! Unisciti a noi");
                         sendIntent.setType("text/plain");
                         startActivity(Intent.createChooser(sendIntent, "Condividi con:"));

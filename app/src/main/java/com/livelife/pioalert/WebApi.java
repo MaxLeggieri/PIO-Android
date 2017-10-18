@@ -309,11 +309,9 @@ public class WebApi {
      */
 
 
-    public JSONObject sendGoogleData(GoogleSignInAccount account) {
-
+    public JSONObject sendGoogleData(GoogleSignInAccount account, String coderef) {
 
         String query = apiAddress+"?method=sendGoogleUserData";
-
 
         try {
             query += "&device_token="+deviceToken;
@@ -997,7 +995,6 @@ public class WebApi {
 
     }
 
-
     public boolean basketMove(int idProduct, long quantity, int calendarType, long calendarTime) {
 
         String query = apiAddress + "?method=basketMove";
@@ -1006,12 +1003,12 @@ public class WebApi {
         query += "&idp=" + idProduct;
         if (calendarType==1){
             if (quantity <= 0) {
-                query += "&quantity=" + 1;
+                query += "&quantity=" + 0;
             } else {
-                query += "&quantity=" + quantity;
+                query += "&quantity=" + 1;
             }
         }else{
-            query += "&quantity=" + 1;
+            query += "&quantity=" + quantity;
         }
 
 

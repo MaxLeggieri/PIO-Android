@@ -74,11 +74,11 @@
                 />
 
             <EditText
-                android:hint="es. j34h5kj3h"
+                android:hint="es. 1A2B"
                 android:gravity="center"
                 android:imeOptions="actionDone"
                 android:padding="9dp"
-                android:background="@drawable/round_corners"
+                android:background="@drawable/round_corners_trans"
                 android:id="@+id/coderef"
                 android:inputType="text"
                 android:layout_width="130dp"
