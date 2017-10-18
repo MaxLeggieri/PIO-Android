@@ -41,7 +41,15 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 public class PioAlert extends Application implements BootstrapNotifier {
 
     //private BackgroundPowerSaver backgroundPowerSaver;
+    public static final String PACKAGE_NAME = PioAlert.class.getPackage().getName();
 
+    private static PioAlert mInstance;
+
+
+
+    public static synchronized PioAlert getInstance() {
+        return mInstance;
+    }
     private RegionBootstrap regionBootstrap;
 
     @Override
@@ -53,6 +61,8 @@ public class PioAlert extends Application implements BootstrapNotifier {
 
     public void onCreate() {
         super.onCreate();
+        mInstance = this;
+
         // Simply constructing this class and holding a reference to it in your custom Application class
         // enables auto battery saving of about 60%
         //backgroundPowerSaver = new BackgroundPowerSaver(this);

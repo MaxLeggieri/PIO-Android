@@ -21,6 +21,9 @@
 
     <group android:id="@+id/group2" android:checkableBehavior="single">
         <item
+            android:id="@+id/promo_express"
+            android:title="Promo express"/>
+        <item
             android:id="@+id/nav_logout"
             android:title="Esci"/>
         <item

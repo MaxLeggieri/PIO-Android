@@ -264,6 +264,20 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
                         break;
 
+                    case R.id.promo_express:
+                        if (MyPreference.getCurrentUser()!=null){
+                            Intent mIntentLogin = new Intent(MainActivity.this,CreateAdActivity.class);
+                            startActivity(mIntentLogin);
+
+                        }else{
+                            Intent mIntentLogin = new Intent(MainActivity.this,LoginActivity.class);
+                            startActivity(mIntentLogin);
+
+                        }
+
+
+                        break;
+
                     case R.id.nav_felix:
 
                         Intent i5 = new Intent(MainActivity.this,FelixActivity.class);
