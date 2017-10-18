@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -42,6 +43,14 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
      */
     protected GoogleApiClient mGoogleApiClient;
     private BeaconManager beaconManager;
+
+    private final IBinder mBinder = new LocalBinder();
+    public class LocalBinder extends Binder {
+        LocationService getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return LocationService.this;
+        }
+    }
 
     /**
      * Stores parameters for requests to the FusedLocationProviderApi.
@@ -195,7 +204,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+
+        return mBinder;
     }
 
 
@@ -246,6 +256,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public void onConnectionSuspended(int cause) {
 
+        Log.e(tag, "onConnectionSuspended...");
         mGoogleApiClient.connect();
     }
 
@@ -254,6 +265,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
         Log.e(tag, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
     }
+
+
 
 
     public void sendGeo() {

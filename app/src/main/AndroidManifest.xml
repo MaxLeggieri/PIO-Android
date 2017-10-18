@@ -35,9 +35,7 @@
             android:resource="@color/colorAccent"/>
 
         <service
-            android:name=".LocationService"
-            android:enabled="true"
-            android:exported="true"/>
+            android:name=".LocationService" />
         <service android:name=".PioMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
@@ -53,7 +51,7 @@
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_main"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
