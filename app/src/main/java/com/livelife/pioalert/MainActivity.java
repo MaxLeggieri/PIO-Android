@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -214,6 +213,20 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
                         Intent i4 = new Intent(MainActivity.this,RankingActivity.class);
                         startActivity(i4);
+
+                        break;
+
+                    case R.id.promo_express:
+                        if (MyPreference.getCurrentUser()!=null){
+                            Intent mIntentLogin = new Intent(MainActivity.this,CreateAdActivity.class);
+                            startActivity(mIntentLogin);
+
+                        }else{
+                            Intent mIntentLogin = new Intent(MainActivity.this,LoginActivity.class);
+                            startActivity(mIntentLogin);
+
+                        }
+
 
                         break;
 

@@ -33,8 +33,10 @@ public class ProductActivity extends AppCompatActivity {
     TextView productTitleTextView, prodName, price, priceOff, availableUnits, saveAmount, brandName, prodDesc, brandLocation;
     ImageButton backButton, prodImageButton;
     Button infoButton;
+    Button write_a_review_btn;
     Product p;
     LinearLayout addToCartButton;
+    LinearLayout review_ll;
     LinearLayout check_in_ll;
     RelativeLayout check_in_rl;
     LinearLayout giorna_ll;
@@ -155,6 +157,15 @@ public class ProductActivity extends AppCompatActivity {
         prodDesc.setText(p.descLong);
 
         infoButton = (Button) findViewById(R.id.infoButton);
+        write_a_review_btn = (Button) findViewById(R.id.write_a_review_btn);
+        write_a_review_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(ProductActivity.this,RatingScreen.class);
+                mIntent.putExtra("PRODUCT",p);
+                startActivity(mIntent);
+            }
+        });
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,6 +179,16 @@ public class ProductActivity extends AppCompatActivity {
         });
 
 
+        review_ll = (LinearLayout) findViewById(R.id.review_ll);
+        review_ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(ProductActivity.this,AllReviewsListActivity.class);
+                mIntent.putExtra("PRODUCT",p);
+
+                startActivity(mIntent);
+            }
+        });
         addToCartButton = (LinearLayout) findViewById(R.id.addToCartButton);
         check_in_ll = (LinearLayout) findViewById(R.id.check_in_ll);
         check_in_rl = (RelativeLayout) findViewById(R.id.check_in_rl);

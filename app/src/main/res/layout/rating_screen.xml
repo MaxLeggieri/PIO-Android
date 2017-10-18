@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/header_rl"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/colorPrimary">
+
+                <ImageButton
+
+                    android:id="@+id/backButton"
+                    android:layout_width="50dp"
+                    android:layout_height="44dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:background="#00000000"
+                    android:padding="12dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/icon_back" />
+
+                <TextView
+                    android:id="@+id/write_a_review_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/writeAReviewText"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/product_iv"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="10dp"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/prod_name_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+
+                    <RatingBar
+
+                        android:id="@+id/rating_bar_rb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp" />
+
+
+                    <EditText
+                        android:id="@+id/comment_et"
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/white_gray_border"
+                        android:gravity="top"
+
+                        android:hint="@string/writeYourReviewHereText"
+                        android:lines="6"
+                        android:padding="10dp"
+                        android:textColor="@android:color/black"
+                        android:textColorHint="@android:color/darker_gray" />
+
+
+                    <Button
+
+                        android:id="@+id/write_a_review_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/yellow_btn_round_corners"
+                        android:text="@string/submitText"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

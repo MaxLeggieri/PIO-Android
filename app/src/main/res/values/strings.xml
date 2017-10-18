@@ -72,4 +72,11 @@
     <string name="giornaText">Giorna</string>
     <string name="oraText">Ora</string>
     <string name="chooseOraText">Choose Ora</string>
+    <string name="writeAReviewText">Write a review</string>
+    <string name="submitText">Submit</string>
+    <string name="writeYourReviewHereText">Write your review here</string>
+    <string name="allReviewsText">All reviews</string>
+    <string name="someerrorText">Some error occurred</string>
+    <string name="createAdText">Create Ad</string>
+    <string name="logoutText">Logout</string>
 </resources>

@@ -61,7 +61,7 @@ public class WebApi {
     }
 
     public String deviceToken = "";
-    public String apiAddress = "https://www.pioalert.com/api/";
+    public static final String apiAddress = "https://www.pioalert.com/api/";
 
     //public ArrayList<Category> allCategories;
     public ArrayList<Category> allPromoCats;

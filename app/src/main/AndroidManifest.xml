@@ -3,6 +3,9 @@
           package="com.livelife.pioalert">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -86,9 +89,32 @@
             android:configChanges="orientation"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
+        </activity><activity
+            android:name=".AllReviewsListActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".RatingScreen"
+            android:configChanges="orientation"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ConsentActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".CreateAdActivity"
             android:configChanges="orientation"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
