@@ -46,6 +46,18 @@ public interface ApiInterface {
 
     );
 
+    @GET("?method=companies")
+    Call<JsonElement> getCompaniesWithLocation(
+            @Query("uid") String uid,
+            @Query("device_token") String device_token,
+            @Query("rec") int rec,
+            @Query("lat") double lat,
+            @Query("lng") double lng,
+            @Query("page") int mPageNumber,
+            @Query("idcom") int idcom
+
+    );
+
     @POST("?method=createAd")
     @Multipart
     Call<JsonElement> postCreateAd(@PartMap() Map<String, RequestBody> partMap);

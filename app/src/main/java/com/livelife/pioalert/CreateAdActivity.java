@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -53,6 +54,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Query;
 
 import static android.view.animation.Animation.RELATIVE_TO_SELF;
 import static com.livelife.pioalert.R.id.giorna_et;
@@ -82,23 +84,26 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
     Spinner coupon_spinner;
     Spinner km_ray_spinner;
 
-    Button choose_location_btn;
-    Button alert_type_btn;
+    Spinner location_spinner;
+    Spinner alert_type_spinner;
 
     ImageView ad_img_iv;
     ProgressBar progress_pb;
     ImageButton backButton;
-    private String fileToUploadPathImg="";
+    private String fileToUploadPathImg = "";
+    private String mCategoryId = "";
     private String mExpirationTimeStr;
     private long mExpirationTimeMS;
     private int dayOfMonth;
     public int year;
     public int monthOfYear;
+    private List<CompanyLocationResponseModal.Response.Data.Product.Loc> mLocationsFromAPI = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_ad_activity);
+
         ad_img_iv = findViewById(R.id.ad_img_iv);
         backButton = findViewById(R.id.backButton);
         progress_pb = findViewById(R.id.progress_pb);
@@ -118,8 +123,8 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
         km_ray_spinner = findViewById(R.id.km_ray_spinner);
 
 
-        choose_location_btn = findViewById(R.id.choose_location_btn);
-        alert_type_btn = findViewById(R.id.alert_type_btn);
+        location_spinner = findViewById(R.id.location_spinner);
+        alert_type_spinner = findViewById(R.id.alert_type_spinner);
 
 
         logout_tv = findViewById(R.id.logout_tv);
@@ -135,7 +140,68 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
 
 
         callCategoriesAPI();
+        callCCompaniesLocationsAPI();
         initView();
+    }
+
+    private void callCCompaniesLocationsAPI() {
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+        String uid = String.valueOf(PioUser.getInstance().uid);
+        String device_token = "";
+        int rec = 20;
+        double lat = PioUser.getInstance().location.getLatitude();
+        double lng = PioUser.getInstance().location.getLongitude();
+        int mPageNumber = 1;
+        int idcom = 59;
+        Call<JsonElement> call = apiService.getCompaniesWithLocation(uid,
+                device_token,
+                rec,
+                lat,
+                lng,
+                mPageNumber,
+                idcom
+        );
+        call.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                System.out.println(call);
+                if (response.code() == 200) {
+                    Gson mGson = new Gson();
+                    CompanyLocationResponseModal modalMain = mGson.fromJson(response.body().toString(), CompanyLocationResponseModal.class);
+                    ArrayList<String> mCompanyName = new ArrayList<String>();
+                    if (modalMain.getResponse().getResponse()) {
+                        List<CompanyLocationResponseModal.Response.Data.Product> mProducts
+                                = modalMain.getResponse().getData().getProducts();
+                        mLocationsFromAPI = mProducts.get(0).getLoc();
+                        for (CompanyLocationResponseModal.Response.Data.Product.Loc bean :
+                                mLocationsFromAPI) {
+                            mCompanyName.add(bean.getName());
+                        }
+                        if (mCompanyName.size() > 0) {
+                            /*Set Spinner for location*/
+                            ArrayAdapter<String> adapter =
+                                    new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_selected_textview, mCompanyName);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                            location_spinner.setAdapter(adapter);
+
+                        }
+                    }
+                } else {
+                    Toast.makeText(CreateAdActivity.this, getResources().getString(R.string.someerrorText), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+                System.out.println(call);
+
+                Toast.makeText(CreateAdActivity.this, getResources().getString(R.string.someerrorText), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void initView() {
@@ -156,6 +222,28 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
                             modalMain.setPrimarySelected(true);
                         }
                         mCategoryAdapter.updateItem(modalMain, position);
+
+                        mCategoryId = modalMain.getId();
+                        if (modalMain.getName().contains(" ")) {
+                            String mHashTags = "";
+
+                            String[] splited = modalMain.getName().split("\\s+");
+                            if (splited.length > 0) {
+                                for (String mName :
+                                        splited) {
+                                    if (mHashTags.equalsIgnoreCase("")) {
+                                        mHashTags = "#" + mName + " ";
+                                    } else {
+                                        mHashTags = mHashTags + " " + "#" + mName;
+                                    }
+                                }
+                            }
+                            hash_tags_et.setText(mHashTags);
+
+                        }else{
+                            hash_tags_et.setText("#"+modalMain.getName());
+
+                        }
                         updatePrimaryCatRV();
 
 
@@ -238,27 +326,38 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
 //        Request construction:
         Map<String, RequestBody> map = new HashMap<>();
         map.put("idad", RequestBody.create(MediaType.parse("text/plain"), "0"));
-        map.put("idcom", RequestBody.create(MediaType.parse("text/plain"), "475"));
+        map.put("idcom", RequestBody.create(MediaType.parse("text/plain"), "59"));
         map.put("title", RequestBody.create(MediaType.parse("text/plain"), title_et.getText().toString().trim()));
         map.put("description", RequestBody.create(MediaType.parse("text/plain"), description_et.getText().toString().trim()));
         map.put("products", RequestBody.create(MediaType.parse("text/plain"), products_et.getText().toString().trim()));
         map.put("link", RequestBody.create(MediaType.parse("text/plain"), link_et.getText().toString().trim()));
         map.put("youtube", RequestBody.create(MediaType.parse("text/plain"), youtube_link_et.getText().toString().trim()));
-        map.put("coupon", RequestBody.create(MediaType.parse("text/plain"), ""));
-        map.put("categories", RequestBody.create(MediaType.parse("text/plain"), ""));
+        map.put("coupon", RequestBody.create(MediaType.parse("text/plain"), coupon_spinner.getSelectedItem().toString()));
+        map.put("categories", RequestBody.create(MediaType.parse("text/plain"), mCategoryId));
         map.put("hashtags", RequestBody.create(MediaType.parse("text/plain"), hash_tags_et.getText().toString().trim()));
-        map.put("raykm", RequestBody.create(MediaType.parse("text/plain"), ""));
-        map.put("locations", RequestBody.create(MediaType.parse("text/plain"), "1"));
+        map.put("raykm", RequestBody.create(MediaType.parse("text/plain"), km_ray_spinner.getSelectedItem().toString()));
+
+
+        String mLocationid = "";
+        for (int i = 0; i < mLocationsFromAPI.size(); i++) {
+            CompanyLocationResponseModal.Response.Data.Product.Loc bean = mLocationsFromAPI.get(i);
+            if (location_spinner.getSelectedItem().toString().equalsIgnoreCase(bean.getName())) {
+                mLocationid = bean.getIdlocation();
+                break;
+            }
+        }
+
+        map.put("locations", RequestBody.create(MediaType.parse("text/plain"), mLocationid));
         map.put("beacons", RequestBody.create(MediaType.parse("text/plain"), "154"));
-        map.put("alertkind", RequestBody.create(MediaType.parse("text/plain"), ""));
+        map.put("alertkind", RequestBody.create(MediaType.parse("text/plain"), alert_type_spinner.getSelectedItem().toString()));
         map.put("start", RequestBody.create(MediaType.parse("text/plain"), ""));
-        map.put("expiration", RequestBody.create(MediaType.parse("text/plain"), ""+mExpirationTimeMS));
+        map.put("expiration", RequestBody.create(MediaType.parse("text/plain"), "" + mExpirationTimeMS));
         map.put("RelatedProducts", RequestBody.create(MediaType.parse("text/plain"), ""));
         map.put("method", RequestBody.create(MediaType.parse("text/plain"), "createAd"));
-        map.put("userid", RequestBody.create(MediaType.parse("text/plain"),String.valueOf(PioUser.getInstance().uid)));
+        map.put("userid", RequestBody.create(MediaType.parse("text/plain"), String.valueOf(PioUser.getInstance().uid)));
         File mImageFile = new File(fileToUploadPathImg);
-        if (mImageFile.exists()){
-            map.put("image\'", RequestBody.create(MediaType.parse("image/*"), mImageFile));
+        if (mImageFile.exists()) {
+            map.put("image", RequestBody.create(MediaType.parse("image/*"), mImageFile));
 
         }
 
@@ -276,7 +375,7 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
                 CreateAdResponse bean = mGson.fromJson(response.body().toString(), CreateAdResponse.class);
                 if (bean.getResponse().getResponse()) {
                     Toast.makeText(CreateAdActivity.this, "Ad created", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(CreateAdActivity.this,MainActivity.class);
+                    Intent intent = new Intent(CreateAdActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
@@ -287,7 +386,7 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onFailure(Call<JsonElement> call, Throwable t) {
-                Log.e(TAG,"onFailure : " + call.toString());
+                Log.e(TAG, "onFailure : " + call.toString());
                 t.printStackTrace();
 
                 progress_pb.setVisibility(View.GONE);
@@ -340,7 +439,6 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
                     choosePhotoFromCamGalleryDialog();
 
 
-
                 } else {
                     //code for deny
                 }
@@ -359,9 +457,9 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
                                                   int hourOfDay, int minute, int second) {
 
                                 final Calendar calendar = Calendar.getInstance();
-                                calendar.set(Calendar.YEAR,year);
-                                calendar.set(Calendar.MONTH,monthOfYear);
-                                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+                                calendar.set(Calendar.YEAR, year);
+                                calendar.set(Calendar.MONTH, monthOfYear);
+                                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                 calendar.set(Calendar.MINUTE, minute);
                                 calendar.set(Calendar.SECOND, second);
@@ -417,7 +515,7 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-        @Override
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_ad_btn:
@@ -437,14 +535,14 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.logout_tv:
                 MyPreference.resetAllData();
-                Intent intent = new Intent(CreateAdActivity.this,MainActivity.class);
+                Intent intent = new Intent(CreateAdActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
 
                 break;
             case R.id.ad_img_iv:
-                 boolean result = checkPermission(CreateAdActivity.this);
+                boolean result = checkPermission(CreateAdActivity.this);
 
                 if (result)
                     choosePhotoFromCamGalleryDialog();
@@ -474,7 +572,7 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
                         break;
                     case "Cancel":
 
-dialog.dismiss();
+                        dialog.dismiss();
                         break;
                     default:
 
@@ -505,13 +603,13 @@ dialog.dismiss();
 
 
     private void onCaptureImageResultPhoto() {
-        if (imgUri==null){
+        if (imgUri == null) {
 
             File root = new File(Environment.getExternalStorageDirectory() + File.separator + "Azoog" + File.separator);
             if (!root.exists()) {
                 root.mkdir();
             }
-            File imageDir = new File(root, UUID.randomUUID()+".png");
+            File imageDir = new File(root, UUID.randomUUID() + ".png");
 
             imgUri = Uri.fromFile(imageDir);
 
@@ -538,7 +636,7 @@ dialog.dismiss();
     }
 
     private void setImageIntoImageView(String url) {
-        Picasso.with(this).load("file://"+url).centerCrop().resize(120,120).into(ad_img_iv);
+        Picasso.with(this).load("file://" + url).centerCrop().resize(120, 120).into(ad_img_iv);
 
     }
 
@@ -548,8 +646,6 @@ dialog.dismiss();
         pickIntent.setType("image/*");
         startActivityForResult(Intent.createChooser(pickIntent, "Select Photo"), REQUEST_GALLERY_PHOTO);
     }
-
-
 
 
     private Uri imgUri;
@@ -569,7 +665,7 @@ dialog.dismiss();
             root.mkdir();
         }
 
-        File imageDir = new File(root, UUID.randomUUID()+".png");
+        File imageDir = new File(root, UUID.randomUUID() + ".png");
 
         imgUri = Uri.fromFile(imageDir);
 
@@ -579,8 +675,8 @@ dialog.dismiss();
     }
 
     private boolean isValidData() {
-        if (title_et.getText().toString().trim().isEmpty()){
-            Toast.makeText(CreateAdActivity.this,"Please enter title",Toast.LENGTH_SHORT).show();
+        if (title_et.getText().toString().trim().isEmpty()) {
+            Toast.makeText(CreateAdActivity.this, "Please enter title", Toast.LENGTH_SHORT).show();
             return false;
         }
 

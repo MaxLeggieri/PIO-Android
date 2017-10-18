@@ -71,7 +71,7 @@ public class AllReviewsListActivity extends AppCompatActivity{
                     Gson mGson = new Gson();
                     ReviewsModal mReviewModal = mGson.fromJson(response.body().toString(), ReviewsModal.class);
                     if (mReviewModal.getResponse().getResponse()) {
-//                        dumpData(mReviewModal.getResponse().getData());
+                        dumpData(mReviewModal.getResponse().getData().getRatings());
 
 
                     } else {
@@ -93,9 +93,9 @@ public class AllReviewsListActivity extends AppCompatActivity{
     }
 
 
-    private void dumpData(List<ReviewsModal.Response.Data> mDataList) {
+    private void dumpData(List<ReviewsModal.Response.Data.Rating> mRatings) {
 
-        ReviewsListAdapter mAdapter = new ReviewsListAdapter(mDataList,AllReviewsListActivity.this);
+        ReviewsListAdapter mAdapter = new ReviewsListAdapter(mRatings,AllReviewsListActivity.this);
         recyclerView.setAdapter(mAdapter);
     }
 }

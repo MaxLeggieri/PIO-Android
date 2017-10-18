@@ -17,13 +17,13 @@ import java.util.List;
 
 public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.MyViewHolder> {
 
-    public ReviewsListAdapter(List<ReviewsModal.Response.Data> mDataList, Activity mActivity) {
+    public ReviewsListAdapter(List<ReviewsModal.Response.Data.Rating> mDataList, Activity mActivity) {
         this.mDataList = mDataList;
         this.mActivity = mActivity;
     }
 
-    private List<ReviewsModal.Response.Data> mDataList = new ArrayList<>();
-    private Activity mActivity ;
+    private List<ReviewsModal.Response.Data.Rating> mDataList = new ArrayList<>();
+    private Activity mActivity;
 
 
     @Override
@@ -36,9 +36,11 @@ public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        ReviewsModal.Response.Data bean  = mDataList.get(position);
-//        holder.rating_bar_rb.setRating(bean.getRatingValue());
-//        holder.reviews_tv.setText(bean.getmComment());
+        ReviewsModal.Response.Data.Rating bean = mDataList.get(position);
+        if (bean.getRating() != null && !bean.getRating().isEmpty()) {
+            holder.rating_bar_rb.setRating(Float.parseFloat(bean.getRating()));
+        }
+        holder.reviews_tv.setText(bean.getComment());
 
     }
 
@@ -47,10 +49,11 @@ public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.
         return mDataList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         RatingBar rating_bar_rb;
         TextView reviews_tv;
+
         public MyViewHolder(View itemView) {
             super(itemView);
             rating_bar_rb = itemView.findViewById(R.id.rating_bar_rb);

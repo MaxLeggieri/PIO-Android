@@ -96,8 +96,9 @@ public class RatingScreen extends AppCompatActivity implements View.OnClickListe
 
         Call<JsonElement> call = apiService.setRating(
                 String.valueOf(PioUser.getInstance().uid),
+//                String.valueOf(607),
                 rating_bar_rb.getRating(),
-                "ad",
+                "product",
                 String.valueOf(mProduct.pid),
                 comment_et.getText().toString().trim()
         );

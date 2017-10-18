@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="15dp"
     android:paddingLeft="5dp"
-    android:paddingRight="5dp" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:paddingBottom="10dp"
+    android:paddingRight="5dp"
+    android:paddingTop="10dp">
 
     <RatingBar
 
-        style="?android:attr/ratingBarStyleIndicator"
-
         android:id="@+id/rating_bar_rb"
+
+        style="?android:attr/ratingBarStyleIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
-        android:layout_marginTop="3dp"
         android:id="@+id/reviews_tv"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
 
 </LinearLayout>

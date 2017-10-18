@@ -8,10 +8,10 @@
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/header_rl"
-        android:background="@color/colorPrimary"
-        android:layout_height="45dp">
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary">
 
         <ImageButton
 
@@ -28,31 +28,32 @@
         <TextView
             android:id="@+id/header_tv"
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:textColor="@android:color/white"
-            android:text="@string/createAdText"
-            android:textSize="20sp"
             android:gravity="center"
-            android:layout_height="match_parent" />
+            android:text="@string/createAdText"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
         <TextView
             android:id="@+id/logout_tv"
             android:layout_width="wrap_content"
-            android:layout_marginRight="10dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:textColor="@android:color/white"
-            android:text="@string/logoutText"
-            android:textSize="20sp"
+            android:layout_marginRight="10dp"
             android:gravity="center"
-            android:layout_height="match_parent" />
+            android:text="@string/logoutText"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
     </RelativeLayout>
 
 
     <ScrollView
-        android:layout_below="@+id/header_rl"
-        android:layout_above="@+id/bottom_rl"
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_rl"
+        android:layout_below="@+id/header_rl">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,13 +64,12 @@
             android:paddingRight="30dp">
 
 
-
             <TextView
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:text="Title :"
                 android:textColor="@android:color/black" />
 
@@ -164,10 +164,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:visibility="gone"
-
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/attachment_tv"
@@ -193,11 +193,11 @@
 
             <View
                 android:layout_width="match_parent"
-                android:visibility="gone"
-
                 android:layout_height="1px"
+
                 android:layout_marginTop="15dp"
-                android:background="@color/black_overlay" />
+                android:background="@color/black_overlay"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -259,9 +259,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@+id/coupon_info_tv" />
+                    android:layout_toRightOf="@+id/coupon_info_tv"
+                    android:drawSelectorOnTop="true"
+                    android:entries="@array/couponArray" />
             </RelativeLayout>
 
             <View
@@ -369,7 +372,10 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@+id/km_ray_info_tv" />
+
+                    android:layout_toRightOf="@+id/km_ray_info_tv"
+                    android:drawSelectorOnTop="true"
+                    android:entries="@array/kmRay" />
             </RelativeLayout>
 
             <View
@@ -394,19 +400,17 @@
                     android:text="Location:"
                     android:textColor="@android:color/black" />
 
-                <Button
+                <Spinner
+                    android:id="@+id/location_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:id="@+id/choose_location_btn"
+
+
                     android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@+id/location_tv"
-                    android:background="@color/colorPrimary"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text="Choose Location"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white" />
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/location_tv"/>
+
             </RelativeLayout>
 
             <View
@@ -432,19 +436,18 @@
                     android:text="Alert Type:"
                     android:textColor="@android:color/black" />
 
-                <Button
-                    android:id="@+id/alert_type_btn"
+                <Spinner
+                    android:id="@+id/alert_type_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+
+
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="15dp"
                     android:layout_toRightOf="@+id/alert_type_tv"
-                    android:background="@color/colorPrimary"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text="Choose Alert Type"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white" />
+                    android:drawSelectorOnTop="true"
+                    android:entries="@array/alertType" />
             </RelativeLayout>
 
             <View
@@ -475,38 +478,39 @@
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:textSize="12sp"
-
                     android:layout_marginTop="5dp"
+
                     android:layout_toRightOf="@+id/expiry_date_tv"
                     android:background="#ededed"
                     android:drawableLeft="@drawable/ic_date_range_black_24dp"
                     android:drawablePadding="5dp"
                     android:focusable="false"
-                    android:padding="3dp" />
+                    android:padding="3dp"
+                    android:textSize="12sp" />
             </RelativeLayout>
 
 
-           </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 
 
     <ProgressBar
         android:id="@+id/progress_pb"
-        android:layout_above="@+id/bottom_rl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_rl"
         android:layout_centerInParent="true"
 
         android:visibility="gone"
 
         />
+
     <RelativeLayout
         android:id="@+id/bottom_rl"
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
 
-        android:layout_height="wrap_content">
+        android:layout_alignParentBottom="true">
 
         <Button
             android:id="@+id/create_ad_btn"
