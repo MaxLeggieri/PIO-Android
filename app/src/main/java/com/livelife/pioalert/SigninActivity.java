@@ -59,10 +59,10 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-    LinearLayout fbButton,gButton;
+    LinearLayout fbButton,gButton,promoCodeView;
     ProgressBar loginProgress;
 
-    EditText coderef;
+    EditText code;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -101,12 +101,18 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
             }
         };
 
-        coderef = (EditText) findViewById(R.id.coderef);
+        promoCodeView = (LinearLayout) findViewById(R.id.promoCodeView);
+        code = (EditText) findViewById(R.id.code);
     }
 
     @Override
     protected void onResume() {
+
         super.onResume();
+
+        if (!PioUser.getInstance().promoCode.equals("")) {
+            promoCodeView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -265,12 +271,13 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 } else {
 
 
-                    JSONObject object = WebApi.getInstance().sendGoogleData(acct,coderef.getText().toString());
+                    JSONObject object = WebApi.getInstance().sendGoogleData(acct,code.getText().toString());
 
 
                     try {
                         Log.v(tag,object.toString(2));
                         PioUser.getInstance().setUid(object.getInt("uid"));
+                        PioUser.getInstance().setPromoCode(code.getText().toString());
                         PioUser.getInstance().setUserEmail(acct.getEmail());
                         PioUser.getInstance().setUserNameAndImage(acct.getGivenName(),acct.getFamilyName(),"https://lh4.googleusercontent.com"+acct.getPhotoUrl().getPath());
                     } catch (JSONException e) {
@@ -317,7 +324,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                                         return;
                                     }
 
-                                    WebApi.getInstance().sendFacebookData(object.toString(), SigninActivity.this,coderef.getText().toString());
+                                    WebApi.getInstance().sendFacebookData(object.toString(), SigninActivity.this,code.getText().toString());
 
                                     try {
                                         Log.v(tag,"graphrequest: "+object.toString(2));
@@ -328,7 +335,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
 
                                         PioUser.getInstance().setUserEmail(object.getString("email"));
                                         PioUser.getInstance().setUserNameAndImage(userName,lastName,imgPath);
-
+                                        PioUser.getInstance().setPromoCode(code.getText().toString());
 
 
                                     } catch (JSONException e) {

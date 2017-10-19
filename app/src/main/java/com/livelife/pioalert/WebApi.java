@@ -1016,9 +1016,6 @@ public class WebApi {
         if (calendarTime > 0) {
             query += "&calendarTime=" + calendarTime;
         }
-        query += "&calendarType=" + calendarType;
-
-
         Log.e(tag, "Calling basketMove : " + query);
 
         try {
@@ -1383,7 +1380,8 @@ public class WebApi {
             you.score = youObj.getInt("score");
             you.rank = youObj.getInt("pos");
             you.currentUser = true;
-            you.coderef = youTotalObj.getString("code");
+            you.code = youTotalObj.getString("code");
+            you.coderef = youTotalObj.getString("coderef");
             currentPlayer = you;
 
             return you;

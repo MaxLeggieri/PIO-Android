@@ -62,55 +62,64 @@
             android:layout_height="match_parent">
             <LinearLayout
                 android:paddingTop="5dp"
+                android:layout_marginLeft="28dp"
+                android:layout_marginBottom="12dp"
                 android:id="@+id/review_ll"
                 android:paddingRight="20dp"
+                android:layout_below="@+id/prodName"
                 android:layout_width="wrap_content"
-                android:layout_alignParentRight="true"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:layout_height="wrap_content">
                 <RatingBar
-
+                    android:progressTint="@color/yellow"
+                    android:id="@+id/ratingBar"
                     style="?android:attr/ratingBarStyleSmall"
                     android:isIndicator="true"
-
                     android:layout_width="wrap_content"
                     android:rating="3.5"
                     android:layout_marginRight="5dp"
                     android:layout_height="wrap_content" />
                 <TextView
+                    android:id="@+id/numberReviews"
                     android:layout_width="wrap_content"
-                    android:text="6"
+                    android:text="0"
                     android:layout_marginRight="5dp"
 
                     android:textAppearance="@style/AppTheme.TextAppearance.Bold"
                     android:textColor="#6f6f6f"
                     android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="11sp"
+                    android:layout_marginLeft="12dp"
+                    android:text="VEDI RECENSIONI"/>
             </LinearLayout>
 
             <TextView
-                android:layout_below="@+id/review_ll"
                 android:id="@+id/prodName"
+                android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginLeft="28dp"
                 android:layout_marginRight="28dp"
-                android:layout_marginBottom="28dp"
                 android:ellipsize="end"
                 android:maxLines="4"
                 android:text="Product name"
                 android:textAppearance="@style/AppTheme.TextAppearance.Bold"
                 android:textColor="#6f6f6f"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
 
             <ImageButton
                 android:id="@+id/prodImageButton"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
-                android:layout_below="@id/prodName"
+                android:layout_below="@id/review_ll"
                 android:layout_marginLeft="28dp"
                 android:adjustViewBounds="true"
                 android:background="#dddddd"
@@ -121,7 +130,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/prodName"
+                android:layout_below="@+id/review_ll"
                 android:layout_marginStart="13dp"
                 android:layout_marginTop="12dp"
                 android:layout_toEndOf="@+id/prodImageButton"
@@ -429,13 +438,28 @@
                 android:layout_height="36dp"
                 android:layout_below="@+id/numberViews"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="12dp"
                 android:layout_marginTop="35dp"
                 android:background="@drawable/button_round_corners"
                 android:text="@string/ask_info"
                 android:textColor="#ffffff" />
 
 
+            <Button
+
+                android:layout_below="@id/infoButton"
+                android:textColor="@android:color/white"
+                android:text="@string/writeAReviewText"
+                android:layout_marginTop="5dp"
+                android:textAllCaps="false"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="12dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="20dp"
+                android:id="@+id/write_a_review_btn"
+                android:background="@drawable/button_round_corners"
+                android:layout_width="180dp"
+                android:layout_height="36dp" />
 
         </RelativeLayout>
 
@@ -443,11 +467,11 @@
     </ScrollView>
 
     <LinearLayout
+        android:layout_alignParentBottom="true"
         android:id="@+id/addToCartButton"
         android:layout_width="match_parent"
         android:layout_height="66dp"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/write_a_review_btn"
         android:background="@color/colorPrimary"
         android:clickable="true"
         android:gravity="center_horizontal|center_vertical"
@@ -480,19 +504,4 @@
 
     </LinearLayout>
 
-    <Button
-
-        android:textColor="@android:color/white"
-        android:text="@string/writeAReviewText"
-        android:layout_marginTop="5dp"
-        android:layout_alignParentBottom="true"
-        android:textAllCaps="false"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="5dp"
-
-        android:layout_marginRight="20dp"
-        android:id="@+id/write_a_review_btn"
-        android:background="@drawable/yellow_btn_round_corners"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 </RelativeLayout>

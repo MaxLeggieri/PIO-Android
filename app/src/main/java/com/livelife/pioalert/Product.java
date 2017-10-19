@@ -33,12 +33,21 @@ public class Product implements Serializable {
     public String brandName, companylogo, brandLocation = "";
     public int idCom;
 
+    public int numReviews = 0;
+    public double avrReviews = 0.0;
+
 
     Product() {}
 
     Product(JSONObject jsonObject) {
 
         try {
+
+            if (jsonObject.has("rate")) {
+                JSONObject rate = jsonObject.getJSONObject("rate");
+                numReviews = rate.getInt("votes");
+                avrReviews = (float) rate.getDouble("rating_avg");
+            }
 
             if (jsonObject.has("calendarType")){
                 this.calendarType = jsonObject.getString("calendarType");
@@ -103,12 +112,13 @@ public class Product implements Serializable {
 
 
             if (save > 0) {
-                saveAmount = "Risparmi € "+String.format("%.2f", save);
+                saveAmount = " -€ "+String.format("%.2f", save);
             }
 
             if (jsonObject.has("where")) {
                 brandLocation = jsonObject.getJSONObject("where").getString("addressloc");
             }
+
 
 
         } catch (JSONException e) {

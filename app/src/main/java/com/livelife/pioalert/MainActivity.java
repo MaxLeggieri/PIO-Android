@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
     ImageView userImageView;
     TextView userWelcomeTextView,userPointsTextView;
     Button promoCode;
+    TextView promoCodeUsed;
     AHBottomNavigation bottomNavigation;
 
 
@@ -113,16 +115,12 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
                     startService(serviceIntent);
                 }
 
-                you = WebApi.getInstance().userRanking();
-                Log.v(tag,"PioPlayer: "+you.name);
-                userPointsTextView.setText(""+you.score+" pts");
-                promoCode.setPaintFlags(promoCode.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                promoCode.setText("PROMO CODE "+you.coderef);
+
+                updateUser();
 
                 homeFragment = new HomeFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, homeFragment, "HomeFragment").commit();
                 bottomNavigation.setCurrentItem(0);
-
 
             }
 
@@ -137,6 +135,30 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
     }
 
+    void updateUser() {
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                you = WebApi.getInstance().userRanking();
+
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.v(tag,"PioPlayer: "+you.name);
+                        userPointsTextView.setText(""+you.score+" pts");
+                        promoCode.setPaintFlags(promoCode.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                        promoCode.setText("PROMO CODE "+you.code);
+                        promoCodeUsed.setText("UTILIZZATO "+you.coderef+" VOLTE");
+                    }
+                });
+            }
+        }).run();
+
+
+
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -319,14 +341,14 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         promoCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final android.app.AlertDialog ad = Utility.getInstance().getAlertDialog("Dai questo codice ad un amico/a e fai scaricare l'app",you.coderef,MainActivity.this);
+                final android.app.AlertDialog ad = Utility.getInstance().getAlertDialog("Dai questo codice ad un amico/a e fai scaricare l'app",you.code,MainActivity.this);
                 ad.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "Condividi", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Scarica l'app PIO qui: \n\n https://pioalert.com/download.php \n\n Inserisci questo codice prima di accedere: "+you.coderef);
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Scarica l'app PIO! Unisciti a noi");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Scarica l'app PIO qui: \n\n https://pioalert.com/download.php \n\n Inserisci questo codice prima di accedere: "+you.code);
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Scarica l'app PIO, unisciti a noi!");
                         sendIntent.setType("text/plain");
                         startActivity(Intent.createChooser(sendIntent, "Condividi con:"));
                     }
@@ -341,6 +363,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
             }
         });
+        promoCodeUsed = (TextView) navHeaderView.findViewById(R.id.promoCodeUsed);
 
 
 
@@ -452,6 +475,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
     }
 
     public void openDrawer() {
+        updateUser();
         drawerLayout.openDrawer(Gravity.LEFT);
     }
 

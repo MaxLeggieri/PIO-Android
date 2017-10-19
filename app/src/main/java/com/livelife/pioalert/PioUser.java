@@ -58,6 +58,8 @@ public class PioUser {
 
     public String shipName,shipSurname,shipAddress,shipZip,shipCity,shipSubCity,shipPhone,shipSummary;
 
+    String promoCode = "";
+
     Location location;
     double userLat,userLon;
 
@@ -105,6 +107,7 @@ public class PioUser {
         shipSubCity = c.getSharedPreferences("PIO",0).getString("shippingSubCity",null);
         shipPhone = c.getSharedPreferences("PIO",0).getString("shippingPhone",null);
         shipSummary = shipName+" "+shipSurname+"\n"+shipAddress+"\n"+shipZip+" "+shipCity+" ("+shipSubCity+")";
+        promoCode = c.getSharedPreferences("PIO",0).getString("promoCode","");
     }
 
     public void setLogged(boolean logged) {
@@ -113,6 +116,13 @@ public class PioUser {
         editor.putBoolean("logged", logged);
         editor.commit();
 
+    }
+
+    public void setPromoCode(String promoCode) {
+        this.promoCode = promoCode;
+        SharedPreferences.Editor editor = c.getSharedPreferences("PIO",0).edit();
+        editor.putString("promoCode", promoCode);
+        editor.commit();
     }
 
     public void setProfiled(boolean profiled) {

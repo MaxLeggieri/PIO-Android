@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PIO</string>
+
+    <string name="go_to_store">VAI AL NEGOZIO</string>
+    <string name="no_results">Nessun risultato...</string>
+    <string name="title_activity_drawer">DrawerActivity</string>
+
+    <string name="price">Prezzo</string>
+    <string name="available">Disponibili</string>
+    <string name="promo_location">Promo presso</string>
+    <string name="add_to_cart">AGGIUNGI O PRENOTA</string>
+    <string name="products">PRODOTTI</string>
+    <string name="ask_info">chiedi informazioni</string>
+    <string name="promo">Promo</string>
+    <string name="prenatoSubitoText">PRENATO SUBITO</string>
+    <string name="checkIntext">Check-in</string>
+    <string name="checkoutText">Check-out</string>
+    <string name="giornaText">Giorno</string>
+    <string name="oraText">Ora</string>
+    <string name="chooseOraText">Scegli l\'ora</string>
+    <string name="writeAReviewText">SCRIVI UNA RECENSIONE</string>
+    <string name="submitText">INVIA</string>
+    <string name="writeYourReviewHereText">Scrivi la tua recensione qui</string>
+    <string name="allReviewsText">Tutte le recensioni</string>
+    <string name="someerrorText">Si è verificato un errore</string>
+    <string name="createAdText">Crea una promo</string>
+    <string name="logoutText">Logout</string>
+
+
+    <string-array name="kmRay">
+        <item>30 mt</item>
+        <item>40 mt</item>
+        <item>50 mt</item>
+        <item>100 mt</item>
+        <item>200 mt</item>
+        <item>300 mt</item>
+        <item>1 Km</item>
+        <item>2 Km</item>
+        <item>3 Km</item>
+        <item>4 Km</item>
+        <item>5 Km</item>
+        <item>6 Km</item>
+        <item>7 Km</item>
+        <item>8 Km</item>
+        <item>9 Km</item>
+        <item>10 Km</item>
+    </string-array>
+    <string-array name="alertType">
+        <item>Scheduled</item>
+        <item>Instantaneous</item>
+
+    </string-array>
+    <string-array name="couponArray">
+        <item>Yes</item>
+        <item>No</item>
+
+    </string-array>
+</resources>

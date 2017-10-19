@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,7 +31,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ProductActivity extends AppCompatActivity {
 
-    TextView productTitleTextView, prodName, price, priceOff, availableUnits, saveAmount, brandName, prodDesc, brandLocation;
+    TextView productTitleTextView, prodName, price, priceOff, availableUnits, saveAmount, brandName, prodDesc, brandLocation, numberReviews;
     ImageButton backButton, prodImageButton;
     Button infoButton;
     Button write_a_review_btn;
@@ -53,21 +54,31 @@ public class ProductActivity extends AppCompatActivity {
     private int mHoursOra = 0;
     private int mMinsOra = 0;
 
+
+    RatingBar ratingBar;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    int prodId = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
-        int prodId = getIntent().getIntExtra("productId", 0);
+        prodId = getIntent().getIntExtra("productId", 0);
 
         if (prodId == 0) finish();
 
         p = WebApi.getInstance().getProductById(prodId);
+
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingBar.setRating((float) p.avrReviews);
+        numberReviews = (TextView) findViewById(R.id.numberReviews);
+        ratingBar.setRating((float) p.avrReviews);
+        numberReviews.setText(""+p.numReviews);
 
         backButton = (ImageButton) findViewById(R.id.backButton);
         mCheckIn_et = (EditText) findViewById(R.id.check_in_et);
@@ -236,6 +247,7 @@ public class ProductActivity extends AppCompatActivity {
 
 
                 int mCalType = 0;
+                boolean added = false;
                 if (!p.calendarType.isEmpty()) {
                     mCalType = Integer.parseInt(p.calendarType);
                     if (mCalType == 2) {
@@ -249,15 +261,22 @@ public class ProductActivity extends AppCompatActivity {
                         calendar.set(Calendar.SECOND, 0);
                         calendar.set(Calendar.MILLISECOND, 0);
                         mCalTime = calendar.getTimeInMillis();
+
+                        long mQuantity = TimeUnit.DAYS.convert(mCheckOutTime - mCalTime, TimeUnit.MILLISECONDS);
+                        System.out.println ("Days: " +mQuantity );
+                        added = WebApi.getInstance().basketMove(p.pid,mQuantity  , mCalType, mCalTime);
+                    }
+                    else if (mCalType == 0) {
+
+                        added = WebApi.getInstance().basketMove(p.pid, 1, mCalType, mCalTime);
                     }
                 }
 
 
 
 
-                long mQuantity = TimeUnit.DAYS.convert(mCheckOutTime - mCalTime, TimeUnit.MILLISECONDS);
-                System.out.println ("Days: " +mQuantity );
-                boolean added = WebApi.getInstance().basketMove(p.pid,mQuantity  , mCalType, mCalTime);
+
+
 
                 if (added) {
                     addProgressBar.setVisibility(View.GONE);
@@ -276,6 +295,27 @@ public class ProductActivity extends AppCompatActivity {
 
         addProgressBar = (ProgressBar) findViewById(R.id.addProgressBar);
         addProgressBar.setVisibility(View.GONE);
+    }
+
+
+    boolean isReloaded = false;
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+        if (isReloaded) {
+
+            p = WebApi.getInstance().getProductById(prodId);
+
+            ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+            ratingBar.setRating((float) p.avrReviews);
+            numberReviews = (TextView) findViewById(R.id.numberReviews);
+            ratingBar.setRating((float) p.avrReviews);
+            numberReviews.setText("" + p.numReviews);
+        }
+
+        isReloaded = true;
     }
 
     private void showTimePickerForOra() {

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#f8ca00</color>
+    <color name="colorPrimary">#203666</color>
     <color name="colorPrimaryDark">#f8ca00</color>
     <color name="navigationBarColor">#f8ca00</color>
     <color name="colorPrimaryDarker">#404040</color>
     <color name="colorAccent">#4d92df</color>
     <color name="facebook">#0067ad</color>
 
+    <color name="yellow">#f7ca2e</color>
     <color name="light_title">#A08864</color>
     <color name="black_overlay">#66000000</color>
     <color name="light_blue">#6386D8</color>

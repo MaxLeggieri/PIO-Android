@@ -139,10 +139,13 @@ public class CartActivity extends AppCompatActivity {
         });
 
         buyButton.setEnabled(false);
-        buyAndCollectButton.setEnabled(false);
-        buyButton.setAlpha(0.4f);
-        buyAndCollectButton.setAlpha(0.4f);
 
+        buyButton.setAlpha(0.4f);
+
+        /*
+        buyAndCollectButton.setEnabled(false);
+        buyAndCollectButton.setAlpha(0.4f);
+        */
 
         changeAddressButton = (Button) findViewById(R.id.changeAddressButton);
         changeAddressButton.setOnClickListener(new View.OnClickListener() {
@@ -191,6 +194,9 @@ public class CartActivity extends AppCompatActivity {
             });
         }
 
+        buyAndCollectButton.setEnabled(true);
+        buyAndCollectButton.setAlpha(1);
+        buyAndCollectButton.setText("PAGA E RITIRA IN NEGOZIO "+Utility.getInstance().getFormattedPrice(cart.subTotal));
 
     }
 
@@ -322,7 +328,7 @@ public class CartActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else {
-            showNoShippingDialog();
+            //showNoShippingDialog();
         }
 
 
@@ -343,7 +349,16 @@ public class CartActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-            dialog.setNegativeButton("Ignora", null);
+
+            dialog.setNegativeButton("Ignora", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // TODO
+                    buyAndCollectButton.setEnabled(true);
+                    buyAndCollectButton.setAlpha(1);
+                    buyAndCollectButton.setText("PAGA E RITIRA IN NEGOZIO "+Utility.getInstance().getFormattedPrice(cart.subTotal));
+                }
+            });
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -388,7 +403,7 @@ public class CartActivity extends AppCompatActivity {
         dropInRequest.amount(""+t+"");
         dropInRequest.requestThreeDSecureVerification(true);
 
-        startActivityForResult(dropInRequest.getIntent(this), 3456);
+        startActivityForResult(dropInRequest.getIntent(this), 1234);
     }
 
     @Override
@@ -402,6 +417,83 @@ public class CartActivity extends AppCompatActivity {
                 }
                 break;
 
+            }
+
+            case (3456) : {
+
+                if (resultCode == Activity.RESULT_OK) {
+                    DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+                    // use the result to update your UI and send the payment method nonce to your server
+
+                    Log.v(tag,"PayPal DropInResult nonce: "+result.getPaymentMethodNonce().getNonce());
+
+                    final String nonce = result.getPaymentMethodNonce().getNonce();
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            double t = cart.subTotal;
+                            JSONObject resp = WebApi.getInstance().paypalTrans(nonce,""+t+"",currentDhlRateId,idCom);
+
+                            try {
+                                final boolean responseOk = resp.getBoolean("response");
+                                Log.v(tag,"paypalTrans: "+resp.toString(2));
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(responseOk) {
+
+                                            AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
+                                            dialog.setMessage("L'ordine è andato a buon fine. Vai al negozio e ritira il tuo acquisto!");
+                                            dialog.setTitle("Grazie!");
+                                            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                                                    finish();
+                                                }
+                                            });
+                                            dialog.show();
+
+                                        } else {
+
+                                            AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
+                                            dialog.setMessage("Si è verificato un error. Riprova o contatta il gestore della tua carta o servizio.");
+                                            dialog.setTitle("Ops!");
+                                            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                                                    finish();
+                                                }
+                                            });
+                                            dialog.show();
+
+                                        }
+                                    }
+                                });
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                    });
+
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    // the user canceled
+
+                    Log.v(tag,"PayPal DropInResult: User canceled");
+
+                } else {
+                    // handle errors here, an exception may be available in
+                    Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
+
+                    Log.v(tag,"PayPal DropInResult: Error "+error.toString());
+                }
+
+
+                break;
             }
 
             case (1234) : {

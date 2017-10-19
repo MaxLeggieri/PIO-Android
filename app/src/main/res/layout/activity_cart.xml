@@ -65,7 +65,7 @@
 
     </RelativeLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -185,7 +185,7 @@
                 android:layout_marginTop="22dp"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="Carico..."
+                android:text="..."
                 android:textColor="#6f6f6f"
                 android:textSize="16sp"
                 android:layout_below="@+id/subTotal"
@@ -236,7 +236,7 @@
                 android:textAppearance="@style/AppTheme.TextAppearance.Bold"
                 android:layout_width="match_parent"
                 android:layout_height="66dp"
-                android:background="#cc9c4a"
+                android:background="#ffb81a"
                 android:layout_below="@+id/bookingButton"
                 />
 
@@ -259,7 +259,7 @@
 
 
 
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
 
 </RelativeLayout>

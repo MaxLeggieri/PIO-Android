@@ -1,59 +1,59 @@
 <resources>
     <string name="app_name">PIO</string>
 
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="dummy_content_row">Titolo Nome etc</string>
+    <string name="title_activity_login" translatable="false">LoginActivity</string>
+    <string name="dummy_button" translatable="false">Dummy Button</string>
+    <string name="dummy_content" translatable="false">DUMMY\nCONTENT</string>
+    <string name="dummy_content_row" translatable="false">Titolo Nome etc</string>
 
-    <string name="facebook_app_id">1851533448411785</string>
-    <string name="title_activity_categories">CategoriesActivity</string>
-    <string name="title_activity_template">TemplateActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-
-
-    <string name="title_activity_home">Esplora</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="facebook_app_id" translatable="false">1851533448411785</string>
+    <string name="title_activity_categories" translatable="false">CategoriesActivity</string>
+    <string name="title_activity_template" translatable="false">TemplateActivity</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
 
 
-    <string name="alert_location_permission_title">Condividi la tua posizione</string>
-    <string name="alert_location_permission_message">Per ottenere la massima qualità della tua esperienza su Pio condividi la tua posizione. I tuoi dati sono privati e custoditi a norma di legge</string>
-    <string name="search_hint">Cerca su Pio</string>
-    <string name="title_activity_main">PIO</string>
-
-    <string name="crash_toast_text">Crash inviato a Max...</string>
-
-    <string name="title_explore">Esplora</string>
-    <string name="title_promo">Promo</string>
-    <string name="title_showcase">Vetrina</string>
-    <string name="title_shops">Negozi</string>
-    <string name="title_carts">Carrelli</string>
-    <string name="title_notifications">Notifiche</string>
+    <string name="title_activity_home" translatable="false">Esplora</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
 
-    <string name="sign_in_facebook">ACCEDI CON FACEBOOK</string>
-    <string name="sign_in_google">ACCEDI CON GOOGLE</string>
-    <string name="inizia_a_risparmiare">INIZIA A RISPARMIARE!</string>
+    <string name="alert_location_permission_title" translatable="false">Condividi la tua posizione</string>
+    <string name="alert_location_permission_message" translatable="false">Per ottenere la massima qualità della tua esperienza su Pio condividi la tua posizione. I tuoi dati sono privati e custoditi a norma di legge</string>
+    <string name="search_hint" translatable="false">Cerca su Pio</string>
+    <string name="title_activity_main" translatable="false">PIO</string>
 
-    <string name="title_categories">Categorie</string>
-    <string name="title_categories_desc">Dicci cosa ti interessa</string>
-    <string name="choose_how_much">SCEGLI QUANTO VUOI</string>
-    <string name="done">FATTO</string>
-    <string name="choose_more">SCEGLINE ALMENO TRE</string>
+    <string name="crash_toast_text" translatable="false">Crash inviato a Max...</string>
 
-    <string name="title_consent">La tua privacy</string>
-    <string name="subtitle_consent">I tuoi dati sono al sicuro</string>
+    <string name="title_explore" translatable="false">Esplora</string>
+    <string name="title_promo" translatable="false">Promo</string>
+    <string name="title_showcase" translatable="false">Vetrina</string>
+    <string name="title_shops" translatable="false">Negozi</string>
+    <string name="title_carts" translatable="false">Carrelli</string>
+    <string name="title_notifications" translatable="false">Notifiche</string>
 
-    <string name="header_email">E-mail</string>
-    <string name="header_birthdate">Data di nascita</string>
-    <string name="header_job">Impiego</string>
-    <string name="header_sex">Sesso</string>
-    <string name="header_consent">Consenso</string>
 
-    <string name="hint_email">tuonome@provider.com</string>
-    <string name="hint_birthdate">31/10/1990</string>
+    <string name="sign_in_facebook" translatable="false">ACCEDI CON FACEBOOK</string>
+    <string name="sign_in_google" translatable="false">ACCEDI CON GOOGLE</string>
+    <string name="inizia_a_risparmiare" translatable="false">INIZIA A RISPARMIARE!</string>
+
+    <string name="title_categories" translatable="false">Categorie</string>
+    <string name="title_categories_desc" translatable="false">Dicci cosa ti interessa</string>
+    <string name="choose_how_much" translatable="false">SCEGLI QUANTO VUOI</string>
+    <string name="done" translatable="false">FATTO</string>
+    <string name="choose_more" translatable="false">SCEGLINE ALMENO TRE</string>
+
+    <string name="title_consent" translatable="false">La tua privacy</string>
+    <string name="subtitle_consent" translatable="false">I tuoi dati sono al sicuro</string>
+
+    <string name="header_email" translatable="false">E-mail</string>
+    <string name="header_birthdate" translatable="false">Data di nascita</string>
+    <string name="header_job" translatable="false">Impiego</string>
+    <string name="header_sex" translatable="false">Sesso</string>
+    <string name="header_consent" translatable="false">Consenso</string>
+
+    <string name="hint_email" translatable="false">tuonome@provider.com</string>
+    <string name="hint_birthdate" translatable="false">31/10/1990</string>
 
     <string name="go_to_store">VAI AL NEGOZIO</string>
     <string name="no_results">Nessun risultato...</string>
@@ -69,10 +69,10 @@
     <string name="prenatoSubitoText">PRENATO SUBITO</string>
     <string name="checkIntext">Check-in</string>
     <string name="checkoutText">Check-out</string>
-    <string name="giornaText">Giorna</string>
-    <string name="oraText">Ora</string>
-    <string name="chooseOraText">Choose Ora</string>
-    <string name="writeAReviewText">Write a review</string>
+    <string name="giornaText">Day</string>
+    <string name="oraText">Time</string>
+    <string name="chooseOraText">Choose time</string>
+    <string name="writeAReviewText">WRITE A REVIEW</string>
     <string name="submitText">Submit</string>
     <string name="writeYourReviewHereText">Write your review here</string>
     <string name="allReviewsText">All reviews</string>
