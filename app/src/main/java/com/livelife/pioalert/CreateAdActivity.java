@@ -325,7 +325,7 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
         progress_pb.setVisibility(View.VISIBLE);
 //        Request construction:
         Map<String, RequestBody> map = new HashMap<>();
-        map.put("idad", RequestBody.create(MediaType.parse("text/plain"), "0"));
+        //map.put("idad", RequestBody.create(MediaType.parse("text/plain"), "0"));
         map.put("idcom", RequestBody.create(MediaType.parse("text/plain"), "59"));
         map.put("title", RequestBody.create(MediaType.parse("text/plain"), title_et.getText().toString().trim()));
         map.put("description", RequestBody.create(MediaType.parse("text/plain"), description_et.getText().toString().trim()));

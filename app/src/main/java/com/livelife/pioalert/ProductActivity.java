@@ -33,7 +33,7 @@ public class ProductActivity extends AppCompatActivity {
 
     TextView productTitleTextView, prodName, price, priceOff, availableUnits, saveAmount, brandName, prodDesc, brandLocation, numberReviews;
     ImageButton backButton, prodImageButton;
-    Button infoButton;
+    Button infoButton,viewShopButton;
     Button write_a_review_btn;
     Product p;
     LinearLayout addToCartButton;
@@ -73,6 +73,16 @@ public class ProductActivity extends AppCompatActivity {
         if (prodId == 0) finish();
 
         p = WebApi.getInstance().getProductById(prodId);
+
+        viewShopButton = (Button) findViewById(R.id.viewShopButton);
+        viewShopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent companyIntent = new Intent(ProductActivity.this,CompanyActivity.class);
+                companyIntent.putExtra("comId",p.idCom);
+                startActivity(companyIntent);
+            }
+        });
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         ratingBar.setRating((float) p.avrReviews);

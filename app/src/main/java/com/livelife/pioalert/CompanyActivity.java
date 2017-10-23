@@ -85,6 +85,7 @@ public class CompanyActivity extends AppCompatActivity {
 
         final Location comLoc = com.locations.get(0);
 
+
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -107,6 +108,10 @@ public class CompanyActivity extends AppCompatActivity {
                         .snippet(com.locations.get(0).address)
                         .position(
                                 new LatLng(comLoc.lat, comLoc.lng)));
+
+
+
+
             }
         });
 
@@ -164,6 +169,7 @@ public class CompanyActivity extends AppCompatActivity {
         });
 
 
+        productsHeader = (LinearLayout) findViewById(R.id.productsHeader);
 
         companyPromos = (RecyclerView) findViewById(R.id.companyPromos);
         companyPromos.setHasFixedSize(true);
@@ -180,45 +186,43 @@ public class CompanyActivity extends AppCompatActivity {
         layoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL);
         companyProducts.setLayoutManager(layoutManager2);
 
-        final LinearLayout productsHeader = (LinearLayout) findViewById(R.id.productsHeader);
-
-        Runnable promoRunnable = new Runnable() {
-            @Override
-            public void run() {
-                promoItems = WebApi.getInstance().companyAds(com.cid);
-                promoAdapter = new PromoRecyclerView(promoItems,null);
-                companyPromos.setAdapter(promoAdapter);
-            }
-        };
-
-        Handler ph = new Handler();
-        ph.postDelayed(promoRunnable,300);
 
 
-        Runnable productsRunnable = new Runnable() {
-            @Override
-            public void run() {
-                productItems = WebApi.getInstance().companyProducts(com.cid);
-                prodAdapter = new ProductRecyclerView(productItems);
-                companyProducts.setAdapter(prodAdapter);
+        /*
 
-                if (productItems.size() == 0) {
-                    productsHeader.setVisibility(View.GONE);
-                    companyProducts.setVisibility(View.GONE);
-                }
-            }
-        };
-
-        ph.postDelayed(productsRunnable,400);
+        */
 
 
     }
 
+    boolean initialized = false;
+    LinearLayout productsHeader;
     @Override
     public void onResume() {
         super.onResume();
         mapView.onResume();
 
+
+        if (!initialized) {
+
+            promoItems = WebApi.getInstance().companyAds(com.cid);
+            productItems = WebApi.getInstance().companyProducts(com.cid);
+
+
+
+            promoAdapter = new PromoRecyclerView(promoItems,null);
+            companyPromos.setAdapter(promoAdapter);
+
+            prodAdapter = new ProductRecyclerView(productItems);
+            companyProducts.setAdapter(prodAdapter);
+
+            if (productItems.size() == 0) {
+                productsHeader.setVisibility(View.GONE);
+                companyProducts.setVisibility(View.GONE);
+            }
+            initialized = true;
+
+        }
 
 
     }

@@ -150,7 +150,11 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
                         userPointsTextView.setText(""+you.score+" pts");
                         promoCode.setPaintFlags(promoCode.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                         promoCode.setText("PROMO CODE "+you.code);
-                        promoCodeUsed.setText("UTILIZZATO "+you.coderef+" VOLTE");
+                        if(!you.coderef.equals("0")) {
+                            promoCodeUsed.setText("UTILIZZATO " + you.coderef + " VOLTE");
+                        } else {
+                            promoCodeUsed.setText("NON ANCORA UTILIZZATO");
+                        }
                     }
                 });
             }

@@ -2,6 +2,7 @@ package com.livelife.pioalert;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -42,7 +43,7 @@ public class PromoActivity extends AppCompatActivity {
     ImageView imageView,comImageView;
     ImageButton backButton;
     TextView promoTitleTextView,shopNameTextView,shopDistanceTextView,promoTitle,expireTextView,promoDesc,numberViews;
-    Button linkButton,attachmentButton,couponButton;
+    Button linkButton,attachmentButton,couponButton,viewShopButton;
     ImageButton videoPreviewButton,likeButton,shareButton,playButton;
     MapView mapView;
     GoogleMap map;
@@ -116,6 +117,17 @@ public class PromoActivity extends AppCompatActivity {
 
         numberViews = (TextView) findViewById(R.id.numberViews);
         numberViews.setText("Visto "+p.viewedCount+" volte");
+
+        viewShopButton = (Button) findViewById(R.id.viewShopButton);
+        viewShopButton.setPaintFlags(viewShopButton.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        viewShopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent companyIntent = new Intent(PromoActivity.this,CompanyActivity.class);
+                companyIntent.putExtra("comId",p.brandId);
+                startActivity(companyIntent);
+            }
+        });
 
         linkButton = (Button) findViewById(R.id.linkButton);
         linkButton.setOnClickListener(detailsListener);

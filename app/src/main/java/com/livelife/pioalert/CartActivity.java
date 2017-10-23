@@ -177,6 +177,9 @@ public class CartActivity extends AppCompatActivity {
 
         updateCart();
 
+
+        Log.v(tag,"SELLING METHOD: "+cart.sellingMethod);
+
         if (PioUser.getInstance().shipAddress != null) {
             shippingAddress.setText(PioUser.getInstance().shipSummary);
         }
@@ -189,7 +192,7 @@ public class CartActivity extends AppCompatActivity {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    getDhlRate();
+                    getRate();
                 }
             });
         }
@@ -218,6 +221,9 @@ public class CartActivity extends AppCompatActivity {
         subTotal.setText(Utility.getInstance().getFormattedPrice(cart.subTotal));
         //shipAmount.setText(Utility.getInstance().getFormattedPrice(cart.subTotal));
         total.setText(Utility.getInstance().getFormattedPrice(cart.subTotal));
+
+        buyAndCollectButton.setText("PAGA E RITIRA IN NEGOZIO "+Utility.getInstance().getFormattedPrice(cart.subTotal));
+
     }
 
     public void modifyQuantityForItem(final Product p) {
@@ -285,7 +291,7 @@ public class CartActivity extends AppCompatActivity {
 
     String currentDhlRateId,currentPaypalClientToken,currentDhlTotal;
 
-    void getDhlRate() {
+    void getRate() {
 
 
 
@@ -328,13 +334,31 @@ public class CartActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else {
-            //showNoShippingDialog();
+            JSONObject rateRequest = WebApi.getInstance().getRegularRate(CartActivity.this, idCom);
+            try {
+                currentPaypalClientToken = rateRequest.getString("payPalClientToken");
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        buyAndCollectButton.setEnabled(true);
+                        buyAndCollectButton.setAlpha(1);
+
+
+                        buyAndCollectButton.setText("PAGA E RITIRA IN NEGOZIO "+Utility.getInstance().getFormattedPrice(cart.subTotal));
+
+                    }
+                });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
 
 
     }
-
 
     public void showNoShippingDialog() {
         System.out.println("calendarType : " + calendarType);
@@ -403,7 +427,7 @@ public class CartActivity extends AppCompatActivity {
         dropInRequest.amount(""+t+"");
         dropInRequest.requestThreeDSecureVerification(true);
 
-        startActivityForResult(dropInRequest.getIntent(this), 1234);
+        startActivityForResult(dropInRequest.getIntent(this), 3456);
     }
 
     @Override
@@ -432,7 +456,7 @@ public class CartActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             double t = cart.subTotal;
-                            JSONObject resp = WebApi.getInstance().paypalTrans(nonce,""+t+"",currentDhlRateId,idCom);
+                            JSONObject resp = WebApi.getInstance().paypalTrans(nonce,""+t+"",null,idCom);
 
                             try {
                                 final boolean responseOk = resp.getBoolean("response");
@@ -488,6 +512,8 @@ public class CartActivity extends AppCompatActivity {
                 } else {
                     // handle errors here, an exception may be available in
                     Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
+
+
 
                     Log.v(tag,"PayPal DropInResult: Error "+error.toString());
                 }

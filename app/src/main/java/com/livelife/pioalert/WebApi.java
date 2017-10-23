@@ -1418,6 +1418,69 @@ public class WebApi {
     }
 
 
+    public JSONObject getRegularRate(Context context, int idCom) {
+
+        HttpURLConnection c = null;
+        try {
+
+            String data  = URLEncoder.encode("method", "UTF-8") + "=" + URLEncoder.encode("getRegularRate", "UTF-8");
+            data += "&" + URLEncoder.encode("uid", "UTF-8") + "=" + URLEncoder.encode(""+PioUser.getInstance().uid+"", "UTF-8");
+            data += "&" + URLEncoder.encode("idcom", "UTF-8") + "=" + URLEncoder.encode(""+idCom+"", "UTF-8");
+            data += "&" + URLEncoder.encode("device_token", "UTF-8") + "=" + URLEncoder.encode(deviceToken, "UTF-8");
+
+            if(sandbox) {
+                data += "&" + URLEncoder.encode("sandbox", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8");
+            }
+
+            String url = apiAddress+"?"+data;
+
+            Log.e(tag,"Calling: "+url);
+
+            URL u = new URL(url);
+            c = (HttpURLConnection) u.openConnection();
+            c.setRequestMethod("GET");
+            c.setRequestProperty("Content-length", "0");
+            c.setUseCaches(false);
+            c.setAllowUserInteraction(false);
+            //c.setConnectTimeout(timeout);
+            //c.setReadTimeout(timeout);
+            c.connect();
+            int status = c.getResponseCode();
+
+            switch (status) {
+                case 200:
+                case 201:
+                    BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line+"\n");
+                    }
+                    br.close();
+
+                    JSONObject response = new JSONObject(sb.toString()).getJSONObject("response");
+
+
+                    return response;
+            }
+
+        } catch (IOException | JSONException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (c != null) {
+                try {
+                    c.disconnect();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
+
+
+        return new JSONObject();
+    }
+
 
     public JSONObject getDhlRate(Context context, int idCom) {
 
@@ -1506,7 +1569,6 @@ public class WebApi {
 
             data += "&" + URLEncoder.encode("payment_method_nonce", "UTF-8") + "=" + URLEncoder.encode(paymentMethodNonce, "UTF-8");
             data += "&" + URLEncoder.encode("amount", "UTF-8") + "=" + URLEncoder.encode(amount, "UTF-8");
-            data += "&" + URLEncoder.encode("id_rate", "UTF-8") + "=" + URLEncoder.encode(rateId, "UTF-8");
 
             if(sandbox) {
                 data += "&" + URLEncoder.encode("sandbox", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8");

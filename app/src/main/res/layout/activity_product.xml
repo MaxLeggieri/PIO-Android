@@ -227,28 +227,48 @@
                 android:textSize="18sp" />
 
 
-            <TextView
-                android:id="@+id/brandLocation"
+            <LinearLayout
+                android:id="@+id/brandLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/brandName"
-                android:layout_alignStart="@+id/brandName"
                 android:layout_below="@+id/brandName"
+                android:layout_alignEnd="@id/brandName"
+                android:orientation="vertical"
                 android:layout_marginTop="4dp"
-                android:maxLines="2"
-                android:text="Location"
-                android:textAppearance="@style/AppTheme.TextAppearance.Bold"
-                android:textColor="#5da5e5"
-                android:textSize="12sp" />
+                android:layout_alignStart="@+id/brandName">
+
+                <TextView
+                    android:id="@+id/brandLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/brandName"
+                    android:layout_marginBottom="12dp"
+                    android:maxLines="2"
+                    android:text="Location"
+                    android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                    android:textColor="#5da5e5"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/viewShopButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="VISITA IL NEGOZIO"
+                    android:textColor="#ffffff"
+                    android:background="@drawable/button_round_corners"/>
+            </LinearLayout>
+
 
             <RelativeLayout
                 android:id="@+id/check_in_rl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:layout_alignEnd="@+id/brandLocation"
-                android:layout_alignStart="@+id/brandLocation"
-                android:layout_below="@+id/brandLocation"
+                android:layout_alignStart="@+id/brandLayout"
+                android:layout_alignEnd="@id/brandName"
+                android:layout_below="@+id/brandLayout"
                 android:layout_marginTop="21dp">
 
                 <TextView

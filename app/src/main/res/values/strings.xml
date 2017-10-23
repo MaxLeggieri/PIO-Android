@@ -66,7 +66,7 @@
     <string name="products">PRODOTTI</string>
     <string name="ask_info">chiedi informazioni</string>
     <string name="promo">Promo</string>
-    <string name="prenatoSubitoText">PRENATO SUBITO</string>
+    <string name="prenatoSubitoText">PRENOTA SUBITO</string>
     <string name="checkIntext">Check-in</string>
     <string name="checkoutText">Check-out</string>
     <string name="giornaText">Day</string>
@@ -109,4 +109,5 @@
         <item>No</item>
 
     </string-array>
+    <string name="visita_negozio">VIEW SHOP</string>
 </resources>
