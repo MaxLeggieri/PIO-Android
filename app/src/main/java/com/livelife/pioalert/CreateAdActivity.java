@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -401,6 +402,7 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
 
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean checkPermission(final Activity context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
@@ -411,7 +413,7 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
                     alertBuilder.setTitle("Permission necessary");
                     alertBuilder.setMessage("External storage permission is necessary");
                     alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                        @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.M)
                         public void onClick(DialogInterface dialog, int which) {
                             requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA},
                                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
