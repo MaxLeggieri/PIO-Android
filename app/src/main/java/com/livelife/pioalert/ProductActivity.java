@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -31,7 +32,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ProductActivity extends AppCompatActivity {
 
-    TextView productTitleTextView, prodName, price, priceOff, availableUnits, saveAmount, brandName, prodDesc, brandLocation, numberReviews;
+    TextView productTitleTextView, prodName, price, priceOff, availableUnits, saveAmount, brandName, prodDesc, brandLocation,
+            numberReviews,review_info_tv;
     ImageButton backButton, prodImageButton;
     Button infoButton,viewShopButton;
     Button write_a_review_btn;
@@ -71,7 +73,10 @@ public class ProductActivity extends AppCompatActivity {
         prodId = getIntent().getIntExtra("productId", 0);
 
         if (prodId == 0) finish();
-
+        if (!Utility.isNetworkConnected(this)){
+            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         p = WebApi.getInstance().getProductById(prodId);
 
         viewShopButton = (Button) findViewById(R.id.viewShopButton);
@@ -89,6 +94,11 @@ public class ProductActivity extends AppCompatActivity {
         numberReviews = (TextView) findViewById(R.id.numberReviews);
         ratingBar.setRating((float) p.avrReviews);
         numberReviews.setText(""+p.numReviews);
+        review_info_tv = (TextView) findViewById(R.id.review_info_tv);
+
+        if (p.numReviews<=0){
+            review_info_tv.setText("NO REVIEWS");
+        }
 
         backButton = (ImageButton) findViewById(R.id.backButton);
         mCheckIn_et = (EditText) findViewById(R.id.check_in_et);
@@ -274,12 +284,23 @@ public class ProductActivity extends AppCompatActivity {
 
                         long mQuantity = TimeUnit.DAYS.convert(mCheckOutTime - mCalTime, TimeUnit.MILLISECONDS);
                         System.out.println ("Days: " +mQuantity );
+                        if (!Utility.isNetworkConnected(ProductActivity.this)){
+                            Toast.makeText(ProductActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                            return ;
+                        }
                         added = WebApi.getInstance().basketMove(p.pid,mQuantity  , mCalType, mCalTime);
                     }
-                    else if (mCalType == 0) {
+                    else{
+                        if (!Utility.isNetworkConnected(ProductActivity.this)){
+                            Toast.makeText(ProductActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                            return ;
+                        }
+                        added = WebApi.getInstance().basketMove(p.pid, 1, mCalType, mCalTime);
+
+                    } /*if (mCalType == 0) {
 
                         added = WebApi.getInstance().basketMove(p.pid, 1, mCalType, mCalTime);
-                    }
+                    }*/
                 }
 
 
@@ -315,14 +336,22 @@ public class ProductActivity extends AppCompatActivity {
 
 
         if (isReloaded) {
-
+            if (!Utility.isNetworkConnected(this)){
+                Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                return ;
+            }
             p = WebApi.getInstance().getProductById(prodId);
 
             ratingBar = (RatingBar) findViewById(R.id.ratingBar);
             ratingBar.setRating((float) p.avrReviews);
             numberReviews = (TextView) findViewById(R.id.numberReviews);
-            ratingBar.setRating((float) p.avrReviews);
+
             numberReviews.setText("" + p.numReviews);
+            review_info_tv = (TextView) findViewById(R.id.review_info_tv);
+
+            if (p.numReviews<=0){
+                review_info_tv.setText("NO REVIEWS");
+            }
         }
 
         isReloaded = true;

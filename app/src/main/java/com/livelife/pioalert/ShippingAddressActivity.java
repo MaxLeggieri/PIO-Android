@@ -3,13 +3,14 @@ package com.livelife.pioalert;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -119,7 +120,10 @@ public class ShippingAddressActivity extends AppCompatActivity {
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
-
+                            if (!Utility.isNetworkConnected(ShippingAddressActivity.this)){
+                                Toast.makeText(ShippingAddressActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                                return ;
+                            }
                             WebApi.getInstance().shippingAddressChange();
 
                             runOnUiThread(new Runnable() {

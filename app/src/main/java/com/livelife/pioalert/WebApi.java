@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
@@ -310,6 +311,10 @@ public class WebApi {
 
 
     public JSONObject sendGoogleData(GoogleSignInAccount account, String coderef) {
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return null;
+        }
 
         String query = apiAddress+"?method=sendGoogleUserData";
 
@@ -339,7 +344,10 @@ public class WebApi {
 
 
     public void sendFacebookData(String json, Context c, String coderef) {
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
 
         try {
             postJsonObjectFromUrl(apiAddress,json,c,coderef);
@@ -358,6 +366,10 @@ public class WebApi {
 
 
         ArrayList<Category> cats = new ArrayList<>();
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return cats;
+        }
         String query = apiAddress+"?method=categories_all";
 
         try {
@@ -395,7 +407,10 @@ public class WebApi {
 
         String query = apiAddress + "?method=ucategory_on";
 
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return false;
+        }
         try {
             query += "&device_token=" + deviceToken;
             query += "&idcat=" + cats;
@@ -423,7 +438,10 @@ public class WebApi {
 
 
         String query = apiAddress + "?method=signupMissing";
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return null;
+        }
         try {
             query += "&device_token=" + deviceToken;
             query += "&uid=" + PioUser.getInstance().uid;
@@ -447,7 +465,10 @@ public class WebApi {
     public JSONObject home(int page, String searchTerm, int idcat) {
 
         String query = apiAddress + "?method=home";
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return new JSONObject();
+        }
         try {
             query += "&device_token=" + deviceToken;
             query += "&uid=" + PioUser.getInstance().uid;
@@ -475,7 +496,10 @@ public class WebApi {
     public JSONArray autosuggest(String text) {
 
         String query = apiAddress + "?method=autosuggest";
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return new JSONArray();
+        }
         try {
             query += "&device_token=" + deviceToken;
             query += "&uid=" + PioUser.getInstance().uid;
@@ -507,7 +531,10 @@ public class WebApi {
         if (promoId==0) return new Promo();
 
         String query = apiAddress+"?method=getAdById";
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return new Promo();
+        }
         query += "&device_token="+deviceToken;
         query += "&uid="+PioUser.getInstance().uid;
         query += "&ids="+promoId;
@@ -537,7 +564,10 @@ public class WebApi {
 
 
         String query = apiAddress+"?method=useCoupon";
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return new JSONObject();
+        }
         try {
             query += "&uid=" + PioUser.getInstance().uid;
             query += "&idad=" + promoId;
@@ -593,6 +623,10 @@ public class WebApi {
     public void tokenHandler(String notificationToken) {
 
         String query = apiAddress+"?method=tokenHandler";
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         try {
             query += "&device_token=" + deviceToken;
             query += "&notification_token=" + notificationToken;
@@ -614,6 +648,10 @@ public class WebApi {
 
         String m = like?"like":"unlike";
         String query = apiAddress+"?method="+m;
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         try {
             query += "&uid=" + PioUser.getInstance().uid;
             query += "&idad=" + promoId;
@@ -635,6 +673,10 @@ public class WebApi {
         ArrayList<Product> products = new ArrayList<>();
 
         String query = apiAddress+"?method=product";
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return products;
+        }
         try {
             query += "&idproduct="+ids;
             query += "&lat=" + PioUser.getInstance().location.getLatitude();
@@ -676,6 +718,10 @@ public class WebApi {
     public Product getProductById(int idp) {
 
         String query = apiAddress+"?method=product";
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return new Product();
+        }
         try {
             query += "&device_token=" + deviceToken;
             query += "&uid=" + PioUser.getInstance().uid;
@@ -701,7 +747,10 @@ public class WebApi {
     public ArrayList<Company> getCompanies(int page, String cats, String partner) {
 
         ArrayList<Company> companies = new ArrayList<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return companies;
+        }
         String query = apiAddress+"?method=companies";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -743,7 +792,10 @@ public class WebApi {
     }
 
     public Company getCompanyById(int idc) {
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return new Company();
+        }
         String query = apiAddress+"?method=companies";
         try {
             query += "&device_token=" + deviceToken;
@@ -753,7 +805,7 @@ public class WebApi {
             query += "&lat=" + PioUser.getInstance().location.getLatitude();
             query += "&lng=" + PioUser.getInstance().location.getLongitude();
 
-            Log.e(tag,"Calling: "+query);
+            Log.e(tag,"Calling getCompanyById : "+query);
 
             JSONObject response = getJsonObjectFromUrl(query);
             JSONObject data = response.getJSONObject("data");
@@ -777,7 +829,10 @@ public class WebApi {
     public ArrayList<Promo> companyAds(int idCom) {
 
         ArrayList<Promo> promos = new ArrayList<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return promos;
+        }
         String query = apiAddress+"?method=companyAdsDist";
         try {
             query += "&device_token=" + deviceToken;
@@ -819,7 +874,10 @@ public class WebApi {
 
     public ArrayList<Product> companyProducts(int idCom) {
         ArrayList<Product> products = new ArrayList<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return products;
+        }
         String query = apiAddress+"?method=companyProducts";
         try {
             query += "&device_token=" + deviceToken;
@@ -829,7 +887,7 @@ public class WebApi {
             query += "&lat=" + PioUser.getInstance().location.getLatitude();
             query += "&lng=" + PioUser.getInstance().location.getLongitude();
 
-            Log.e(tag,"Calling: "+query);
+            Log.e(tag,"Calling companyProducts : "+query);
 
             JSONObject response = getJsonObjectFromUrl(query);
             JSONObject dataObj = response.getJSONObject("data");
@@ -864,7 +922,10 @@ public class WebApi {
     public ArrayList<Promo> getAds2user(int page, String cat) {
 
         ArrayList<Promo> promos = new ArrayList<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return promos;
+        }
         String query = apiAddress+"?method=ads2user";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -913,7 +974,10 @@ public class WebApi {
     public ArrayList<Product> productsByCats(String cats, int page) {
 
         ArrayList<Product> prods = new ArrayList<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return prods;
+        }
         String query  = apiAddress+"?method=productsByCats";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -961,7 +1025,10 @@ public class WebApi {
     public Cart basketShow(int idCom) {
 
         Cart cart = new Cart();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return cart;
+        }
         String query  = apiAddress+"?method=basketShow";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -996,7 +1063,10 @@ public class WebApi {
     }
 
     public boolean basketMove(int idProduct, long quantity, int calendarType, long calendarTime) {
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return false;
+        }
         String query = apiAddress + "?method=basketMove";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -1030,7 +1100,10 @@ public class WebApi {
     }
 
     public boolean emailPrenotation(int idCom, String message) {
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return false;
+        }
         String query  = apiAddress+"?method=basket2emailPrenotation";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -1059,7 +1132,10 @@ public class WebApi {
     public ArrayList<String> getUserCats() {
 
         ArrayList<String> userCats = new ArrayList<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return userCats;
+        }
         String query  = apiAddress+"?method=usercats";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -1093,7 +1169,10 @@ public class WebApi {
     public ArrayList<Cart> basketShowAll() {
 
         ArrayList<Cart> carts = new ArrayList<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return carts;
+        }
         String query  = apiAddress+"?method=basketShow";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -1139,7 +1218,10 @@ public class WebApi {
     public ArrayList<Promo> adsNotified() {
 
         ArrayList<Promo> p = new ArrayList<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return p;
+        }
         String query  = apiAddress+"?method=adsNotified";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -1173,7 +1255,10 @@ public class WebApi {
     }
 
     public void notificationsRead(String ids, String timeref) {
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         String query  = apiAddress+"?method=notificationsRead";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -1198,7 +1283,10 @@ public class WebApi {
     public ArrayList<Order> orders() {
 
         ArrayList<Order> orders = new ArrayList<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return orders;
+        }
         String query  = apiAddress+"?method=orders";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -1295,7 +1383,10 @@ public class WebApi {
     public ArrayList<PioPlayer> ranking(int rec) {
 
         ArrayList<PioPlayer> players = new ArrayList<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return players;
+        }
         Date date = new Date();
         DateFormat monthFormat = new SimpleDateFormat("M");
         DateFormat yearFormat = new SimpleDateFormat("yyyy");
@@ -1359,7 +1450,10 @@ public class WebApi {
         Date date = new Date();
         DateFormat monthFormat = new SimpleDateFormat("M");
         DateFormat yearFormat = new SimpleDateFormat("yyyy");
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return new PioPlayer();
+        }
         String query  = apiAddress+"?method=usersParade";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;
@@ -1395,7 +1489,10 @@ public class WebApi {
 
     public ArrayList<String> claim() {
         ArrayList<String> c = new ArrayList<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return c;
+        }
         String query  = apiAddress+"?method=claim";
 
         Log.e(tag,"Calling: "+query);
@@ -1421,6 +1518,10 @@ public class WebApi {
     public JSONObject getRegularRate(Context context, int idCom) {
 
         HttpURLConnection c = null;
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return new JSONObject();
+        }
         try {
 
             String data  = URLEncoder.encode("method", "UTF-8") + "=" + URLEncoder.encode("getRegularRate", "UTF-8");
@@ -1485,6 +1586,10 @@ public class WebApi {
     public JSONObject getDhlRate(Context context, int idCom) {
 
         HttpURLConnection c = null;
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return new JSONObject();
+        }
         try {
 
             String data  = URLEncoder.encode("method", "UTF-8") + "=" + URLEncoder.encode("getDhlRate", "UTF-8");
@@ -1553,6 +1658,10 @@ public class WebApi {
     public JSONObject paypalTrans(String paymentMethodNonce, String amount, String rateId, int idCom) {
 
         HttpURLConnection c = null;
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return new JSONObject();
+        }
         try {
 
             String data = "";
@@ -1627,6 +1736,10 @@ public class WebApi {
     public void shippingAddressChange() {
 
         HttpURLConnection c = null;
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         try {
 
             String data  = URLEncoder.encode("method", "UTF-8") + "=" + URLEncoder.encode("shippingAddressChange", "UTF-8");
@@ -1690,7 +1803,10 @@ public class WebApi {
 
 
         HashMap<String,String> unread = new HashMap<>();
-
+        if (!Utility.isNetworkConnected(mainActivity)){
+            Toast.makeText(mainActivity,mainActivity.getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return unread;
+        }
         String query  = apiAddress+"?method=unreadNotifiedAds";
         query += "&device_token=" + deviceToken;
         query += "&uid=" + PioUser.getInstance().uid;

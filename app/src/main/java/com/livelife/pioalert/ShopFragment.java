@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,6 +113,10 @@ public class ShopFragment extends Fragment implements CompanyRecyclerView.OnRecy
         Runnable catRunnable = new Runnable() {
             @Override
             public void run() {
+                if (!Utility.isNetworkConnected(getActivity())){
+                    Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    return ;
+                }
                 allCompanies = WebApi.getInstance().getCompanies(page,lastCatSelected,null);
                 companiesAdapter.setItems(allCompanies);
             }
@@ -132,6 +137,10 @@ public class ShopFragment extends Fragment implements CompanyRecyclerView.OnRecy
         Runnable catRunnable = new Runnable() {
             @Override
             public void run() {
+                if (!Utility.isNetworkConnected(getActivity())){
+                    Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    return ;
+                }
                 List<Company> newComps = WebApi.getInstance().getCompanies(page,lastCatSelected,null);
                 Log.e(tag,"Adding "+newComps.size()+" items...");
                 if (newComps.size() > 0) {
@@ -153,6 +162,10 @@ public class ShopFragment extends Fragment implements CompanyRecyclerView.OnRecy
             public void run() {
 
                 if (allCompanies == null) {
+                    if (!Utility.isNetworkConnected(getActivity())){
+                        Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                        return ;
+                    }
                     allCompanies = WebApi.getInstance().getCompanies(page,lastCatSelected,null);
                 }
 

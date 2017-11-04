@@ -1,9 +1,11 @@
 package com.livelife.pioalert;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Max on 04/01/2017.
@@ -36,12 +38,32 @@ public class Product implements Serializable {
     public int numReviews = 0;
     public double avrReviews = 0.0;
 
+    public ArrayList<String> comcat = new ArrayList<>();
+    public ArrayList<String> comcatId = new ArrayList<>();
+
 
     Product() {}
 
     Product(JSONObject jsonObject) {
 
         try {
+
+
+            if(jsonObject.has("comcat")) {
+                JSONArray comcatJson = jsonObject.getJSONArray("comcat");
+                for (int i = 0; i < comcatJson.length(); i++) {
+                    String id = comcatJson.getString(i);
+                    comcat.add(id);
+                }
+            }
+
+            if(jsonObject.has("comcatId")) {
+                JSONArray comcatIdJson = jsonObject.getJSONArray("comcatId");
+                for (int i = 0; i < comcatIdJson.length(); i++) {
+                    String id = comcatIdJson.getString(i);
+                    comcatId.add(id);
+                }
+            }
 
             if (jsonObject.has("rate")) {
                 JSONObject rate = jsonObject.getJSONObject("rate");

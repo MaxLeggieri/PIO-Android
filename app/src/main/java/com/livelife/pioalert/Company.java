@@ -1,7 +1,5 @@
 package com.livelife.pioalert;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,11 +11,12 @@ import java.util.ArrayList;
  * Created by Max on 08/01/2017.
  */
 
-public class Company {
+public class Company implements Serializable{
 
     public int cid;
     public String officialName,brandName,phone,email,image,description;
     public ArrayList<com.livelife.pioalert.Location> locations = new ArrayList<>();
+    public ArrayList<CategoryProductModal> comcatList = new ArrayList<>();
 
     Company(){}
 
@@ -43,6 +42,23 @@ public class Company {
                     JSONObject obj = locs.getJSONObject(i);
                     com.livelife.pioalert.Location l = new com.livelife.pioalert.Location(obj);
                     locations.add(l);
+                }
+            }
+            if(json.has("comcat")) {
+                JSONArray comcat = json.getJSONArray("comcat");
+                CategoryProductModal mCategoryProductModalFree = new CategoryProductModal("tutti",null,true);
+                comcatList.add(mCategoryProductModalFree);
+                for (int i = 0; i < comcat.length(); i++) {
+                    JSONObject obj = comcat.getJSONObject(i);
+                    boolean isSelected  = false;
+                /*    if (i==0){
+                        isSelected = true;
+                    }else{
+                        isSelected = false;
+                    }*/
+
+                    CategoryProductModal bean = new CategoryProductModal(obj.getString("name"),obj.getString("idcat"),isSelected);
+                    comcatList.add(bean);
                 }
             }
 

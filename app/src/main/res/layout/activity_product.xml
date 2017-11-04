@@ -60,53 +60,58 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <LinearLayout
-                android:paddingTop="5dp"
-                android:layout_marginLeft="28dp"
-                android:layout_marginBottom="12dp"
                 android:id="@+id/review_ll"
-                android:paddingRight="20dp"
-                android:layout_below="@+id/prodName"
                 android:layout_width="wrap_content"
-                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/prodName"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="28dp"
                 android:gravity="center_vertical"
-                android:layout_height="wrap_content">
+                android:orientation="horizontal"
+                android:paddingRight="20dp"
+                android:paddingTop="5dp">
+
                 <RatingBar
-                    android:progressTint="@color/yellow"
                     android:id="@+id/ratingBar"
                     style="?android:attr/ratingBarStyleSmall"
-                    android:isIndicator="true"
                     android:layout_width="wrap_content"
-                    android:rating="3.5"
+                    android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:layout_height="wrap_content" />
+                    android:isIndicator="true"
+                    android:progressTint="@color/yellow"
+                    android:rating="3.5" />
+
                 <TextView
                     android:id="@+id/numberReviews"
                     android:layout_width="wrap_content"
-                    android:text="0"
+                    android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
 
+                    android:text="0"
                     android:textAppearance="@style/AppTheme.TextAppearance.Bold"
-                    android:textColor="#6f6f6f"
-                    android:layout_height="wrap_content" />
+                    android:textColor="#6f6f6f" />
 
                 <TextView
+                    android:id="@+id/review_info_tv"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="11sp"
                     android:layout_marginLeft="12dp"
-                    android:text="VEDI RECENSIONI"/>
+                    android:text="VEDI RECENSIONI"
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/prodName"
-                android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="12dp"
+                android:layout_alignParentTop="true"
                 android:layout_marginLeft="28dp"
                 android:layout_marginRight="28dp"
+                android:layout_marginTop="12dp"
                 android:ellipsize="end"
                 android:maxLines="4"
                 android:text="Product name"
@@ -231,11 +236,11 @@
                 android:id="@+id/brandLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/brandName"
                 android:layout_alignEnd="@id/brandName"
-                android:orientation="vertical"
+                android:layout_alignStart="@+id/brandName"
+                android:layout_below="@+id/brandName"
                 android:layout_marginTop="4dp"
-                android:layout_alignStart="@+id/brandName">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/brandLocation"
@@ -253,11 +258,11 @@
                     android:id="@+id/viewShopButton"
                     android:layout_width="wrap_content"
                     android:layout_height="28dp"
+                    android:background="@drawable/button_round_corners"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="VISITA IL NEGOZIO"
-                    android:textColor="#ffffff"
-                    android:background="@drawable/button_round_corners"/>
+                    android:textColor="#ffffff" />
             </LinearLayout>
 
 
@@ -266,8 +271,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:layout_alignStart="@+id/brandLayout"
                 android:layout_alignEnd="@id/brandName"
+                android:layout_alignStart="@+id/brandLayout"
                 android:layout_below="@+id/brandLayout"
                 android:layout_marginTop="21dp">
 
@@ -467,19 +472,19 @@
 
             <Button
 
-                android:layout_below="@id/infoButton"
-                android:textColor="@android:color/white"
-                android:text="@string/writeAReviewText"
-                android:layout_marginTop="5dp"
-                android:textAllCaps="false"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="12dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginRight="20dp"
                 android:id="@+id/write_a_review_btn"
-                android:background="@drawable/button_round_corners"
                 android:layout_width="180dp"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:layout_below="@id/infoButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/button_round_corners"
+                android:text="@string/writeAReviewText"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white" />
 
         </RelativeLayout>
 
@@ -487,10 +492,10 @@
     </ScrollView>
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:id="@+id/addToCartButton"
         android:layout_width="match_parent"
         android:layout_height="66dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:background="@color/colorPrimary"
         android:clickable="true"

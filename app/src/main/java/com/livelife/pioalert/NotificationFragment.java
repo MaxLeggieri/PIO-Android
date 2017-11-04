@@ -7,15 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Max on 26/06/2017.
@@ -97,8 +96,13 @@ public class NotificationFragment extends Fragment {
         runPromos();
 
         //if (lastIds != null) {
+        if (Utility.isNetworkConnected(getActivity())){
 
             WebApi.getInstance().notificationsRead(lastIds,lastTimeref);
+        }else{
+            Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+        }
+
 
             //lastIds = null;
             //lastTimeref = null;
@@ -114,6 +118,10 @@ public class NotificationFragment extends Fragment {
             public void run() {
 
                 if (allPromo == null) {
+                    if (!Utility.isNetworkConnected(getActivity())){
+                        Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                        return ;
+                    }
                     allPromo = WebApi.getInstance().adsNotified();
                 }
 

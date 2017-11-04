@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -32,6 +31,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -141,6 +141,10 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         new Thread(new Runnable() {
             @Override
             public void run() {
+                if (!Utility.isNetworkConnected(MainActivity.this)){
+                    Toast.makeText(MainActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    return ;
+                }
                 you = WebApi.getInstance().userRanking();
 
                 MainActivity.this.runOnUiThread(new Runnable() {
@@ -473,6 +477,10 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         final String nt = FirebaseInstanceId.getInstance().getToken();
         Log.v(tag,"Firebase token: "+nt);
         if (nt != null) {
+            if (!Utility.isNetworkConnected(this)){
+                Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                return ;
+            }
             WebApi.getInstance().tokenHandler(nt);
         }
 
@@ -533,7 +541,10 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
         }
         else {
-
+            if (!Utility.isNetworkConnected(MainActivity.this)){
+                Toast.makeText(MainActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                return ;
+            }
             // Check notification from server...
             HashMap<String,String> unread = WebApi.getInstance().unreadNotifiedAds();
 

@@ -1,17 +1,17 @@
 package com.livelife.pioalert;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -56,6 +56,10 @@ public class AllCartsActivity extends AppCompatActivity {
         Runnable r = new Runnable() {
             @Override
             public void run() {
+                if (!Utility.isNetworkConnected(AllCartsActivity.this)){
+                    Toast.makeText(AllCartsActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    return ;
+                }
                 allCarts = WebApi.getInstance().basketShowAll();
                 Log.e(tag,allCarts.size()+" carts...");
                 if (allCarts.size() > 0) {

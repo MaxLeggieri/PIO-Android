@@ -270,7 +270,10 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                     hideLoginControls(false);
                 } else {
 
-
+                    if (!Utility.isNetworkConnected(SigninActivity.this)){
+                        Toast.makeText(SigninActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                        return ;
+                    }
                     JSONObject object = WebApi.getInstance().sendGoogleData(acct,code.getText().toString());
 
 
@@ -323,7 +326,10 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                                     if(object == null) {
                                         return;
                                     }
-
+                                    if (!Utility.isNetworkConnected(SigninActivity.this)){
+                                        Toast.makeText(SigninActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                                        return ;
+                                    }
                                     WebApi.getInstance().sendFacebookData(object.toString(), SigninActivity.this,code.getText().toString());
 
                                     try {

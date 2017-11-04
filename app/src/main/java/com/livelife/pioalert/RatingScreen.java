@@ -35,6 +35,8 @@ public class RatingScreen extends AppCompatActivity implements View.OnClickListe
     TextView prod_name_tv;
     ImageView product_iv;
     Product mProduct;
+    Company mCompany;
+    Promo mPromo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +57,18 @@ public class RatingScreen extends AppCompatActivity implements View.OnClickListe
                 mProduct = (Product) getIntent().getSerializableExtra("PRODUCT");
                 prod_name_tv.setText(mProduct.name);
                 Picasso.with(this).load("http://pioalert.com" + mProduct.image).into(product_iv);
+
+            }
+            if (getIntent().hasExtra("COMPANY")) {
+                mCompany = (Company) getIntent().getSerializableExtra("COMPANY");
+                prod_name_tv.setText(mCompany.officialName);
+                Picasso.with(this).load("http://pioalert.com" + mCompany.image).into(product_iv);
+
+            }
+            if (getIntent().hasExtra("PROMO")) {
+                mPromo = (Promo) getIntent().getSerializableExtra("PROMO");
+                prod_name_tv.setText(mPromo.prodName);
+                Picasso.with(this).load("http://pioalert.com" + mPromo.imagePath).into(product_iv);
 
             }
         }
@@ -91,15 +105,31 @@ public class RatingScreen extends AppCompatActivity implements View.OnClickListe
     }
 
     private void callWS() {
+        if (!Utility.isNetworkConnected(this)){
+            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
+        String element_type = "";
+        String element_id = "";
+        if (mProduct!=null){
+            element_type = "product";
+            element_id = String.valueOf(mProduct.pid);
+        } else if (mCompany!=null&&mCompany.locations!=null&&mCompany.locations.size()>0){
+            element_type = "location";
+            element_id = String.valueOf(mCompany.locations.get(0).idLoc);
+        }else if (mPromo!=null){
+            element_type = "ad";
+            element_id = String.valueOf(mPromo.pid);
+        }
 
         Call<JsonElement> call = apiService.setRating(
                 String.valueOf(PioUser.getInstance().uid),
 //                String.valueOf(607),
                 rating_bar_rb.getRating(),
-                "product",
-                String.valueOf(mProduct.pid),
+                element_type,
+                element_id,
                 comment_et.getText().toString().trim()
         );
         call.enqueue(new Callback<JsonElement>() {

@@ -1,6 +1,7 @@
 package com.livelife.pioalert;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -28,11 +30,20 @@ public class LoginActivity extends AppCompatActivity {
     private EditText login_et;
     private EditText password_et;
     private Button login_btn;
+    private TextView click_here_tv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        click_here_tv  = findViewById(R.id.click_here_tv);
+        click_here_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://pioalert.com"));
+                startActivity(browserIntent);
+            }
+        });
         login_et  = findViewById(R.id.login_et);
         password_et  = findViewById(R.id.password_et);
         login_btn  = findViewById(R.id.login_btn);
@@ -40,11 +51,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isValidData()){
+                    if (!Utility.isNetworkConnected(LoginActivity.this)){
+                        Toast.makeText(LoginActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                        return ;
+                    }
                     ApiInterface apiService =
                             ApiClient.getClient().create(ApiInterface.class);
 
                     Call<JsonElement> call = apiService.postLogin(login_et.getText().toString().trim(),password_et
-                    .getText().toString().trim(),"login");
+                    .getText().toString().trim(),PioUser.getInstance().uid,WebApi.getInstance().deviceToken,"login");
                     call.enqueue(new Callback<JsonElement>() {
                         @Override
                         public void onResponse(Call<JsonElement>call, Response<JsonElement> response) {

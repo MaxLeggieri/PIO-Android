@@ -1,14 +1,15 @@
 package com.livelife.pioalert;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -53,6 +54,10 @@ public class RankingActivity extends AppCompatActivity {
         Runnable r = new Runnable() {
             @Override
             public void run() {
+                if (!Utility.isNetworkConnected(RankingActivity.this)){
+                    Toast.makeText(RankingActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    return ;
+                }
                 allPlayers = WebApi.getInstance().ranking(20);
                 Log.e(tag,allPlayers.size()+" players...");
                 if (allPlayers.size() > 0) {

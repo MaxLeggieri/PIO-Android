@@ -3,12 +3,13 @@ package com.livelife.pioalert;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Max on 22/07/16.
  */
-public class Promo {
+public class Promo implements Serializable{
 
     int pid;
     int brandId;
@@ -37,6 +38,9 @@ public class Promo {
     double lat;
     double lng;
 
+    public int numReviews = 0;
+    public double avrReviews = 0.0;
+
     Promo(){}
 
     Promo(JSONObject jsonObject, boolean minified) {
@@ -45,6 +49,13 @@ public class Promo {
 
 
         try {
+
+            if (jsonObject.has("rate")) {
+                JSONObject rate = jsonObject.getJSONObject("rate");
+                numReviews = rate.getInt("votes");
+                avrReviews = (float) rate.getDouble("rating_avg");
+            }
+
             pid = jsonObject.getInt("idad");
             brandId = jsonObject.getInt("idcom");
             desc = jsonObject.getString("description");

@@ -24,6 +24,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     Call<JsonElement> postLogin(@Field("user_name") String user_name,
                                 @Field("password") String password,
+                                @Field("uid") int uid,
+                                @Field("device_token") String device_token,
                                 @Field("method") String method);
 
     @GET("?method=categories_all")
@@ -42,6 +44,7 @@ public interface ApiInterface {
     Call<JsonElement> getRatings(
             @Query("element_type") String element_type,
             @Query("element_id") String element_id,
+            @Query("uid") int uid,
             @Query("page") int mPageNumber
 
     );
@@ -58,7 +61,7 @@ public interface ApiInterface {
 
     );
 
-    @POST("?method=createAd")
     @Multipart
-    Call<JsonElement> postCreateAd(@PartMap() Map<String, RequestBody> partMap);
+    @POST("?method=createAd")
+    Call<JsonElement> postCreateAd(@PartMap Map<String, RequestBody> partMap);
 }

@@ -5,16 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 /**
  * Created by Max on 14/01/2017.
@@ -153,4 +149,12 @@ public class Utility {
         activity.startActivity(Intent.createChooser(emailIntent , "Send email..."));
     }
 
+    /**TO check the Internet*/
+
+    public static boolean isNetworkConnected(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
 }

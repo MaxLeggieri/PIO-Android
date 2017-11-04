@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,6 +113,10 @@ public class ShowcaseFragment extends Fragment implements ShowcaseRecyclerView.O
         Runnable catRunnable = new Runnable() {
             @Override
             public void run() {
+                if (!Utility.isNetworkConnected(getActivity())){
+                    Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    return ;
+                }
                 allProducts = WebApi.getInstance().productsByCats(lastCatSelected,page);
                 productsAdapter.setItems(allProducts);
             }
@@ -132,6 +137,10 @@ public class ShowcaseFragment extends Fragment implements ShowcaseRecyclerView.O
         Runnable catRunnable = new Runnable() {
             @Override
             public void run() {
+                if (!Utility.isNetworkConnected(getActivity())){
+                    Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    return ;
+                }
                 List<Product> newProds = WebApi.getInstance().productsByCats(lastCatSelected,page);
                 Log.e(tag,"Adding "+newProds.size()+" items...");
                 if (newProds.size() > 0) {
@@ -153,6 +162,10 @@ public class ShowcaseFragment extends Fragment implements ShowcaseRecyclerView.O
             public void run() {
 
                 if (allProducts == null) {
+                    if (!Utility.isNetworkConnected(getActivity())){
+                        Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                        return ;
+                    }
                     allProducts = WebApi.getInstance().productsByCats(lastCatSelected,page);
                 }
 

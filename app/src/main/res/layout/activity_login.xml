@@ -6,71 +6,111 @@
     android:layout_height="match_parent"
     tools:context="com.livelife.pioalert.SigninActivity">
 
-        <RelativeLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/signin_bg_600" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/signin_bg_600" />
+        <LinearLayout
+            android:id="@+id/main_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="80dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp">
-
-                <EditText
-                    android:id="@+id/login_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter username"
-                    android:singleLine="true"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/darker_gray" />
-
-                <EditText
-                    android:id="@+id/password_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/login_et"
-                    android:layout_marginTop="15dp"
-                    android:hint="Enter password"
-                    android:inputType="textPassword"
-                    android:singleLine="true"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/darker_gray" />
-
-                <Button
-                    android:id="@+id/login_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/password_et"
-                    android:layout_marginTop="25dp"
-                    android:background="@color/colorPrimary"
-                    android:gravity="center"
-                    android:text="Login"
-                    android:textColor="@android:color/white" />
-            </RelativeLayout>
-
-
-            <ProgressBar
-                android:id="@+id/loginProgress"
+            <TextView
+                android:id="@+id/are_you_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="60dp"
-                android:visibility="gone"
+                android:text="Non sei ancora dei nostri? "
+                android:textColor="@android:color/white" />
 
-                />
+            <TextView
+                android:id="@+id/click_here_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/click_here_text"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
 
+        <TextView
+            android:id="@+id/loginwithdata_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/main_ll"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+
+            android:text="o fai log in con i dati che usi per il pannello di controllo"
+            android:textColor="@android:color/white" />
+
+        <RelativeLayout
+            android:id="@+id/centre_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
+
+            <EditText
+                android:id="@+id/login_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter username"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/darker_gray" />
+
+            <EditText
+                android:id="@+id/password_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/login_et"
+                android:layout_marginTop="15dp"
+                android:hint="Enter password"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/darker_gray" />
+
+            <Button
+                android:id="@+id/login_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/password_et"
+                android:layout_marginTop="25dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:text="Login"
+                android:textColor="@android:color/white" />
         </RelativeLayout>
+
+
+        <ProgressBar
+            android:id="@+id/loginProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="60dp"
+            android:visibility="gone"
+
+            />
+
+    </RelativeLayout>
 </RelativeLayout>

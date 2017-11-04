@@ -1,16 +1,16 @@
 package com.livelife.pioalert;
 
-import android.*;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -24,7 +24,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.RotateAnimation;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,9 +35,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -55,10 +57,8 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Query;
 
 import static android.view.animation.Animation.RELATIVE_TO_SELF;
-import static com.livelife.pioalert.R.id.giorna_et;
 
 /**
  * Created by Shoeb on 14/10/17.
@@ -105,6 +105,11 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_ad_activity);
 
+        /**Noughat Camera fix*/
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
         ad_img_iv = findViewById(R.id.ad_img_iv);
         backButton = findViewById(R.id.backButton);
         progress_pb = findViewById(R.id.progress_pb);
@@ -146,6 +151,10 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void callCCompaniesLocationsAPI() {
+        if (!Utility.isNetworkConnected(this)){
+            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
         String uid = String.valueOf(PioUser.getInstance().uid);
@@ -154,7 +163,7 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
         double lat = PioUser.getInstance().location.getLatitude();
         double lng = PioUser.getInstance().location.getLongitude();
         int mPageNumber = 1;
-        int idcom = 59;
+        int idcom = Integer.valueOf(MyPreference.getCurrentUser().getResponse().getData().getIdcom());
         Call<JsonElement> call = apiService.getCompaniesWithLocation(uid,
                 device_token,
                 rec,
@@ -174,19 +183,22 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
                     if (modalMain.getResponse().getResponse()) {
                         List<CompanyLocationResponseModal.Response.Data.Product> mProducts
                                 = modalMain.getResponse().getData().getProducts();
-                        mLocationsFromAPI = mProducts.get(0).getLoc();
-                        for (CompanyLocationResponseModal.Response.Data.Product.Loc bean :
-                                mLocationsFromAPI) {
-                            mCompanyName.add(bean.getName());
-                        }
-                        if (mCompanyName.size() > 0) {
+                        if (mProducts!=null){
+
+                            mLocationsFromAPI = mProducts.get(0).getLoc();
+                            for (CompanyLocationResponseModal.Response.Data.Product.Loc bean :
+                                    mLocationsFromAPI) {
+                                mCompanyName.add(bean.getName());
+                            }
+                            if (mCompanyName.size() > 0) {
                             /*Set Spinner for location*/
-                            ArrayAdapter<String> adapter =
-                                    new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_selected_textview, mCompanyName);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                ArrayAdapter<String> adapter =
+                                        new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_selected_textview, mCompanyName);
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-                            location_spinner.setAdapter(adapter);
+                                location_spinner.setAdapter(adapter);
 
+                            }
                         }
                     }
                 } else {
@@ -285,6 +297,10 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void callCategoriesAPI() {
+        if (!Utility.isNetworkConnected(this)){
+            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
@@ -323,17 +339,22 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void callWS() {
+        if (!Utility.isNetworkConnected(this)){
+            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         progress_pb.setVisibility(View.VISIBLE);
 //        Request construction:
         Map<String, RequestBody> map = new HashMap<>();
+
         //map.put("idad", RequestBody.create(MediaType.parse("text/plain"), "0"));
-        map.put("idcom", RequestBody.create(MediaType.parse("text/plain"), "59"));
+        map.put("idcom", RequestBody.create(MediaType.parse("text/plain"), MyPreference.getCurrentUser().getResponse().getData().getIdcom()));
         map.put("title", RequestBody.create(MediaType.parse("text/plain"), title_et.getText().toString().trim()));
         map.put("description", RequestBody.create(MediaType.parse("text/plain"), description_et.getText().toString().trim()));
         map.put("products", RequestBody.create(MediaType.parse("text/plain"), products_et.getText().toString().trim()));
         map.put("link", RequestBody.create(MediaType.parse("text/plain"), link_et.getText().toString().trim()));
         map.put("youtube", RequestBody.create(MediaType.parse("text/plain"), youtube_link_et.getText().toString().trim()));
-        map.put("coupon", RequestBody.create(MediaType.parse("text/plain"), coupon_spinner.getSelectedItem().toString()));
+//        map.put("coupon", RequestBody.create(MediaType.parse("text/plain"), coupon_spinner.getSelectedItem().toString()));
         map.put("categories", RequestBody.create(MediaType.parse("text/plain"), mCategoryId));
         map.put("hashtags", RequestBody.create(MediaType.parse("text/plain"), hash_tags_et.getText().toString().trim()));
         map.put("raykm", RequestBody.create(MediaType.parse("text/plain"), km_ray_spinner.getSelectedItem().toString()));
@@ -342,24 +363,31 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
         String mLocationid = "";
         for (int i = 0; i < mLocationsFromAPI.size(); i++) {
             CompanyLocationResponseModal.Response.Data.Product.Loc bean = mLocationsFromAPI.get(i);
-            if (location_spinner.getSelectedItem().toString().equalsIgnoreCase(bean.getName())) {
+            if (mLocationid.equalsIgnoreCase("")){
+                mLocationid = bean.getIdlocation();
+            }else{
+                mLocationid = mLocationid + ","+ bean.getIdlocation();
+            }
+            /*if (location_spinner.getSelectedItem().toString().equalsIgnoreCase(bean.getName())) {
                 mLocationid = bean.getIdlocation();
                 break;
-            }
+            }*/
         }
 
-        map.put("locations", RequestBody.create(MediaType.parse("text/plain"), mLocationid));
-        map.put("beacons", RequestBody.create(MediaType.parse("text/plain"), "154"));
-        map.put("alertkind", RequestBody.create(MediaType.parse("text/plain"), alert_type_spinner.getSelectedItem().toString()));
+//        map.put("locations", RequestBody.create(MediaType.parse("text/plain"), mLocationid));
+//        map.put("beacons", RequestBody.create(MediaType.parse("text/plain"), "154"));
+//        map.put("alertkind", RequestBody.create(MediaType.parse("text/plain"), alert_type_spinner.getSelectedItem().toString()));
+        map.put("alertkind", RequestBody.create(MediaType.parse("text/plain"),"Instantaneous"));
         map.put("start", RequestBody.create(MediaType.parse("text/plain"), ""));
         map.put("expiration", RequestBody.create(MediaType.parse("text/plain"), "" + mExpirationTimeMS));
         map.put("RelatedProducts", RequestBody.create(MediaType.parse("text/plain"), ""));
         map.put("method", RequestBody.create(MediaType.parse("text/plain"), "createAd"));
         map.put("userid", RequestBody.create(MediaType.parse("text/plain"), String.valueOf(PioUser.getInstance().uid)));
         File mImageFile = new File(fileToUploadPathImg);
-        if (mImageFile.exists()) {
-            map.put("image", RequestBody.create(MediaType.parse("image/*"), mImageFile));
+        RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpg"), mImageFile);
 
+        if (mImageFile.exists()) {
+            map.put("image\"; filename=\"user-profile.jpg" /*+ mImageFile.getName()*/, fileBody);
         }
 
         ApiInterface apiService =
@@ -621,6 +649,47 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
 
 
     }
+    /**
+     * Transformate the loaded image to avoid OutOfMemoryException
+     */
+    public class BitmapTransform implements Transformation {
+
+        private final int maxWidth;
+        private final int maxHeight;
+
+        public BitmapTransform(int maxWidth, int maxHeight) {
+            this.maxWidth = maxWidth;
+            this.maxHeight = maxHeight;
+        }
+
+        @Override
+        public Bitmap transform(Bitmap source) {
+            int targetWidth, targetHeight;
+            double aspectRatio;
+
+            if (source.getWidth() > source.getHeight()) {
+                targetWidth = maxWidth;
+                aspectRatio = (double) source.getHeight() / (double) source.getWidth();
+                targetHeight = (int) (targetWidth * aspectRatio);
+            } else {
+                targetHeight = maxHeight;
+                aspectRatio = (double) source.getWidth() / (double) source.getHeight();
+                targetWidth = (int) (targetHeight * aspectRatio);
+            }
+
+            Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+            if (result != source) {
+                source.recycle();
+            }
+            return result;
+        }
+
+        @Override
+        public String key() {
+            return maxWidth + "x" + maxHeight;
+        }
+
+    }
 
     private void onSelectFromGalleryResultPhoto(Intent data) {
 
@@ -637,8 +706,21 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    private static final int MAX_WIDTH = 1024;
+    private static final int MAX_HEIGHT = 768;
+
     private void setImageIntoImageView(String url) {
-        Picasso.with(this).load("file://" + url).centerCrop().resize(120, 120).into(ad_img_iv);
+
+        Glide.with(this)
+                .load(url)
+                .apply(RequestOptions.centerCropTransform()
+                        .placeholder(R.drawable.ic_insert_photo_black_24dp))
+                .into(ad_img_iv);
+
+//        Picasso.with(this).load("file://" + url)
+
+
+//                .centerCrop().resize(120, 120).into(ad_img_iv);
 
     }
 
@@ -681,6 +763,23 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(CreateAdActivity.this, "Please enter title", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        if (description_et.getText().toString().trim().isEmpty()) {
+            Toast.makeText(CreateAdActivity.this, "Please enter description", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (fileToUploadPathImg.isEmpty()) {
+            Toast.makeText(CreateAdActivity.this, "Please choose image", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+/*
+
+        if (mExpirationTimeMS==0){
+            Toast.makeText(CreateAdActivity.this, "Please select expiration date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+*/
 
         return true;
     }

@@ -2,9 +2,8 @@ package com.livelife.pioalert;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -63,7 +63,10 @@ public class ProfileActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-
+                            if (!Utility.isNetworkConnected(ProfileActivity.this)){
+                                Toast.makeText(ProfileActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                                return ;
+                            }
                             WebApi.getInstance().setUserCategories(cats);
                             ProfileActivity.this.runOnUiThread(new Runnable() {
                                 @Override
@@ -85,7 +88,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         listView = (ListView) findViewById(R.id.listView);
-
+        if (!Utility.isNetworkConnected(this)){
+            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
+        if (!Utility.isNetworkConnected(ProfileActivity.this)){
+            Toast.makeText(ProfileActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         allCats = WebApi.getInstance().getAllCategories();
         userCats = WebApi.getInstance().getUserCats();
 

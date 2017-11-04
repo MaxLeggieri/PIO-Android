@@ -30,6 +30,8 @@ public class AllReviewsListActivity extends AppCompatActivity{
     private ImageButton backButton;
     private int mPageNumber = 1;
     Product mProduct;
+    Company mCompany;
+    Promo mPromo;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,15 +55,40 @@ public class AllReviewsListActivity extends AppCompatActivity{
                 callWS();
 
             }
+            if (getIntent().hasExtra("COMPANY")) {
+                mCompany = (Company) getIntent().getSerializableExtra("COMPANY");
+                callWS();
+
+            }
+            if (getIntent().hasExtra("PROMO")) {
+                mPromo = (Promo) getIntent().getSerializableExtra("PROMO");
+                callWS();
+
+            }
         }
     }
     private void callWS() {
+        if (!Utility.isNetworkConnected(this)){
+            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-
-        Call<JsonElement> call = apiService.getRatings("product",
-
-                String.valueOf(mProduct.pid),
+        String element_type = "";
+        String element_id = "";
+        if (mProduct!=null){
+            element_type = "product";
+            element_id = String.valueOf(mProduct.pid);
+        } else if (mCompany!=null&&mCompany.locations!=null&&mCompany.locations.size()>0){
+            element_type = "location";
+            element_id = String.valueOf(mCompany.locations.get(0).idLoc);
+        } else if (mPromo!=null){
+            element_type = "ad";
+            element_id = String.valueOf(mPromo.pid);
+        }
+        Call<JsonElement> call = apiService.getRatings(element_type,
+                element_id,
+                PioUser.getInstance().uid,
                 mPageNumber
         );
         call.enqueue(new Callback<JsonElement>() {

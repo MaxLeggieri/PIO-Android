@@ -16,7 +16,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,11 +43,13 @@ public class PromoActivity extends AppCompatActivity {
 
     static final String tag = PromoActivity.class.getSimpleName();
     Promo p;
-    ImageView imageView,comImageView;
+    ImageView imageView, comImageView;
     ImageButton backButton;
-    TextView promoTitleTextView,shopNameTextView,shopDistanceTextView,promoTitle,expireTextView,promoDesc,numberViews;
-    Button linkButton,attachmentButton,couponButton,viewShopButton;
-    ImageButton videoPreviewButton,likeButton,shareButton,playButton;
+    TextView promoTitleTextView, shopNameTextView, shopDistanceTextView, promoTitle, expireTextView, promoDesc, numberViews, numberReviews,review_info_tv;
+
+
+    Button linkButton, attachmentButton, couponButton, viewShopButton;
+    ImageButton videoPreviewButton, likeButton, shareButton, playButton;
     MapView mapView;
     GoogleMap map;
     MediaPlayer mpDone, mpErr;
@@ -52,7 +57,10 @@ public class PromoActivity extends AppCompatActivity {
 
     RecyclerView galleryRecycler;
     ImageAdapter imageAdapter;
+    Button write_a_review_btn;
+    RatingBar ratingBar;
 
+    LinearLayout review_ll;
     boolean couponConvalidated = false;
 
     @Override
@@ -65,13 +73,36 @@ public class PromoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_promo);
 
-        int promoId = getIntent().getIntExtra("promoId",0);
+        int promoId = getIntent().getIntExtra("promoId", 0);
 
         if (promoId == 0) finish();
-
+        if (!Utility.isNetworkConnected(this)){
+            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         p = WebApi.getInstance().getPromoById(promoId);
 
-        Log.e("PromoActivity",p.title);
+        Log.e("PromoActivity", p.title);
+        review_ll = (LinearLayout) findViewById(R.id.review_ll);
+        review_ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(PromoActivity.this, AllReviewsListActivity.class);
+                mIntent.putExtra("PROMO", p);
+
+                startActivity(mIntent);
+            }
+        });
+
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingBar.setRating((float) p.avrReviews);
+        numberReviews = (TextView) findViewById(R.id.numberReviews);
+        review_info_tv = (TextView) findViewById(R.id.review_info_tv);
+
+        if (p.numReviews<=0){
+            review_info_tv.setText("NO REVIEWS");
+        }
+        numberReviews.setText("" + p.numReviews);
 
         imageView = (ImageView) findViewById(R.id.imageView);
         comImageView = (ImageView) findViewById(R.id.comImageView);
@@ -79,9 +110,18 @@ public class PromoActivity extends AppCompatActivity {
         comImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent companyIntent = new Intent(PromoActivity.this,CompanyActivity.class);
-                companyIntent.putExtra("comId",p.brandId);
+                Intent companyIntent = new Intent(PromoActivity.this, CompanyActivity.class);
+                companyIntent.putExtra("comId", p.brandId);
                 startActivity(companyIntent);
+            }
+        });
+        write_a_review_btn = (Button) findViewById(R.id.write_a_review_btn);
+        write_a_review_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(PromoActivity.this, RatingScreen.class);
+                mIntent.putExtra("PROMO", p);
+                startActivity(mIntent);
             }
         });
         backButton = (ImageButton) findViewById(R.id.backButton);
@@ -93,8 +133,8 @@ public class PromoActivity extends AppCompatActivity {
         });
 
 
-        Picasso.with(this).load("http://pioalert.com"+p.imagePath).into(imageView);
-        Picasso.with(this).load("http://pioalert.com"+p.cimage).into(comImageView);
+        Picasso.with(this).load("http://pioalert.com" + p.imagePath).into(imageView);
+        Picasso.with(this).load("http://pioalert.com" + p.cimage).into(comImageView);
 
         promoTitleTextView = (TextView) findViewById(R.id.promoTitleTextView);
         promoTitleTextView.setText(p.brandName);
@@ -104,47 +144,47 @@ public class PromoActivity extends AppCompatActivity {
         shopNameTextView.setText(p.brandName);
 
         shopDistanceTextView = (TextView) findViewById(R.id.shopDistanceTextView);
-        shopDistanceTextView.setText("A "+p.distanceHuman+" da te");
+        shopDistanceTextView.setText("A " + p.distanceHuman + " da te");
 
         promoTitle = (TextView) findViewById(R.id.promoTitle);
         promoTitle.setText(p.title);
 
         expireTextView = (TextView) findViewById(R.id.expireTextView);
-        expireTextView.setText("Promo valida fino al "+p.expiration);
+        expireTextView.setText("Promo valida fino al " + p.expiration);
 
         promoDesc = (TextView) findViewById(R.id.promoDesc);
         promoDesc.setText(p.desc);
 
         numberViews = (TextView) findViewById(R.id.numberViews);
-        numberViews.setText("Visto "+p.viewedCount+" volte");
+        numberViews.setText("Visto " + p.viewedCount + " volte");
 
         viewShopButton = (Button) findViewById(R.id.viewShopButton);
-        viewShopButton.setPaintFlags(viewShopButton.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        viewShopButton.setPaintFlags(viewShopButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         viewShopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent companyIntent = new Intent(PromoActivity.this,CompanyActivity.class);
-                companyIntent.putExtra("comId",p.brandId);
+                Intent companyIntent = new Intent(PromoActivity.this, CompanyActivity.class);
+                companyIntent.putExtra("comId", p.brandId);
                 startActivity(companyIntent);
             }
         });
 
         linkButton = (Button) findViewById(R.id.linkButton);
         linkButton.setOnClickListener(detailsListener);
-        if(p.link.equals("")) {
+        if (p.link.equals("")) {
             linkButton.setVisibility(View.GONE);
         }
 
         attachmentButton = (Button) findViewById(R.id.attachmentButton);
         attachmentButton.setOnClickListener(detailsListener);
-        Log.v(tag,"ATTACHMENT: "+p.attachment);
-        if(p.attachment.equals("")) {
+        Log.v(tag, "ATTACHMENT: " + p.attachment);
+        if (p.attachment.equals("")) {
             attachmentButton.setVisibility(View.GONE);
         }
 
         couponButton = (Button) findViewById(R.id.couponButton);
         couponButton.setOnClickListener(detailsListener);
-        if(p.usedCoupon != 0 || p.couponCode.equals("")) {
+        if (p.usedCoupon != 0 || p.couponCode.equals("")) {
             couponButton.setVisibility(View.GONE);
         }
 
@@ -174,13 +214,11 @@ public class PromoActivity extends AppCompatActivity {
         });
 
 
-
-
         videoPreviewButton = (ImageButton) findViewById(R.id.videoPreviewButton);
         playButton = (ImageButton) findViewById(R.id.playButton);
         videoPreviewButton.setOnClickListener(detailsListener);
         playButton.setOnClickListener(detailsListener);
-        if(p.youtube.equals("")) {
+        if (p.youtube.equals("")) {
             videoPreviewButton.setVisibility(View.GONE);
             playButton.setVisibility(View.GONE);
         } else {
@@ -192,7 +230,7 @@ public class PromoActivity extends AppCompatActivity {
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(p.liked) {
+                if (p.liked) {
                     likeButton.setImageResource(R.drawable.icon_like);
                 } else {
                     likeButton.setImageResource(R.drawable.icon_like_attivo);
@@ -202,13 +240,17 @@ public class PromoActivity extends AppCompatActivity {
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
-                        WebApi.getInstance().likeAd(p.liked,p.pid);
+                        if (!Utility.isNetworkConnected(PromoActivity.this)){
+                            Toast.makeText(PromoActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                            return ;
+                        }
+                        WebApi.getInstance().likeAd(p.liked, p.pid);
                     }
                 });
             }
         });
 
-        if(p.liked) {
+        if (p.liked) {
             likeButton.setImageResource(R.drawable.icon_like_attivo);
         }
 
@@ -216,10 +258,10 @@ public class PromoActivity extends AppCompatActivity {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.v(tag,"PROMO LINK: "+p.link);
+                Log.v(tag, "PROMO LINK: " + p.link);
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "https://www.pioalert.com/sharead/?idad="+p.pid+"&uid="+PioUser.getInstance().uid);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "https://www.pioalert.com/sharead/?idad=" + p.pid + "&uid=" + PioUser.getInstance().uid);
                 sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Guarda questa offerta su PIO, l'app delle promozioni!");
                 sendIntent.setType("text/plain");
                 startActivity(Intent.createChooser(sendIntent, "Condividi con:"));
@@ -227,9 +269,8 @@ public class PromoActivity extends AppCompatActivity {
         });
 
 
-
-        mpErr = MediaPlayer.create(this,R.raw.error_sound);
-        mpDone = MediaPlayer.create(this,R.raw.done_sound);
+        mpErr = MediaPlayer.create(this, R.raw.error_sound);
+        mpDone = MediaPlayer.create(this, R.raw.done_sound);
         alertDialogBuilder = new AlertDialog.Builder(this);
 
         galleryRecycler = (RecyclerView) findViewById(R.id.galleryRecycler);
@@ -249,11 +290,11 @@ public class PromoActivity extends AppCompatActivity {
     }
 
     void showGallery(int position) {
-        Intent i = new Intent(this,SlideshowActivity.class);
+        Intent i = new Intent(this, SlideshowActivity.class);
         String images = android.text.TextUtils.join(",", p.gallery);
-        i.putExtra("images",images);
-        i.putExtra("promoTitle",p.title);
-        i.putExtra("position",position);
+        i.putExtra("images", images);
+        i.putExtra("promoTitle", p.title);
+        i.putExtra("position", position);
         startActivity(i);
     }
 
@@ -266,7 +307,7 @@ public class PromoActivity extends AppCompatActivity {
                     startActivity(browserIntent1);
                     break;
                 case R.id.attachmentButton:
-                    Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse("http://pioalert.com"+p.attachment));
+                    Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse("http://pioalert.com" + p.attachment));
                     startActivity(browserIntent2);
                     break;
 
@@ -282,7 +323,7 @@ public class PromoActivity extends AppCompatActivity {
 
                 case R.id.couponButton:
 
-                    Log.v(tag,"QR: "+p.couponCode);
+                    Log.v(tag, "QR: " + p.couponCode);
                     IntentIntegrator integrator = new IntentIntegrator(PromoActivity.this);
                     integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
                     integrator.setPrompt("Inquadra il QR code");
@@ -299,31 +340,35 @@ public class PromoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
-                Log.v(tag,"Scan cancelled...");
+        if (result != null) {
+            if (result.getContents() == null) {
+                Log.v(tag, "Scan cancelled...");
 
             } else {
                 String qr = data.getStringExtra("SCAN_RESULT");
                 Log.v(tag, "Scanned: " + data.getStringExtra("SCAN_RESULT"));
 
-                if(qr.equals(p.couponCode)) {
+                if (qr.equals(p.couponCode)) {
                     mpDone.start();
                     couponButton.setEnabled(false);
                     couponButton.setAlpha(0.4f);
                     couponConvalidated = true;
                     alertDialogBuilder.setTitle("Coupon Convalidato")
-                            .setMessage(p.title+"\n\nMostra questo messaggio all'operatore.")
-                            .setNeutralButton("OK",null);
+                            .setMessage(p.title + "\n\nMostra questo messaggio all'operatore.")
+                            .setNeutralButton("OK", null);
                     alertDialogBuilder.show();
 
 
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
-                            JSONObject obj = WebApi.getInstance().useCoupon(p.couponCode,p.pid);
+                            if (!Utility.isNetworkConnected(PromoActivity.this)){
+                                Toast.makeText(PromoActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                                return ;
+                            }
+                            JSONObject obj = WebApi.getInstance().useCoupon(p.couponCode, p.pid);
                             try {
-                                Log.e(tag,obj.toString(2));
+                                Log.e(tag, obj.toString(2));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -334,8 +379,8 @@ public class PromoActivity extends AppCompatActivity {
                 } else {
                     mpErr.start();
                     alertDialogBuilder.setTitle("Coupon Errato")
-                            .setMessage(p.title+"\n\nRiprova oppure accertati di visualizzare l'offerta corretta")
-                            .setNeutralButton("OK",null);
+                            .setMessage(p.title + "\n\nRiprova oppure accertati di visualizzare l'offerta corretta")
+                            .setNeutralButton("OK", null);
                     alertDialogBuilder.show();
                 }
             }
@@ -346,10 +391,38 @@ public class PromoActivity extends AppCompatActivity {
         }
     }
 
+
+    boolean isReloaded = false;
+
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
+
         mapView.onResume();
+
+        if (isReloaded) {
+
+            int promoId = getIntent().getIntExtra("promoId", 0);
+
+            if (promoId == 0) finish();
+            if (!Utility.isNetworkConnected(this)){
+                Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                return ;
+            }
+            p = WebApi.getInstance().getPromoById(promoId);
+
+            ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+            ratingBar.setRating((float) p.avrReviews);
+            numberReviews = (TextView) findViewById(R.id.numberReviews);
+            numberReviews.setText("" + p.numReviews);
+            review_info_tv = (TextView) findViewById(R.id.review_info_tv);
+
+            if (p.numReviews<=0){
+                review_info_tv.setText("NO REVIEWS");
+            }
+        }
+
+        isReloaded = true;
     }
 
     @Override

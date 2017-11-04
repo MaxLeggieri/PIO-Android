@@ -1,7 +1,7 @@
 package com.livelife.pioalert;
 
-import android.app.Service;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
@@ -20,7 +20,10 @@ public class PioInstanceIdService extends FirebaseInstanceIdService {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d("PioInstanceIdService", "Refreshed token: " + refreshedToken);
-
+        if (!Utility.isNetworkConnected(this)){
+            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return ;
+        }
         WebApi.getInstance().tokenHandler(refreshedToken);
     }
 }

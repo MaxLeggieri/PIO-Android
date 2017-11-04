@@ -79,6 +79,7 @@
     <string name="someerrorText">Some error occurred</string>
     <string name="createAdText">Create Ad</string>
     <string name="logoutText">Logout</string>
+    <string name="internet_check_text">Please check your Internet connection!</string>
 
 
     <string-array name="kmRay">
@@ -110,4 +111,5 @@
 
     </string-array>
     <string name="visita_negozio">VIEW SHOP</string>
+    <string name="click_here_text"><u>Fai click qui per saperne di più</u></string>
 </resources>
