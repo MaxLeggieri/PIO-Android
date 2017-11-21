@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,8 +115,12 @@ public class PromoFragment extends Fragment implements PromoRecyclerView.OnRecyc
         Runnable catRunnable = new Runnable() {
             @Override
             public void run() {
-                if (!Utility.isNetworkConnected(getActivity())){
-                    Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                if (!Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+                    @Override
+                    public void retryInternet() {
+                    }
+                })){
+                    //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                     return ;
                 }
                 allPromo = WebApi.getInstance().getAds2user(page,lastCatSelected);
@@ -140,8 +143,12 @@ public class PromoFragment extends Fragment implements PromoRecyclerView.OnRecyc
         Runnable catRunnable = new Runnable() {
             @Override
             public void run() {
-                if (!Utility.isNetworkConnected(getActivity())){
-                    Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                if (!Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+                    @Override
+                    public void retryInternet() {
+                    }
+                })){
+                    //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                     return ;
                 }
                 List<Promo> newPromos = WebApi.getInstance().getAds2user(page,lastCatSelected);
@@ -165,8 +172,12 @@ public class PromoFragment extends Fragment implements PromoRecyclerView.OnRecyc
             public void run() {
 
                 if (allPromo == null) {
-                    if (!Utility.isNetworkConnected(getActivity())){
-                        Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    if (!Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+                        @Override
+                        public void retryInternet() {
+                        }
+                    })){
+                        //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                         return ;
                     }
                     allPromo = WebApi.getInstance().getAds2user(page,lastCatSelected);

@@ -51,8 +51,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isValidData()){
-                    if (!Utility.isNetworkConnected(LoginActivity.this)){
-                        Toast.makeText(LoginActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    if (!Utility.isNetworkConnected(LoginActivity.this, new InternetCallback() {
+                        @Override
+                        public void retryInternet() {
+                        }
+                    })){
+//                        Toast.makeText(LoginActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                         return ;
                     }
                     ApiInterface apiService =

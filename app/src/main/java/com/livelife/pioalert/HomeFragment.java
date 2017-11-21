@@ -47,7 +47,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -184,8 +183,12 @@ public class HomeFragment extends Fragment implements PioUser.PioUserListener, O
             @Override
             public void onClick(View view) {
                 if (homeStarted) {
-                    if (!Utility.isNetworkConnected(getActivity())){
-                        Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    if (!Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+                        @Override
+                        public void retryInternet() {
+                        }
+                    })){
+                        //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                         return ;
                     }
                     home = WebApi.getInstance().home(1,null,0);
@@ -234,8 +237,12 @@ public class HomeFragment extends Fragment implements PioUser.PioUserListener, O
                     scrollView.scrollTo(0, 0);
                     lastCat = res.getInt("idcat");
                     searchEditText.setText(res.getString("name"));
-                    if (!Utility.isNetworkConnected(getActivity())){
-                        Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    if (!Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+                        @Override
+                        public void retryInternet() {
+                        }
+                    })){
+                        //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                         return ;
                     }
                     home = WebApi.getInstance().home(1,res.getString("name"),lastCat);
@@ -380,8 +387,12 @@ public class HomeFragment extends Fragment implements PioUser.PioUserListener, O
                     searchEditText.clearFocus();
                     searchResultsListView.setVisibility(View.GONE);
                     scrollView.scrollTo(0, 0);
-                    if (!Utility.isNetworkConnected(getActivity())){
-                        Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    if (!Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+                        @Override
+                        public void retryInternet() {
+                        }
+                    })){
+                        //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                         return false;
                     }
                     home = WebApi.getInstance().home(1,lastSearch,0);
@@ -457,8 +468,12 @@ public class HomeFragment extends Fragment implements PioUser.PioUserListener, O
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (!Utility.isNetworkConnected(getActivity())){
-                    Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                if (!Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+                    @Override
+                    public void retryInternet() {
+                    }
+                })){
+                    //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                     return ;
                 }
                 searchResults = WebApi.getInstance().autosuggest(text);
@@ -617,8 +632,12 @@ public class HomeFragment extends Fragment implements PioUser.PioUserListener, O
 
 
         if (!homeStarted && isAdded() && mainActivity != null) {
-            if (!Utility.isNetworkConnected(getActivity())){
-                Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            if (!Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+                @Override
+                public void retryInternet() {
+                }
+            })){
+                //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                 return ;
             }
             //mainActivity.initializeBeacons();
@@ -885,8 +904,12 @@ public class HomeFragment extends Fragment implements PioUser.PioUserListener, O
         try {
 
             if (home == null) {
-                if (!Utility.isNetworkConnected(getActivity())){
-                    Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                if (!Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+                    @Override
+                    public void retryInternet() {
+                    }
+                })){
+                    //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                     return ;
                 }
                 home = WebApi.getInstance().home(1,lastSearch,lastCat);
@@ -1045,8 +1068,12 @@ public class HomeFragment extends Fragment implements PioUser.PioUserListener, O
 
 
     public void getGooglePlaces() {
-        if (!Utility.isNetworkConnected(getActivity())){
-            Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+        if (!Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
+            //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
         ArrayList<PioPlace> pioPlaces = WebApi.getInstance().getGooglePlaces();

@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -53,8 +52,12 @@ public class InfoActivity extends AppCompatActivity {
         }
 
         appVersion.setText("version "+info.versionName+"\n"+"build "+info.versionCode);
-        if (!Utility.isNetworkConnected(InfoActivity.this)){
-            Toast.makeText(InfoActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+        if (!Utility.isNetworkConnected(InfoActivity.this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
+            //Toast.makeText(InfoActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
         ArrayList<String> claimArr = WebApi.getInstance().claim();

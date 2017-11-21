@@ -59,9 +59,13 @@ public class PromoActivity extends AppCompatActivity {
     ImageAdapter imageAdapter;
     Button write_a_review_btn;
     RatingBar ratingBar;
+    RatingBar ratingBar_bottom;
 
+    LinearLayout rating_bar_ll;
     LinearLayout review_ll;
     boolean couponConvalidated = false;
+
+    Button write_a_review_btn_top;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -76,7 +80,11 @@ public class PromoActivity extends AppCompatActivity {
         int promoId = getIntent().getIntExtra("promoId", 0);
 
         if (promoId == 0) finish();
-        if (!Utility.isNetworkConnected(this)){
+        if (!Utility.isNetworkConnected(this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
             Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
@@ -95,13 +103,25 @@ public class PromoActivity extends AppCompatActivity {
         });
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingBar_bottom = (RatingBar) findViewById(R.id.ratingBar_bottom);
+
+        ratingBar_bottom = (RatingBar) findViewById(R.id.ratingBar_bottom);
+        ratingBar_bottom.setRating(Float.parseFloat(p.userRating));
+
+        rating_bar_ll = findViewById(R.id.rating_bar_ll);
+        rating_bar_ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(PromoActivity.this, RatingScreen.class);
+                mIntent.putExtra("PROMO", p);
+                startActivity(mIntent);
+            }
+        });
         ratingBar.setRating((float) p.avrReviews);
         numberReviews = (TextView) findViewById(R.id.numberReviews);
         review_info_tv = (TextView) findViewById(R.id.review_info_tv);
 
-        if (p.numReviews<=0){
-            review_info_tv.setText("NO REVIEWS");
-        }
+
         numberReviews.setText("" + p.numReviews);
 
         imageView = (ImageView) findViewById(R.id.imageView);
@@ -116,6 +136,7 @@ public class PromoActivity extends AppCompatActivity {
             }
         });
         write_a_review_btn = (Button) findViewById(R.id.write_a_review_btn);
+        write_a_review_btn_top = (Button) findViewById(R.id.write_a_review_btn_top);
         write_a_review_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,7 +144,25 @@ public class PromoActivity extends AppCompatActivity {
                 mIntent.putExtra("PROMO", p);
                 startActivity(mIntent);
             }
+        });  write_a_review_btn_top.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(PromoActivity.this, RatingScreen.class);
+                mIntent.putExtra("PROMO", p);
+                startActivity(mIntent);
+            }
         });
+        if (p.numReviews <= 0) {
+            review_info_tv.setVisibility(View.GONE);
+            review_ll.setVisibility(View.GONE);
+            write_a_review_btn_top.setVisibility(View.VISIBLE);
+            review_info_tv.setText("NO REVIEWS");
+        } else {
+            write_a_review_btn_top.setVisibility(View.GONE);
+            review_ll.setVisibility(View.VISIBLE);
+            review_info_tv.setVisibility(View.VISIBLE);
+            review_info_tv.setText("VEDI RECENSIONI");
+        }
         backButton = (ImageButton) findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,7 +279,11 @@ public class PromoActivity extends AppCompatActivity {
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
-                        if (!Utility.isNetworkConnected(PromoActivity.this)){
+                        if (!Utility.isNetworkConnected(PromoActivity.this, new InternetCallback() {
+                            @Override
+                            public void retryInternet() {
+                            }
+                        })){
                             Toast.makeText(PromoActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                             return ;
                         }
@@ -362,7 +405,11 @@ public class PromoActivity extends AppCompatActivity {
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
-                            if (!Utility.isNetworkConnected(PromoActivity.this)){
+                            if (!Utility.isNetworkConnected(PromoActivity.this, new InternetCallback() {
+                                @Override
+                                public void retryInternet() {
+                                }
+                            })){
                                 Toast.makeText(PromoActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                                 return ;
                             }
@@ -405,7 +452,11 @@ public class PromoActivity extends AppCompatActivity {
             int promoId = getIntent().getIntExtra("promoId", 0);
 
             if (promoId == 0) finish();
-            if (!Utility.isNetworkConnected(this)){
+            if (!Utility.isNetworkConnected(this, new InternetCallback() {
+                @Override
+                public void retryInternet() {
+                }
+            })){
                 Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                 return ;
             }
@@ -413,12 +464,23 @@ public class PromoActivity extends AppCompatActivity {
 
             ratingBar = (RatingBar) findViewById(R.id.ratingBar);
             ratingBar.setRating((float) p.avrReviews);
+
+            ratingBar_bottom = (RatingBar) findViewById(R.id.ratingBar_bottom);
+            ratingBar_bottom.setRating(Float.parseFloat(p.userRating));
+
             numberReviews = (TextView) findViewById(R.id.numberReviews);
             numberReviews.setText("" + p.numReviews);
             review_info_tv = (TextView) findViewById(R.id.review_info_tv);
-
-            if (p.numReviews<=0){
+            if (p.numReviews <= 0) {
+                review_info_tv.setVisibility(View.GONE);
+                review_ll.setVisibility(View.GONE);
+                write_a_review_btn_top.setVisibility(View.VISIBLE);
                 review_info_tv.setText("NO REVIEWS");
+            } else {
+                write_a_review_btn_top.setVisibility(View.GONE);
+                review_info_tv.setVisibility(View.VISIBLE);
+                review_ll.setVisibility(View.VISIBLE);
+                review_info_tv.setText("VEDI RECENSIONI");
             }
         }
 

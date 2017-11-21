@@ -39,7 +39,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -151,8 +150,12 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void callCCompaniesLocationsAPI() {
-        if (!Utility.isNetworkConnected(this)){
-            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+        if (!Utility.isNetworkConnected(this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
+            //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
         ApiInterface apiService =
@@ -297,8 +300,12 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void callCategoriesAPI() {
-        if (!Utility.isNetworkConnected(this)){
-            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+        if (!Utility.isNetworkConnected(this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
+            //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
         ApiInterface apiService =
@@ -339,8 +346,12 @@ public class CreateAdActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void callWS() {
-        if (!Utility.isNetworkConnected(this)){
-            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+        if (!Utility.isNetworkConnected(this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
+            //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
         progress_pb.setVisibility(View.VISIBLE);

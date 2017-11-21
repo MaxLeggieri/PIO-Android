@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -95,8 +94,12 @@ public class PioPlaceActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!Utility.isNetworkConnected(PioPlaceActivity.this)){
-            Toast.makeText(PioPlaceActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+        if (!Utility.isNetworkConnected(PioPlaceActivity.this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
+            //Toast.makeText(PioPlaceActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
         JSONObject obj = WebApi.getInstance().getPoiDetails(placeId);

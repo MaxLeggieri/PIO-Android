@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +50,12 @@ public class FelixActivity extends AppCompatActivity implements CompanyRecyclerV
             public void run() {
 
                 if (allCompanies == null) {
-                    if (!Utility.isNetworkConnected(FelixActivity.this)){
-                        Toast.makeText(FelixActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    if (!Utility.isNetworkConnected(FelixActivity.this, new InternetCallback() {
+                        @Override
+                        public void retryInternet() {
+                        }
+                    })){
+                        //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                         return ;
                     }
                     allCompanies = WebApi.getInstance().getCompanies(page,"0","felix");
@@ -87,8 +90,12 @@ public class FelixActivity extends AppCompatActivity implements CompanyRecyclerV
         Runnable catRunnable = new Runnable() {
             @Override
             public void run() {
-                if (!Utility.isNetworkConnected(FelixActivity.this)){
-                    Toast.makeText(FelixActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                if (!Utility.isNetworkConnected(FelixActivity.this, new InternetCallback() {
+                    @Override
+                    public void retryInternet() {
+                    }
+                })){
+                    //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                     return ;
                 }
                 List<Company> newComps = WebApi.getInstance().getCompanies(page,"0","felix");

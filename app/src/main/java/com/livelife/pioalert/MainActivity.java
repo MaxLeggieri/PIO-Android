@@ -31,7 +31,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -141,8 +140,12 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (!Utility.isNetworkConnected(MainActivity.this)){
-                    Toast.makeText(MainActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                if (!Utility.isNetworkConnected(MainActivity.this, new InternetCallback() {
+                    @Override
+                    public void retryInternet() {
+                    }
+                })){
+                    //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                     return ;
                 }
                 you = WebApi.getInstance().userRanking();
@@ -477,8 +480,15 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         final String nt = FirebaseInstanceId.getInstance().getToken();
         Log.v(tag,"Firebase token: "+nt);
         if (nt != null) {
-            if (!Utility.isNetworkConnected(this)){
-                Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+
+
+            if (!Utility.isNetworkConnected(this, new InternetCallback() {
+                @Override
+                public void retryInternet() {
+                }
+            })){
+
+                //Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                 return ;
             }
             WebApi.getInstance().tokenHandler(nt);
@@ -541,8 +551,12 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
         }
         else {
-            if (!Utility.isNetworkConnected(MainActivity.this)){
-                Toast.makeText(MainActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            if (!Utility.isNetworkConnected(MainActivity.this, new InternetCallback() {
+                @Override
+                public void retryInternet() {
+                }
+            })){
+                //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                 return ;
             }
             // Check notification from server...

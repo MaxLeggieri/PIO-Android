@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,16 +36,20 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class CompanyActivity extends AppCompatActivity implements ProductCategoryCallback {
 
-    TextView comNameTextView, shopNameTextView, shopDistanceTextView, comDesc, phoneNumber, locationAddress,numberReviews,review_info_tv;
+    TextView comNameTextView, shopNameTextView, shopDistanceTextView, comDesc, phoneNumber, locationAddress, numberReviews,
+            review_info_tv;
     LinearLayout phoneButton;
     Company com;
     ImageButton backButton;
     ImageView comImage;
     Button infoButton;
     Button write_a_review_btn;
+    Button write_a_review_btn_top;
 
     RatingBar ratingBar;
+    RatingBar ratingBar_bottom;
     LinearLayout review_ll;
+    LinearLayout rating_bar_ll;
 
     MapView mapView;
     GoogleMap map;
@@ -60,7 +63,7 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
 
     ArrayList<Promo> promoItems = new ArrayList<>();
     ArrayList<Product> productItems = new ArrayList<>();
-    ArrayList<CategoryProductModal> mCategoryProductModalArrayList  = new ArrayList<>();
+    ArrayList<CategoryProductModal> mCategoryProductModalArrayList = new ArrayList<>();
 
     static final Integer CALL = 0x2;
 
@@ -76,9 +79,13 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
 
         int comId = getIntent().getIntExtra("comId", 0);
         if (comId == 0) finish();
-        if (!Utility.isNetworkConnected(CompanyActivity.this)){
-            Toast.makeText(CompanyActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
-            return ;
+        if (!Utility.isNetworkConnected(CompanyActivity.this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })) {
+            //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            return;
         }
         com = WebApi.getInstance().getCompanyById(comId);
 
@@ -90,10 +97,19 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
             }
         });
         write_a_review_btn = (Button) findViewById(R.id.write_a_review_btn);
+        write_a_review_btn_top = (Button) findViewById(R.id.write_a_review_btn_top);
         write_a_review_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mIntent = new Intent(CompanyActivity.this,RatingScreen.class);
+                Intent mIntent = new Intent(CompanyActivity.this, RatingScreen.class);
+                mIntent.putExtra("COMPANY", com);
+                startActivity(mIntent);
+            }
+        });
+        write_a_review_btn_top.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(CompanyActivity.this, RatingScreen.class);
                 mIntent.putExtra("COMPANY", com);
                 startActivity(mIntent);
             }
@@ -101,28 +117,47 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
         comNameTextView = (TextView) findViewById(R.id.comNameTextView);
         comNameTextView.setText(com.brandName);
         review_ll = (LinearLayout) findViewById(R.id.review_ll);
+        rating_bar_ll = (LinearLayout) findViewById(R.id.rating_bar_ll);
         review_ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mIntent = new Intent(CompanyActivity.this,AllReviewsListActivity.class);
-                mIntent.putExtra("COMPANY",com);
+                Intent mIntent = new Intent(CompanyActivity.this, AllReviewsListActivity.class);
+                mIntent.putExtra("COMPANY", com);
 
                 startActivity(mIntent);
             }
         });
+        rating_bar_ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(CompanyActivity.this, RatingScreen.class);
+                mIntent.putExtra("COMPANY", com);
+                startActivity(mIntent);
+            }
+        });
+
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-        if (com!=null&&com.locations!=null&&com.locations.size()>0){
+        ratingBar_bottom = (RatingBar) findViewById(R.id.ratingBar_bottom);
+        if (com != null && com.locations != null && com.locations.size() > 0) {
             ratingBar.setRating((float) com.locations.get(0).avrReviews);
+            ratingBar_bottom.setRating(Float.parseFloat(com.locations.get(0).userRating));
         }
 
         numberReviews = (TextView) findViewById(R.id.numberReviews);
-        if (com!=null&&com.locations!=null&&com.locations.size()>0){
+        if (com != null && com.locations != null && com.locations.size() > 0) {
             numberReviews.setText("" + com.locations.get(0).numReviews);
             review_info_tv = (TextView) findViewById(R.id.review_info_tv);
 
-            if (com.locations.get(0).numReviews<=0){
+            if (com.locations.get(0).numReviews <= 0) {
+                review_info_tv.setVisibility(View.GONE);
+                review_ll.setVisibility(View.GONE);
+                write_a_review_btn_top.setVisibility(View.VISIBLE);
                 review_info_tv.setText("NO REVIEWS");
+            } else {
+                write_a_review_btn_top.setVisibility(View.GONE);
+                review_info_tv.setVisibility(View.VISIBLE);
+                review_ll.setVisibility(View.VISIBLE);
+                review_info_tv.setText("VEDI RECENSIONI");
             }
         }
 
@@ -248,6 +283,7 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
     LinearLayout productsHeader;
 
     boolean isReloaded = false;
+
     @Override
     public void onResume() {
         super.onResume();
@@ -257,24 +293,39 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
 
             int comId = getIntent().getIntExtra("comId", 0);
             if (comId == 0) finish();
-            if (!Utility.isNetworkConnected(CompanyActivity.this)){
-                Toast.makeText(CompanyActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
-                return ;
+            if (!Utility.isNetworkConnected(CompanyActivity.this, new InternetCallback() {
+                @Override
+                public void retryInternet() {
+                }
+            })) {
+                //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                return;
             }
             com = WebApi.getInstance().getCompanyById(comId);
 
             ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-            if (com!=null&&com.locations!=null&&com.locations.size()>0){
+            ratingBar_bottom = (RatingBar) findViewById(R.id.ratingBar_bottom);
+
+            if (com != null && com.locations != null && com.locations.size() > 0) {
                 ratingBar.setRating((float) com.locations.get(0).avrReviews);
+                ratingBar_bottom.setRating(Float.parseFloat(com.locations.get(0).userRating));
             }
 
             numberReviews = (TextView) findViewById(R.id.numberReviews);
-            if (com!=null&&com.locations!=null&&com.locations.size()>0){
+            if (com != null && com.locations != null && com.locations.size() > 0) {
                 numberReviews.setText("" + com.locations.get(0).numReviews);
                 review_info_tv = (TextView) findViewById(R.id.review_info_tv);
 
-                if (com.locations.get(0).numReviews<=0){
+                if (com.locations.get(0).numReviews <= 0) {
+                    review_info_tv.setVisibility(View.GONE);
+                    review_ll.setVisibility(View.GONE);
+                    write_a_review_btn_top.setVisibility(View.VISIBLE);
                     review_info_tv.setText("NO REVIEWS");
+                } else {
+                    write_a_review_btn_top.setVisibility(View.GONE);
+                    review_info_tv.setVisibility(View.VISIBLE);
+                    review_ll.setVisibility(View.VISIBLE);
+                    review_info_tv.setText("VEDI RECENSIONI");
                 }
             }
 
@@ -283,9 +334,13 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
         isReloaded = true;
 
         if (!initialized) {
-            if (!Utility.isNetworkConnected(CompanyActivity.this)){
-                Toast.makeText(CompanyActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
-                return ;
+            if (!Utility.isNetworkConnected(CompanyActivity.this, new InternetCallback() {
+                @Override
+                public void retryInternet() {
+                }
+            })) {
+                //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                return;
             }
             promoItems = WebApi.getInstance().companyAds(com.cid);
             productItems = WebApi.getInstance().companyProducts(com.cid);
@@ -297,7 +352,7 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
             prodAdapter = new ProductRecyclerView(productItems);
             companyProducts.setAdapter(prodAdapter);
             if (productItems.size() > 0) {
-                 mCategoryProductModalArrayList = new ArrayList<>();
+                mCategoryProductModalArrayList = new ArrayList<>();
               /*  mCategoryProductModalArrayList.add(new CategoryProductModal("name 1", "1", true));
                 mCategoryProductModalArrayList.add(new CategoryProductModal("name 2", "1", false));
                 mCategoryProductModalArrayList.add(new CategoryProductModal("name 3", "1", false));
@@ -313,7 +368,7 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
 //              mProductCategoriesAdapter = new ProductCategoriesAdapter(mCategoryProductModalArrayList);
 
 
-                if (com.comcatList.size()>0){
+                if (com.comcatList.size() > 0) {
 
                     categories_rv.setVisibility(View.VISIBLE);
 
@@ -327,7 +382,7 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
                         filterProductListById (com.comcatList.get(0));
 
                     }*/
-                }else{
+                } else {
                     categories_rv.setVisibility(View.GONE);
                 }
             }
@@ -383,7 +438,7 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
 
     @Override
     public void itemSelected(CategoryProductModal bean, int position) {
-        if (bean.isSelected()){
+        if (bean.isSelected()) {
             return;
         }
 
@@ -391,46 +446,44 @@ public class CompanyActivity extends AppCompatActivity implements ProductCategor
                 mProductCategoriesAdapter.getAllItems()) {
             mCategoryProductModal.setSelected(false);
         }
-        if (!bean.isSelected()){
+        if (!bean.isSelected()) {
             bean.setSelected(true);
         }
 
-        mProductCategoriesAdapter.updateSingleItem(bean,position);
-        
-        filterProductListById (bean);
+        mProductCategoriesAdapter.updateSingleItem(bean, position);
+
+        filterProductListById(bean);
 
     }
 
     private void filterProductListById(CategoryProductModal bean) {
-        if (bean==null){
+        if (bean == null) {
             return;
         }
-        if (bean.getId()==null){
+        if (bean.getId() == null) {
             prodAdapter = new ProductRecyclerView(productItems);
             companyProducts.setAdapter(prodAdapter);
             return;
         }
 
-        ArrayList<Product> mTempList=  new ArrayList<>();
+        ArrayList<Product> mTempList = new ArrayList<>();
 
         for (Product mProduct :
                 productItems) {
 
-            if (mProduct.comcatId.size()>0){
-                if (mProduct.comcatId.get(0).equalsIgnoreCase(bean.getId())){
+            if (mProduct.comcatId.size() > 0) {
+                if (mProduct.comcatId.get(0).equalsIgnoreCase(bean.getId())) {
                     mTempList.add(mProduct);
                 }
             }
 
         }
 
-        if (mTempList.size()>0){
+        if (mTempList.size() > 0) {
             prodAdapter = new ProductRecyclerView(mTempList);
             companyProducts.setAdapter(prodAdapter);
         }
-        
-        
-        
-        
+
+
     }
 }

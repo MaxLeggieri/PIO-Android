@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -96,11 +95,15 @@ public class NotificationFragment extends Fragment {
         runPromos();
 
         //if (lastIds != null) {
-        if (Utility.isNetworkConnected(getActivity())){
+        if (Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
 
             WebApi.getInstance().notificationsRead(lastIds,lastTimeref);
         }else{
-            Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
         }
 
 
@@ -118,8 +121,12 @@ public class NotificationFragment extends Fragment {
             public void run() {
 
                 if (allPromo == null) {
-                    if (!Utility.isNetworkConnected(getActivity())){
-                        Toast.makeText(getActivity(),getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    if (!Utility.isNetworkConnected(getActivity(), new InternetCallback() {
+                        @Override
+                        public void retryInternet() {
+                        }
+                    })){
+                        //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                         return ;
                     }
                     allPromo = WebApi.getInstance().adsNotified();

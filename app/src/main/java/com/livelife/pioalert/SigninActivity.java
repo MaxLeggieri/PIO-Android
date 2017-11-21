@@ -7,17 +7,12 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -270,8 +265,12 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                     hideLoginControls(false);
                 } else {
 
-                    if (!Utility.isNetworkConnected(SigninActivity.this)){
-                        Toast.makeText(SigninActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                    if (!Utility.isNetworkConnected(SigninActivity.this, new InternetCallback() {
+                        @Override
+                        public void retryInternet() {
+                        }
+                    })){
+                        //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                         return ;
                     }
                     JSONObject object = WebApi.getInstance().sendGoogleData(acct,code.getText().toString());
@@ -326,8 +325,12 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                                     if(object == null) {
                                         return;
                                     }
-                                    if (!Utility.isNetworkConnected(SigninActivity.this)){
-                                        Toast.makeText(SigninActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                                    if (!Utility.isNetworkConnected(SigninActivity.this, new InternetCallback() {
+                                        @Override
+                                        public void retryInternet() {
+                                        }
+                                    })){
+                                        //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                                         return ;
                                     }
                                     WebApi.getInstance().sendFacebookData(object.toString(), SigninActivity.this,code.getText().toString());

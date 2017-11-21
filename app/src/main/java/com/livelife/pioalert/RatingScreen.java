@@ -20,8 +20,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.livelife.pioalert.R.id.prodImageButton;
-
 /**
  * Created by Maroof Ahmed Siddique on 15/10/17.
  */
@@ -105,8 +103,12 @@ public class RatingScreen extends AppCompatActivity implements View.OnClickListe
     }
 
     private void callWS() {
-        if (!Utility.isNetworkConnected(this)){
-            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+        if (!Utility.isNetworkConnected(this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
+            //Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
         ApiInterface apiService =

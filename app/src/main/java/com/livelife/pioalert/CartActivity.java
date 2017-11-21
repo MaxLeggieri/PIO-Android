@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.braintreepayments.api.dropin.DropInActivity;
 import com.braintreepayments.api.dropin.DropInRequest;
@@ -90,8 +89,12 @@ public class CartActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 loadingOverlay.setVisibility(View.VISIBLE);
-                if (!Utility.isNetworkConnected(CartActivity.this)){
-                    Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                if (!Utility.isNetworkConnected(CartActivity.this, new InternetCallback() {
+                    @Override
+                    public void retryInternet() {
+                    }
+                })){
+                    //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                     return ;
                 }
                 boolean sent = WebApi.getInstance().emailPrenotation(cart.companyId,userMessage.getText().toString());
@@ -208,8 +211,12 @@ public class CartActivity extends AppCompatActivity {
     }
 
     public void updateCart() {
-        if (!Utility.isNetworkConnected(CartActivity.this)){
-            Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+        if (!Utility.isNetworkConnected(CartActivity.this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
+            //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
         cart = WebApi.getInstance().basketShow(idCom);
@@ -243,8 +250,12 @@ public class CartActivity extends AppCompatActivity {
         dialogBuilder.setPositiveButton("Fatto", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (!Utility.isNetworkConnected(CartActivity.this)){
-                    Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                if (!Utility.isNetworkConnected(CartActivity.this, new InternetCallback() {
+                    @Override
+                    public void retryInternet() {
+                    }
+                })){
+                    //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                     return ;
                 }
                 WebApi.getInstance().basketMove(p.pid, p.quantity, 0, 0);
@@ -254,8 +265,12 @@ public class CartActivity extends AppCompatActivity {
         dialogBuilder.setNegativeButton("Rimuovi", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (!Utility.isNetworkConnected(CartActivity.this)){
-                    Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                if (!Utility.isNetworkConnected(CartActivity.this, new InternetCallback() {
+                    @Override
+                    public void retryInternet() {
+                    }
+                })){
+                    //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                     return ;
                 }
                 WebApi.getInstance().basketMove(p.pid, 0, 0, 0);
@@ -312,8 +327,12 @@ public class CartActivity extends AppCompatActivity {
 
 
         if(PioUser.getInstance().shipAddress != null) {
-            if (!Utility.isNetworkConnected(CartActivity.this)){
-                Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            if (!Utility.isNetworkConnected(CartActivity.this, new InternetCallback() {
+                @Override
+                public void retryInternet() {
+                }
+            })){
+                //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                 return ;
             }
             JSONObject rateRequest = WebApi.getInstance().getDhlRate(CartActivity.this, idCom);
@@ -354,8 +373,12 @@ public class CartActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else {
-            if (!Utility.isNetworkConnected(CartActivity.this)){
-                Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+            if (!Utility.isNetworkConnected(CartActivity.this, new InternetCallback() {
+                @Override
+                public void retryInternet() {
+                }
+            })){
+                //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                 return ;
             }
             JSONObject rateRequest = WebApi.getInstance().getRegularRate(CartActivity.this, idCom);
@@ -480,8 +503,12 @@ public class CartActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             double t = cart.subTotal;
-                            if (!Utility.isNetworkConnected(CartActivity.this)){
-                                Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                            if (!Utility.isNetworkConnected(CartActivity.this, new InternetCallback() {
+                                @Override
+                                public void retryInternet() {
+                                }
+                            })){
+                                //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                                 return ;
                             }
                             JSONObject resp = WebApi.getInstance().paypalTrans(nonce,""+t+"",null,idCom);
@@ -563,8 +590,12 @@ public class CartActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             double t = cart.subTotal+cart.shippingTotal;
-                            if (!Utility.isNetworkConnected(CartActivity.this)){
-                                Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                            if (!Utility.isNetworkConnected(CartActivity.this, new InternetCallback() {
+                                @Override
+                                public void retryInternet() {
+                                }
+                            })){
+                                //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                                 return ;
                             }
                             JSONObject resp = WebApi.getInstance().paypalTrans(nonce,""+t+"",currentDhlRateId,idCom);

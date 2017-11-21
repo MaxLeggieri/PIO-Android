@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -68,8 +67,13 @@ public class AllReviewsListActivity extends AppCompatActivity{
         }
     }
     private void callWS() {
-        if (!Utility.isNetworkConnected(this)){
-            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+        if (!Utility.isNetworkConnected(this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+
+            }
+        })){
+//            Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
         ApiInterface apiService =

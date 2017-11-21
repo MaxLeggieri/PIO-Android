@@ -63,8 +63,12 @@ public class ProfileActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            if (!Utility.isNetworkConnected(ProfileActivity.this)){
-                                Toast.makeText(ProfileActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+                            if (!Utility.isNetworkConnected(ProfileActivity.this, new InternetCallback() {
+                                @Override
+                                public void retryInternet() {
+                                }
+                            })){
+                                //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
                                 return ;
                             }
                             WebApi.getInstance().setUserCategories(cats);
@@ -88,12 +92,20 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         listView = (ListView) findViewById(R.id.listView);
-        if (!Utility.isNetworkConnected(this)){
+        if (!Utility.isNetworkConnected(this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
             Toast.makeText(this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
-        if (!Utility.isNetworkConnected(ProfileActivity.this)){
-            Toast.makeText(ProfileActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
+        if (!Utility.isNetworkConnected(ProfileActivity.this, new InternetCallback() {
+            @Override
+            public void retryInternet() {
+            }
+        })){
+            //Toast.makeText(CartActivity.this,getResources().getString(R.string.internet_check_text),Toast.LENGTH_SHORT).show();
             return ;
         }
         allCats = WebApi.getInstance().getAllCategories();

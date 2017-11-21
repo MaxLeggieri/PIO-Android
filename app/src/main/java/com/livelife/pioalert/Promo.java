@@ -40,6 +40,7 @@ public class Promo implements Serializable{
 
     public int numReviews = 0;
     public double avrReviews = 0.0;
+    public String userRating = "0";
 
     Promo(){}
 
@@ -123,6 +124,18 @@ public class Promo implements Serializable{
                     }
 
                 }
+            }
+
+            if (jsonObject.has("myrating")) {
+                try {
+                    JSONObject mJsonObject1 = jsonObject.getJSONObject("myrating");
+                    if (mJsonObject1.has("rating")){
+                        userRating  =mJsonObject1.getString("rating");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
 
         } catch (JSONException e) {

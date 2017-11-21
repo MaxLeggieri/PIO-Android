@@ -61,8 +61,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <LinearLayout
-                android:id="@+id/review_ll"
+                android:id="@+id/review_main_ll"
+
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/prodName"
@@ -73,34 +76,62 @@
                 android:paddingRight="20dp"
                 android:paddingTop="5dp">
 
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    style="?android:attr/ratingBarStyleSmall"
+                <LinearLayout
+                    android:id="@+id/review_ll"
                     android:layout_width="wrap_content"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:isIndicator="true"
-                    android:progressTint="@color/yellow"
-                    android:rating="3.5" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingRight="20dp"
+                    android:paddingTop="5dp">
 
-                <TextView
-                    android:id="@+id/numberReviews"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:isIndicator="true"
+                        android:progressTint="@color/yellow"
+                        android:rating="3.5" />
 
-                    android:text="0"
-                    android:textAppearance="@style/AppTheme.TextAppearance.Bold"
-                    android:textColor="#6f6f6f" />
+                    <TextView
+                        android:id="@+id/numberReviews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
 
-                <TextView
-                    android:id="@+id/review_info_tv"
+                        android:text="0"
+                        android:textAppearance="@style/AppTheme.TextAppearance.Bold"
+                        android:textColor="#6f6f6f" />
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:text="VEDI RECENSIONI"
-                    android:textSize="11sp" />
+                    <TextView
+                        android:id="@+id/review_info_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text="VEDI RECENSIONI"
+                        android:textSize="11sp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <Button
+
+                    android:id="@+id/write_a_review_btn_top"
+                    android:layout_width="150dp"
+                    android:layout_height="36dp"
+
+                    android:layout_below="@+id/viewShopButton"
+                    android:layout_marginBottom="12dp"
+
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/button_round_corners"
+                    android:text="@string/addAReviewText"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white" />
             </LinearLayout>
 
             <TextView
@@ -124,7 +155,7 @@
                 android:id="@+id/prodImageButton"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
-                android:layout_below="@id/review_ll"
+                android:layout_below="@id/review_main_ll"
                 android:layout_marginLeft="28dp"
                 android:adjustViewBounds="true"
                 android:background="#dddddd"
@@ -135,7 +166,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/review_ll"
+                android:layout_below="@+id/review_main_ll"
                 android:layout_marginStart="13dp"
                 android:layout_marginTop="12dp"
                 android:layout_toEndOf="@+id/prodImageButton"
@@ -476,6 +507,7 @@
                 android:layout_width="180dp"
                 android:layout_height="36dp"
                 android:layout_below="@id/infoButton"
+                android:visibility="gone"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="20dp"
@@ -486,6 +518,34 @@
                 android:textAllCaps="false"
                 android:textColor="@android:color/white" />
 
+            <LinearLayout
+                android:id="@+id/rating_bar_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/infoButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="20dp"
+
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/rateThisProdText"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content" />
+
+                <RatingBar
+                    android:id="@+id/ratingBar_bottom"
+                    style="?android:attr/ratingBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:progressTint="@color/yellow"
+                    android:rating="3.5" />
+            </LinearLayout>
         </RelativeLayout>
 
 

@@ -112,4 +112,8 @@
     </string-array>
     <string name="visita_negozio">VIEW SHOP</string>
     <string name="click_here_text"><u>Fai click qui per saperne di più</u></string>
+    <string name="addAReviewText">Add a review</string>
+    <string name="rateThisProdText">Rate this product</string>
+    <string name="rateThisCompanyText">Rate this company</string>
+    <string name="rateThisPromoText">Rate this promo</string>
 </resources>

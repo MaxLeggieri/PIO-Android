@@ -17,7 +17,7 @@ public class Company implements Serializable{
     public String officialName,brandName,phone,email,image,description;
     public ArrayList<com.livelife.pioalert.Location> locations = new ArrayList<>();
     public ArrayList<CategoryProductModal> comcatList = new ArrayList<>();
-
+    public String userRating = "0";
     Company(){}
 
     Company (JSONObject json) {
@@ -64,6 +64,17 @@ public class Company implements Serializable{
 
 
 
+            if (json.has("myrating")) {
+                try {
+                    JSONObject mJsonObject1 = json.getJSONObject("myrating");
+                    if (mJsonObject1.has("rating")){
+                        userRating  =mJsonObject1.getString("rating");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

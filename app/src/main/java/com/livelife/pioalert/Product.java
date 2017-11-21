@@ -31,6 +31,7 @@ public class Product implements Serializable {
     public String prodCat;
     public String saveAmount;
     public int sellingMethod;
+    public String userRating = "0";
 
     public String brandName, companylogo, brandLocation = "";
     public int idCom;
@@ -139,6 +140,18 @@ public class Product implements Serializable {
 
             if (jsonObject.has("where")) {
                 brandLocation = jsonObject.getJSONObject("where").getString("addressloc");
+            }
+
+            if (jsonObject.has("myrating")) {
+                try {
+                    JSONObject mJsonObject1 = jsonObject.getJSONObject("myrating");
+                    if (mJsonObject1.has("rating")){
+                         userRating  =mJsonObject1.getString("rating");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
 
 

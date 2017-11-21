@@ -151,10 +151,44 @@ public class Utility {
 
     /**TO check the Internet*/
 
-    public static boolean isNetworkConnected(Context context) {
+    public static boolean isNetworkConnected(Context context, InternetCallback internetCallback) {
+        boolean isNetAvail = false;
+
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        isNetAvail = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        if (! isNetAvail){
+            showAlertDialog(context,internetCallback);
+        }
+        return isNetAvail;
+    }
+
+    public  static AlertDialog.Builder builder;
+    public static AlertDialog alert;
+    private static void showAlertDialog(Context context, final InternetCallback internetCallback) {
+
+        if (builder==null){
+            builder = new AlertDialog.Builder(context);
+            builder.setMessage("Please check your Internet connection!")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //do things
+                            dialog.dismiss();
+                            internetCallback.retryInternet();
+                        }
+                    });
+        }
+
+        if (alert==null){
+            alert = builder.create();
+        }
+
+        if (!alert.isShowing()){
+            alert.show();
+        }
+
+
     }
 }
